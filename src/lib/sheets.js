@@ -35,17 +35,40 @@ async function fetchFromSheets() {
 
     return rows
         .filter(row => row[0]) // filter empty rows
-        .map(row => ({
-            id: row[0] || '',
-            name: row[1] || '',
-            category: row[2] || '',
-            price: parseFloat(row[3]) || 0,
-            description: row[4] || '',
-            image: convertDriveUrl(row[5] || ''),
-            stock: (row[6] || '').toLowerCase() === 'yes',
-            discount: parseFloat(row[7]) || 0,
-            tags: (row[8] || '').split(',').map(t => t.trim().toLowerCase()).filter(Boolean),
-        }));
+        .map(row => {
+            const col4 = row[4] || '';
+            const col5 = row[5] || '';
+
+            // Smart detection: if col4 looks like a URL, it's the image
+            // This handles both column orderings gracefully
+            const isCol4Url = col4.startsWith('http') || col4.includes('drive.google.com');
+            const isCol5Url = col5.startsWith('http') || col5.includes('drive.google.com');
+
+            let imageUrl, description;
+            if (isCol4Url && !isCol5Url) {
+                imageUrl = col4;
+                description = col5;
+            } else if (isCol5Url && !isCol4Url) {
+                imageUrl = col5;
+                description = col4;
+            } else {
+                // Default: col4 = description, col5 = image
+                description = col4;
+                imageUrl = col5;
+            }
+
+            return {
+                id: row[0] || '',
+                name: row[1] || '',
+                category: row[2] || '',
+                price: parseFloat(row[3]) || 0,
+                description: description,
+                image: convertDriveUrl(imageUrl),
+                stock: (row[6] || '').toLowerCase() === 'yes',
+                discount: parseFloat(row[7]) || 0,
+                tags: (row[8] || '').split(',').map(t => t.trim().toLowerCase()).filter(Boolean),
+            };
+        });
 }
 
 export async function getProducts() {
