@@ -40,14 +40,11 @@ function StoryContent() {
                 <div className="container">
                     <div className="story-grid">
                         <div className="story-image">
-                            <div style={{
-                                width: '100%', height: '100%',
-                                background: 'linear-gradient(180deg, #F7F3ED 0%, rgba(197,164,103,0.3) 100%)',
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                fontFamily: 'var(--font-heading)', fontSize: '4rem', color: 'var(--color-gold-light)'
-                            }}>
-                                ✦
-                            </div>
+                            <img
+                                src="/story-image.png"
+                                alt="Noore Jewels — Where It All Started"
+                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                            />
                         </div>
                         <div className="story-content">
                             <div className="story-label">The Beginning</div>
@@ -110,14 +107,11 @@ function StoryContent() {
                 <div className="container">
                     <div className="story-grid" style={{ direction: 'rtl' }}>
                         <div className="story-image" style={{ direction: 'ltr' }}>
-                            <div style={{
-                                width: '100%', height: '100%',
-                                background: 'linear-gradient(135deg, #B76E79 0%, rgba(183,110,121,0.4) 100%)',
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                fontFamily: 'var(--font-heading)', fontSize: '4rem', color: 'rgba(255,255,255,0.5)'
-                            }}>
-                                💎
-                            </div>
+                            <img
+                                src="/story-journey.png"
+                                alt="Noore Jewels — Growing Together"
+                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                            />
                         </div>
                         <div className="story-content" style={{ direction: 'ltr' }}>
                             <div className="story-label">The Journey</div>
