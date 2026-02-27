@@ -11,6 +11,7 @@ export function AuthProvider({ children }) {
     const [phone, setPhone] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [fallbackOtp, setFallbackOtp] = useState('');
     const [isInitialized, setIsInitialized] = useState(false);
 
     // Load session from localStorage
@@ -53,6 +54,11 @@ export function AuthProvider({ children }) {
             if (data.success) {
                 setPhone(phoneNumber);
                 setAuthStep('otp');
+                if (data.fallbackOtp) {
+                    setFallbackOtp(data.fallbackOtp);
+                } else {
+                    setFallbackOtp('');
+                }
             } else {
                 setError(data.message || 'Failed to send OTP');
             }
@@ -123,6 +129,7 @@ export function AuthProvider({ children }) {
         setAuthStep('phone');
         setPhone('');
         setError('');
+        setFallbackOtp('');
         setLoading(false);
     }, []);
 
@@ -139,6 +146,7 @@ export function AuthProvider({ children }) {
             phone,
             loading,
             error,
+            fallbackOtp,
             isInitialized,
             setIsAuthOpen,
             openAuth,

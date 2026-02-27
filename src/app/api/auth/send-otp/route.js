@@ -33,6 +33,12 @@ export async function POST(request) {
         // Generate 6-digit OTP
         const otp = crypto.randomInt(100000, 999999).toString();
 
+        // Ensure phone has country code (India = 91)
+        let formattedPhone = cleanPhone;
+        if (formattedPhone.length === 10) {
+            formattedPhone = '91' + formattedPhone;
+        }
+
         // Store OTP with 5-minute expiry
         otpStore.set(cleanPhone, {
             otp,
@@ -43,9 +49,10 @@ export async function POST(request) {
         });
 
         // Send OTP via WhatsApp Bot API
+        let whatsappSent = false;
         try {
             if (process.env.WHATSAPP_TOKEN && process.env.PHONE_NUMBER_ID) {
-                await fetch(
+                const waResponse = await fetch(
                     `https://graph.facebook.com/v18.0/${process.env.PHONE_NUMBER_ID}/messages`,
                     {
                         method: 'POST',
@@ -55,7 +62,7 @@ export async function POST(request) {
                         },
                         body: JSON.stringify({
                             messaging_product: 'whatsapp',
-                            to: cleanPhone,
+                            to: formattedPhone,
                             type: 'text',
                             text: {
                                 body: `🔐 Your Noore Jewels verification code is: *${otp}*\n\nThis code expires in 5 minutes. Do not share it with anyone.`
@@ -63,10 +70,15 @@ export async function POST(request) {
                         }),
                     }
                 );
+                const waResult = await waResponse.json();
+                if (waResponse.ok && waResult.messages && waResult.messages.length > 0) {
+                    whatsappSent = true;
+                } else {
+                    console.error('WhatsApp API error:', JSON.stringify(waResult));
+                }
             }
         } catch (whatsappError) {
             console.error('WhatsApp OTP send error:', whatsappError);
-            // Continue anyway — we'll show OTP in dev mode
         }
 
         // In development, log OTP for testing
@@ -76,7 +88,12 @@ export async function POST(request) {
 
         return NextResponse.json({
             success: true,
-            message: 'OTP sent to your WhatsApp',
+            message: whatsappSent
+                ? 'OTP sent to your WhatsApp!'
+                : 'We could not send OTP to your WhatsApp. Please use this code to verify.',
+            whatsappSent,
+            // If WhatsApp fails, show OTP directly so user can still sign in
+            ...(!whatsappSent && { fallbackOtp: otp }),
             // Only in dev mode for testing
             ...(process.env.NODE_ENV !== 'production' && { devOtp: otp }),
         });

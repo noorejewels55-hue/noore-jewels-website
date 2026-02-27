@@ -6,7 +6,7 @@ import { useState, useRef, useEffect } from 'react';
 export default function AuthModal() {
     const {
         isAuthOpen, setIsAuthOpen, authStep, phone: authPhone,
-        loading, error, sendOTP, verifyOTP, register, resetAuth
+        loading, error, fallbackOtp, sendOTP, verifyOTP, register, resetAuth
     } = useAuth();
 
     const [phoneInput, setPhoneInput] = useState('');
@@ -130,7 +130,23 @@ export default function AuthModal() {
                 {authStep === 'otp' && (
                     <>
                         <h2 className="auth-title">Verify OTP</h2>
-                        <p className="auth-subtitle">Enter the 6-digit code sent to your WhatsApp</p>
+                        <p className="auth-subtitle">
+                            {fallbackOtp
+                                ? 'WhatsApp delivery failed. Please use the code below:'
+                                : 'Enter the 6-digit code sent to your WhatsApp'
+                            }
+                        </p>
+
+                        {fallbackOtp && (
+                            <div style={{
+                                textAlign: 'center', padding: '16px',
+                                background: 'var(--color-bg-alt, #f9f6f0)', borderRadius: '8px',
+                                marginBottom: '16px', border: '1px dashed var(--color-gold, #C5A467)',
+                            }}>
+                                <p style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Your verification code</p>
+                                <p style={{ fontSize: '1.8rem', fontWeight: 700, letterSpacing: '0.3em', color: 'var(--color-text)' }}>{fallbackOtp}</p>
+                            </div>
+                        )}
 
                         <div className="otp-inputs" onPaste={handleOtpPaste}>
                             {otpValues.map((val, i) => (
