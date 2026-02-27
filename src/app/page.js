@@ -75,9 +75,10 @@ function HomePage() {
   const featured = products.filter(p => p.tags?.includes('featured') || p.tags?.includes('bestseller')).slice(0, 8);
   const newArrivals = products.filter(p => p.tags?.includes('new')).slice(0, 4);
 
-  // If no tagged products, show first 8
-  const displayProducts = featured.length > 0 ? featured : products.slice(0, 8);
-  const displayNew = newArrivals.length > 0 ? newArrivals : products.slice(0, 4);
+  // If no tagged products, Best Sellers = first 4, New Arrivals = last 4 (no overlap)
+  const displayProducts = featured.length > 0 ? featured : products.slice(0, 4);
+  const remainingForNew = products.filter(p => !displayProducts.includes(p));
+  const displayNew = newArrivals.length > 0 ? newArrivals : remainingForNew.slice(0, 4);
 
   return (
     <>
