@@ -6,10 +6,11 @@ import { useState, useRef, useEffect } from 'react';
 export default function AuthModal() {
     const {
         isAuthOpen, setIsAuthOpen, authStep, phone: authPhone,
-        loading, error, fallbackOtp, sendOTP, verifyOTP, register, resetAuth
+        loading, error, otpSentVia, sendOTP, verifyOTP, register, resetAuth
     } = useAuth();
 
     const [phoneInput, setPhoneInput] = useState('');
+    const [emailInput, setEmailInput] = useState('');
     const [otpValues, setOtpValues] = useState(['', '', '', '', '', '']);
     const [nameInput, setNameInput] = useState('');
     const otpRefs = useRef([]);
@@ -25,7 +26,7 @@ export default function AuthModal() {
         const clean = phoneInput.replace(/\D/g, '');
         if (clean.length >= 10) {
             const withCountry = clean.length === 10 ? '91' + clean : clean;
-            sendOTP(withCountry);
+            sendOTP(withCountry, emailInput.trim());
         }
     };
 
@@ -74,6 +75,7 @@ export default function AuthModal() {
         setIsAuthOpen(false);
         resetAuth();
         setPhoneInput('');
+        setEmailInput('');
         setOtpValues(['', '', '', '', '', '']);
         setNameInput('');
     };
@@ -113,15 +115,26 @@ export default function AuthModal() {
                                 </div>
                             </div>
 
+                            <div className="auth-form-group" style={{ marginTop: '12px' }}>
+                                <label className="auth-label">Email <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)' }}>(backup for OTP)</span></label>
+                                <input
+                                    className="auth-input"
+                                    type="email"
+                                    placeholder="your@email.com"
+                                    value={emailInput}
+                                    onChange={e => setEmailInput(e.target.value)}
+                                />
+                            </div>
+
                             {error && <p className="auth-error">{error}</p>}
 
                             <button type="submit" className="btn btn-primary btn-full" disabled={loading || phoneInput.length < 10}>
-                                {loading ? 'Sending OTP...' : 'Send OTP via WhatsApp'}
+                                {loading ? 'Sending OTP...' : 'Send OTP'}
                             </button>
                         </form>
 
                         <p style={{ textAlign: 'center', fontSize: '0.72rem', color: 'var(--color-text-muted)', marginTop: '20px', lineHeight: '1.6' }}>
-                            We&apos;ll send a 6-digit verification code to your WhatsApp. No spam, ever.
+                            We&apos;ll send a 6-digit code via WhatsApp. If that fails, we&apos;ll email it to you.
                         </p>
                     </>
                 )}
@@ -131,22 +144,11 @@ export default function AuthModal() {
                     <>
                         <h2 className="auth-title">Verify OTP</h2>
                         <p className="auth-subtitle">
-                            {fallbackOtp
-                                ? 'WhatsApp delivery failed. Please use the code below:'
-                                : 'Enter the 6-digit code sent to your WhatsApp'
+                            {otpSentVia === 'email'
+                                ? '📧 Code sent to your email. Check your inbox!'
+                                : '📱 Code sent to your WhatsApp.'
                             }
                         </p>
-
-                        {fallbackOtp && (
-                            <div style={{
-                                textAlign: 'center', padding: '16px',
-                                background: 'var(--color-bg-alt, #f9f6f0)', borderRadius: '8px',
-                                marginBottom: '16px', border: '1px dashed var(--color-gold, #C5A467)',
-                            }}>
-                                <p style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Your verification code</p>
-                                <p style={{ fontSize: '1.8rem', fontWeight: 700, letterSpacing: '0.3em', color: 'var(--color-text)' }}>{fallbackOtp}</p>
-                            </div>
-                        )}
 
                         <div className="otp-inputs" onPaste={handleOtpPaste}>
                             {otpValues.map((val, i) => (
@@ -175,7 +177,7 @@ export default function AuthModal() {
                         </button>
 
                         <div className="auth-resend">
-                            Didn&apos;t receive? <button onClick={() => sendOTP(authPhone)}>Resend OTP</button>
+                            Didn&apos;t receive? <button onClick={() => sendOTP(authPhone, emailInput)}>Resend OTP</button>
                         </div>
                     </>
                 )}

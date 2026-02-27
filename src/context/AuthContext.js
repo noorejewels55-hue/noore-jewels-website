@@ -11,7 +11,7 @@ export function AuthProvider({ children }) {
     const [phone, setPhone] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const [fallbackOtp, setFallbackOtp] = useState('');
+    const [otpSentVia, setOtpSentVia] = useState('');
     const [isInitialized, setIsInitialized] = useState(false);
 
     // Load session from localStorage
@@ -41,24 +41,20 @@ export function AuthProvider({ children }) {
         }
     }, [user, isInitialized]);
 
-    const sendOTP = useCallback(async (phoneNumber) => {
+    const sendOTP = useCallback(async (phoneNumber, email) => {
         setLoading(true);
         setError('');
         try {
             const res = await fetch('/api/auth/send-otp', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ phone: phoneNumber }),
+                body: JSON.stringify({ phone: phoneNumber, email: email || '' }),
             });
             const data = await res.json();
             if (data.success) {
                 setPhone(phoneNumber);
                 setAuthStep('otp');
-                if (data.fallbackOtp) {
-                    setFallbackOtp(data.fallbackOtp);
-                } else {
-                    setFallbackOtp('');
-                }
+                setOtpSentVia(data.sentVia || 'whatsapp');
             } else {
                 setError(data.message || 'Failed to send OTP');
             }
@@ -129,7 +125,7 @@ export function AuthProvider({ children }) {
         setAuthStep('phone');
         setPhone('');
         setError('');
-        setFallbackOtp('');
+        setOtpSentVia('');
         setLoading(false);
     }, []);
 
@@ -146,7 +142,7 @@ export function AuthProvider({ children }) {
             phone,
             loading,
             error,
-            fallbackOtp,
+            otpSentVia,
             isInitialized,
             setIsAuthOpen,
             openAuth,
