@@ -34,12 +34,17 @@ function HomePage() {
     },
   ];
 
-  // Category images (placeholder gradients — will be replaced with real images)
+  // Category images
   const categoryImages = {
-    'Rings': 'linear-gradient(135deg, #D4BA82 0%, #A68B4B 100%)',
-    'Necklaces': 'linear-gradient(135deg, #B76E79 0%, #8B4753 100%)',
-    'Earrings': 'linear-gradient(135deg, #C5A467 0%, #96793E 100%)',
-    'Bracelets': 'linear-gradient(135deg, #A0927C 0%, #7B6D5A 100%)',
+    'Rings': '/category-chains.png',
+    'Necklaces': '/category-necklaces.png',
+    'Necklace': '/category-necklaces.png',
+    'Earrings': '/category-earrings.png',
+    'Earings': '/category-earrings.png',
+    'Bracelets': '/category-bracelets.png',
+    'Bracelet': '/category-bracelets.png',
+    'Chain': '/category-chains.png',
+    'Chains': '/category-chains.png',
   };
 
   useEffect(() => {
@@ -156,7 +161,11 @@ function HomePage() {
                   <div
                     className="category-card-bg"
                     style={{
-                      background: categoryImages[cat.name] || 'linear-gradient(135deg, #C5A467, #8B7355)',
+                      backgroundImage: categoryImages[cat.name]
+                        ? `url(${categoryImages[cat.name]})`
+                        : 'linear-gradient(135deg, #C5A467, #8B7355)',
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
                       width: '100%',
                       height: '100%',
                     }}
@@ -210,14 +219,15 @@ function HomePage() {
         <div className="container">
           <div className="story-grid">
             <div className="story-image">
-              <div style={{
-                width: '100%', height: '100%',
-                background: 'linear-gradient(135deg, #F7F3ED 0%, #D4BA82 50%, #B76E79 100%)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontFamily: 'var(--font-heading)', fontSize: '3rem', color: 'rgba(255,255,255,0.6)'
-              }}>
-                ✦
-              </div>
+              <img
+                src="/story-image.png"
+                alt="Noore Jewels — Timeless Elegance"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                }}
+              />
             </div>
             <div className="story-content">
               <div className="story-label">Our Story</div>
