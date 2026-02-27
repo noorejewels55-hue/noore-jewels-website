@@ -1,7 +1,13 @@
 import { google } from 'googleapis';
 
+// ─── SINGLETON CACHE WITH STAMPEDE PROTECTION ───
+// This ensures that even if 500 users hit the site at the exact same moment
+// the cache expires, only ONE request goes to Google Sheets.
+// Everyone else gets the old cached data gracefully.
+
 let cachedProducts = null;
 let cacheTimestamp = 0;
+let fetchPromise = null; // Prevents cache stampede
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
 function getAuth() {
@@ -16,45 +22,70 @@ function getAuth() {
     });
 }
 
+async function fetchFromSheets() {
+    const auth = getAuth();
+    const sheets = google.sheets({ version: 'v4', auth });
+
+    const response = await sheets.spreadsheets.values.get({
+        spreadsheetId: process.env.GOOGLE_SHEET_ID,
+        range: 'Products!A2:I',
+    });
+
+    const rows = response.data.values || [];
+
+    return rows
+        .filter(row => row[0]) // filter empty rows
+        .map(row => ({
+            id: row[0] || '',
+            name: row[1] || '',
+            category: row[2] || '',
+            price: parseFloat(row[3]) || 0,
+            description: row[4] || '',
+            image: convertDriveUrl(row[5] || ''),
+            stock: (row[6] || '').toLowerCase() === 'yes',
+            discount: parseFloat(row[7]) || 0,
+            tags: (row[8] || '').split(',').map(t => t.trim().toLowerCase()).filter(Boolean),
+        }));
+}
+
 export async function getProducts() {
-    // Return cached if fresh
-    if (cachedProducts && Date.now() - cacheTimestamp < CACHE_DURATION) {
+    const now = Date.now();
+
+    // Cache is still fresh — return immediately
+    if (cachedProducts && now - cacheTimestamp < CACHE_DURATION) {
         return cachedProducts;
     }
 
-    try {
-        const auth = getAuth();
-        const sheets = google.sheets({ version: 'v4', auth });
+    // Cache expired — but another request is already fetching
+    // Return stale data instead of making a duplicate request
+    if (fetchPromise) {
+        if (cachedProducts) return cachedProducts;
+        return fetchPromise;
+    }
 
-        const response = await sheets.spreadsheets.values.get({
-            spreadsheetId: process.env.GOOGLE_SHEET_ID,
-            range: 'Products!A2:I',
+    // This is the FIRST request after cache expired
+    // Lock the fetch so no other request duplicates it
+    fetchPromise = fetchFromSheets()
+        .then(products => {
+            cachedProducts = products;
+            cacheTimestamp = Date.now();
+            fetchPromise = null;
+            return products;
+        })
+        .catch(error => {
+            console.error('Error fetching products from Google Sheets:', error);
+            fetchPromise = null;
+            return cachedProducts || [];
         });
 
-        const rows = response.data.values || [];
-
-        const products = rows
-            .filter(row => row[0]) // filter empty rows
-            .map(row => ({
-                id: row[0] || '',
-                name: row[1] || '',
-                category: row[2] || '',
-                price: parseFloat(row[3]) || 0,
-                description: row[4] || '',
-                image: convertDriveUrl(row[5] || ''),
-                stock: (row[6] || '').toLowerCase() === 'yes',
-                discount: parseFloat(row[7]) || 0,
-                tags: (row[8] || '').split(',').map(t => t.trim().toLowerCase()).filter(Boolean),
-            }));
-
-        cachedProducts = products;
-        cacheTimestamp = Date.now();
-
-        return products;
-    } catch (error) {
-        console.error('Error fetching products from Google Sheets:', error);
-        return cachedProducts || [];
+    // If we have old data, serve it immediately while refresh happens in background
+    if (cachedProducts) {
+        // Fire and forget — the fetchPromise will update the cache
+        return cachedProducts;
     }
+
+    // First ever load — must wait for data
+    return fetchPromise;
 }
 
 export async function getProductById(productId) {
@@ -199,4 +230,5 @@ function convertDriveUrl(url) {
 export function clearCache() {
     cachedProducts = null;
     cacheTimestamp = 0;
+    fetchPromise = null;
 }

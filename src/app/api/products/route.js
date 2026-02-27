@@ -1,6 +1,11 @@
 import { NextResponse } from 'next/server';
 import { getProducts, getCategories } from '@/lib/sheets';
 
+// Tell Vercel to cache this API response and revalidate every 5 minutes
+// This means Vercel serves a cached response to ALL users instantly,
+// and refreshes the data from Google Sheets in the background every 300 seconds.
+export const revalidate = 300;
+
 export async function GET(request) {
     try {
         const { searchParams } = new URL(request.url);
@@ -57,12 +62,22 @@ export async function GET(request) {
         // Get categories
         const categories = await getCategories();
 
-        return NextResponse.json({
+        const response = NextResponse.json({
             success: true,
             products,
             categories,
             total: products.length,
         });
+
+        // Add cache headers for CDN/browser caching
+        // s-maxage=300: Vercel's CDN caches for 5 minutes
+        // stale-while-revalidate=600: Serve stale for up to 10 min while refreshing
+        response.headers.set(
+            'Cache-Control',
+            'public, s-maxage=300, stale-while-revalidate=600'
+        );
+
+        return response;
 
     } catch (error) {
         console.error('Products API error:', error);
