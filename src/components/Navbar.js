@@ -8,6 +8,7 @@ import { useAuth } from '@/context/AuthContext';
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
+    const [userMenuOpen, setUserMenuOpen] = useState(false);
     const { totalItems, setIsCartOpen } = useCart();
     const { user, openAuth, logout } = useAuth();
 
@@ -55,13 +56,37 @@ export default function Navbar() {
                         {/* Account */}
                         {user ? (
                             <div className="nav-action-btn" style={{ position: 'relative' }}>
-                                <button onClick={() => { }} title={`Hi, ${user.name}`} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.72rem', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-text)' }}>
+                                <button onClick={() => setUserMenuOpen(!userMenuOpen)} title={`Hi, ${user.name}`} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.72rem', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-text)' }}>
                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                                         <circle cx="12" cy="7" r="4" />
                                     </svg>
                                     {user.name.split(' ')[0]}
                                 </button>
+                                {userMenuOpen && (
+                                    <div style={{
+                                        position: 'absolute', top: '100%', right: 0, marginTop: '8px',
+                                        background: '#fff', border: '1px solid #eee', boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+                                        padding: '12px 16px', minWidth: '160px', zIndex: 100,
+                                    }}>
+                                        <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '4px', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Welcome</p>
+                                        <p style={{ fontSize: '0.85rem', fontWeight: 600, marginBottom: '12px', color: 'var(--color-text)' }}>{user.name}</p>
+                                        <button
+                                            onClick={() => { logout(); setUserMenuOpen(false); }}
+                                            style={{
+                                                width: '100%', padding: '8px 12px', fontSize: '0.75rem',
+                                                fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase',
+                                                border: '1px solid var(--color-text)', background: 'transparent',
+                                                color: 'var(--color-text)', cursor: 'pointer',
+                                                transition: 'all 0.3s ease',
+                                            }}
+                                            onMouseOver={(e) => { e.target.style.background = 'var(--color-text)'; e.target.style.color = '#fff'; }}
+                                            onMouseOut={(e) => { e.target.style.background = 'transparent'; e.target.style.color = 'var(--color-text)'; }}
+                                        >
+                                            Sign Out
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         ) : (
                             <button onClick={openAuth} className="nav-action-btn" title="Sign In">

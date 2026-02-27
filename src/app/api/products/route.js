@@ -16,11 +16,21 @@ export async function GET(request) {
 
         let products = await getProducts();
 
-        // Filter by category
+        // Filter by category (handles singular/plural mismatch: navbar uses "necklaces", sheet uses "Necklace")
         if (category && category !== 'all') {
-            products = products.filter(p =>
-                p.category.toLowerCase().replace(/\s+/g, '-') === category.toLowerCase()
-            );
+            const normalizeCategory = (cat) => {
+                let c = cat.toLowerCase().replace(/\s+/g, '-');
+                // Remove trailing 's' for comparison (necklaces -> necklace)
+                if (c.endsWith('s')) c = c.slice(0, -1);
+                // Fix common typos (earings -> earing)
+                c = c.replace('earring', 'earing');
+                return c;
+            };
+            const normalizedFilter = normalizeCategory(category);
+            products = products.filter(p => {
+                const normalizedCat = normalizeCategory(p.category);
+                return normalizedCat === normalizedFilter;
+            });
         }
 
         // Filter by search
