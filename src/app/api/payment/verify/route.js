@@ -55,11 +55,12 @@ export async function POST(request) {
 
         // Send Email confirmation to customer and owner
         try {
-            if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD && customer.email) {
+            const gmailUser = process.env.GMAIL_USER || 'noore.jewels55@gmail.com';
+            if (process.env.GMAIL_APP_PASSWORD && customer.email) {
                 const transporter = nodemailer.createTransport({
                     service: 'gmail',
                     auth: {
-                        user: process.env.GMAIL_USER,
+                        user: gmailUser,
                         pass: process.env.GMAIL_APP_PASSWORD,
                     },
                 });
@@ -76,9 +77,9 @@ export async function POST(request) {
                 }, 0);
 
                 await transporter.sendMail({
-                    from: `"Noore Jewels" <${process.env.GMAIL_USER}>`,
+                    from: `"Noore Jewels" <${gmailUser}>`,
                     to: customer.email,
-                    bcc: process.env.GMAIL_USER, // Send a copy to the owner
+                    bcc: gmailUser, // Send a copy to the owner
                     subject: `Order Confirmed! #${orderId} - Noore Jewels`,
                     html: `
                         <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 32px; background: #FDFBF7; color: #333;">
