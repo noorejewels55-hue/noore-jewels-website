@@ -125,7 +125,7 @@ export async function POST(request) {
         }
 
         return NextResponse.json({
-            success: emailSent || smsSent || whatsappSent,
+            success: emailSent,
             message,
             sentVia,
             // Only in dev mode for testing
