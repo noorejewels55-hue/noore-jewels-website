@@ -100,9 +100,29 @@ export async function POST(request) {
             }
         }
 
-        // Step 2: If email failed or not provided, try WhatsApp as fallback
+        // Step 2: If email failed or not provided, try SMS via Fast2SMS
+        let smsSent = false;
+        if (!emailSent && process.env.FAST2SMS_API_KEY) {
+            try {
+                // Fast2SMS OTP route (no DLT registration needed)
+                const smsResponse = await fetch(
+                    `https://www.fast2sms.com/dev/bulkV2?authorization=${process.env.FAST2SMS_API_KEY}&variables_values=${otp}&route=otp&numbers=${cleanPhone.length > 10 ? cleanPhone.slice(-10) : cleanPhone}`,
+                    { method: 'GET' }
+                );
+                const smsResult = await smsResponse.json();
+                if (smsResult.return === true) {
+                    smsSent = true;
+                } else {
+                    console.error('Fast2SMS error:', JSON.stringify(smsResult));
+                }
+            } catch (smsError) {
+                console.error('SMS OTP send error:', smsError);
+            }
+        }
+
+        // Step 3: If both failed, try WhatsApp as last fallback
         let whatsappSent = false;
-        if (!emailSent) {
+        if (!emailSent && !smsSent) {
             try {
                 if (process.env.WHATSAPP_TOKEN && process.env.PHONE_NUMBER_ID) {
                     const waResponse = await fetch(
@@ -141,8 +161,11 @@ export async function POST(request) {
         if (emailSent) {
             message = `OTP sent to your email (${email})! 📧`;
             sentVia = 'email';
+        } else if (smsSent) {
+            message = 'OTP sent to your mobile via SMS! 📱';
+            sentVia = 'sms';
         } else if (whatsappSent) {
-            message = 'OTP sent to your WhatsApp! 📱';
+            message = 'OTP sent to your WhatsApp! 💬';
             sentVia = 'whatsapp';
         } else {
             message = 'Could not send OTP. Please provide your email address and try again.';
@@ -154,7 +177,7 @@ export async function POST(request) {
         }
 
         return NextResponse.json({
-            success: emailSent || whatsappSent,
+            success: emailSent || smsSent || whatsappSent,
             message,
             sentVia,
             // Only in dev mode for testing
