@@ -89,9 +89,17 @@ export async function POST(request) {
             verifyAttempts: 0,
         });
 
-        // Step 1: Try Email first (primary method)
+        // Step 1: Send OTP via Email (Primary and only method now)
         let emailSent = false;
-        if (email && process.env.GMAIL_APP_PASSWORD) {
+
+        if (!email) {
+            return NextResponse.json(
+                { success: false, message: 'Please provide a valid email address' },
+                { status: 400 }
+            );
+        }
+
+        if (process.env.GMAIL_APP_PASSWORD) {
             try {
                 await sendEmailOTP(email, otp);
                 emailSent = true;
@@ -100,75 +108,15 @@ export async function POST(request) {
             }
         }
 
-        // Step 2: If email failed or not provided, try SMS via Fast2SMS
-        let smsSent = false;
-        if (!emailSent && process.env.FAST2SMS_API_KEY) {
-            try {
-                // Fast2SMS OTP route (no DLT registration needed)
-                const smsResponse = await fetch(
-                    `https://www.fast2sms.com/dev/bulkV2?authorization=${process.env.FAST2SMS_API_KEY}&variables_values=${otp}&route=otp&numbers=${cleanPhone.length > 10 ? cleanPhone.slice(-10) : cleanPhone}`,
-                    { method: 'GET' }
-                );
-                const smsResult = await smsResponse.json();
-                if (smsResult.return === true) {
-                    smsSent = true;
-                } else {
-                    console.error('Fast2SMS error:', JSON.stringify(smsResult));
-                }
-            } catch (smsError) {
-                console.error('SMS OTP send error:', smsError);
-            }
-        }
-
-        // Step 3: If both failed, try WhatsApp as last fallback
-        let whatsappSent = false;
-        if (!emailSent && !smsSent) {
-            try {
-                if (process.env.WHATSAPP_TOKEN && process.env.PHONE_NUMBER_ID) {
-                    const waResponse = await fetch(
-                        `https://graph.facebook.com/v18.0/${process.env.PHONE_NUMBER_ID}/messages`,
-                        {
-                            method: 'POST',
-                            headers: {
-                                'Authorization': `Bearer ${process.env.WHATSAPP_TOKEN}`,
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                messaging_product: 'whatsapp',
-                                to: formattedPhone,
-                                type: 'text',
-                                text: {
-                                    body: `🔐 Your Noore Jewels verification code is: *${otp}*\n\nThis code expires in 5 minutes. Do not share it with anyone.`
-                                }
-                            }),
-                        }
-                    );
-                    const waResult = await waResponse.json();
-                    if (waResponse.ok && waResult.messages && waResult.messages.length > 0) {
-                        whatsappSent = true;
-                    } else {
-                        console.error('WhatsApp API error:', JSON.stringify(waResult));
-                    }
-                }
-            } catch (whatsappError) {
-                console.error('WhatsApp OTP send error:', whatsappError);
-            }
-        }
-
         // Determine response message
         let message = '';
         let sentVia = 'none';
+
         if (emailSent) {
             message = `OTP sent to your email (${email})! 📧`;
             sentVia = 'email';
-        } else if (smsSent) {
-            message = 'OTP sent to your mobile via SMS! 📱';
-            sentVia = 'sms';
-        } else if (whatsappSent) {
-            message = 'OTP sent to your WhatsApp! 💬';
-            sentVia = 'whatsapp';
         } else {
-            message = 'Could not send OTP. Please provide your email address and try again.';
+            message = 'Could not send OTP. Please check the email server configuration.';
         }
 
         // In development, log OTP for testing

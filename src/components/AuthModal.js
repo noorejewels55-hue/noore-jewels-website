@@ -145,12 +145,7 @@ export default function AuthModal() {
                     <>
                         <h2 className="auth-title">Verify OTP</h2>
                         <p className="auth-subtitle">
-                            {otpSentVia === 'whatsapp'
-                                ? '💬 Code sent to your WhatsApp.'
-                                : otpSentVia === 'sms'
-                                    ? '📱 Code sent to your mobile via SMS.'
-                                    : '📧 Code sent to your email. Check your inbox!'
-                            }
+                            📧 Code sent to your email. Check your inbox!
                         </p>
 
                         <div className="otp-inputs" onPaste={handleOtpPaste}>
