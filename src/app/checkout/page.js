@@ -16,7 +16,7 @@ function CheckoutContent() {
     const [formData, setFormData] = useState({
         name: user?.name || '',
         phone: user?.phone || '',
-        email: '',
+        email: user?.email || '',
         address: '',
         city: '',
         state: '',
@@ -35,8 +35,8 @@ function CheckoutContent() {
 
     const handlePayment = async () => {
         // Validate
-        if (!formData.name || !formData.phone || !formData.address || !formData.city || !formData.pincode) {
-            setError('Please fill in all required fields');
+        if (!formData.name || !formData.phone || !formData.email || !formData.address || !formData.city || !formData.pincode) {
+            setError('Please fill in all required fields, including email');
             return;
         }
 
@@ -147,7 +147,7 @@ function CheckoutContent() {
                         Order ID: <strong>{orderId}</strong>
                     </p>
                     <p style={{ fontSize: '0.82rem', color: 'var(--color-text-light)', marginBottom: '32px', lineHeight: 1.8 }}>
-                        You&apos;ll receive an order confirmation on WhatsApp shortly.
+                        You&apos;ll receive an order confirmation via email shortly.
                         For any questions, feel free to chat with us!
                     </p>
                     <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -228,8 +228,8 @@ function CheckoutContent() {
                             </div>
 
                             <div className="auth-form-group">
-                                <label className="auth-label">Email (Optional)</label>
-                                <input className="auth-input" type="email" value={formData.email} onChange={e => handleChange('email', e.target.value)} placeholder="Your email address" />
+                                <label className="auth-label">Email *</label>
+                                <input className="auth-input" type="email" value={formData.email} onChange={e => handleChange('email', e.target.value)} placeholder="Your email address" required />
                             </div>
 
                             <div className="auth-form-group">
