@@ -3,13 +3,25 @@ import "./globals.css";
 export const metadata = {
   title: "Noore Jewels — Trendy Jewellery That Shines Forever",
   description: "Discover stunning, affordable jewellery at Noore Jewels. Shop rings, necklaces, bracelets, earrings and more. Starting at ₹199 with free shipping above ₹999.",
-  keywords: "jewellery, rings, necklaces, bracelets, earrings, affordable jewellery, Noore Jewels, Indian jewellery",
+  keywords: "jewellery, rings, necklaces, bracelets, earrings, affordable jewellery, Noore Jewels, Indian jewellery, AD jewellery, American Diamond",
+  icons: {
+    icon: '/favicon.png',
+    apple: '/favicon.png',
+  },
   openGraph: {
     title: "Noore Jewels — Trendy Jewellery That Shines Forever",
     description: "Discover stunning, affordable jewellery at Noore Jewels. Shop rings, necklaces, bracelets, earrings and more.",
     type: "website",
     url: "https://noorejewels.in",
     siteName: "Noore Jewels",
+    images: [
+      {
+        url: '/favicon.png',
+        width: 512,
+        height: 512,
+        alt: 'Noore Jewels',
+      }
+    ],
   },
 };
 

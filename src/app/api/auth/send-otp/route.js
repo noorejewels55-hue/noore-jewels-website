@@ -89,42 +89,9 @@ export async function POST(request) {
             verifyAttempts: 0,
         });
 
-        // Step 1: Try WhatsApp
-        let whatsappSent = false;
-        try {
-            if (process.env.WHATSAPP_TOKEN && process.env.PHONE_NUMBER_ID) {
-                const waResponse = await fetch(
-                    `https://graph.facebook.com/v18.0/${process.env.PHONE_NUMBER_ID}/messages`,
-                    {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${process.env.WHATSAPP_TOKEN}`,
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            messaging_product: 'whatsapp',
-                            to: formattedPhone,
-                            type: 'text',
-                            text: {
-                                body: `🔐 Your Noore Jewels verification code is: *${otp}*\n\nThis code expires in 5 minutes. Do not share it with anyone.`
-                            }
-                        }),
-                    }
-                );
-                const waResult = await waResponse.json();
-                if (waResponse.ok && waResult.messages && waResult.messages.length > 0) {
-                    whatsappSent = true;
-                } else {
-                    console.error('WhatsApp API error:', JSON.stringify(waResult));
-                }
-            }
-        } catch (whatsappError) {
-            console.error('WhatsApp OTP send error:', whatsappError);
-        }
-
-        // Step 2: If WhatsApp failed and email is provided, send via email
+        // Step 1: Try Email first (primary method)
         let emailSent = false;
-        if (!whatsappSent && email && process.env.GMAIL_APP_PASSWORD) {
+        if (email && process.env.GMAIL_APP_PASSWORD) {
             try {
                 await sendEmailOTP(email, otp);
                 emailSent = true;
@@ -133,17 +100,52 @@ export async function POST(request) {
             }
         }
 
+        // Step 2: If email failed or not provided, try WhatsApp as fallback
+        let whatsappSent = false;
+        if (!emailSent) {
+            try {
+                if (process.env.WHATSAPP_TOKEN && process.env.PHONE_NUMBER_ID) {
+                    const waResponse = await fetch(
+                        `https://graph.facebook.com/v18.0/${process.env.PHONE_NUMBER_ID}/messages`,
+                        {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${process.env.WHATSAPP_TOKEN}`,
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                messaging_product: 'whatsapp',
+                                to: formattedPhone,
+                                type: 'text',
+                                text: {
+                                    body: `🔐 Your Noore Jewels verification code is: *${otp}*\n\nThis code expires in 5 minutes. Do not share it with anyone.`
+                                }
+                            }),
+                        }
+                    );
+                    const waResult = await waResponse.json();
+                    if (waResponse.ok && waResult.messages && waResult.messages.length > 0) {
+                        whatsappSent = true;
+                    } else {
+                        console.error('WhatsApp API error:', JSON.stringify(waResult));
+                    }
+                }
+            } catch (whatsappError) {
+                console.error('WhatsApp OTP send error:', whatsappError);
+            }
+        }
+
         // Determine response message
         let message = '';
         let sentVia = 'none';
-        if (whatsappSent) {
-            message = 'OTP sent to your WhatsApp! 📱';
-            sentVia = 'whatsapp';
-        } else if (emailSent) {
+        if (emailSent) {
             message = `OTP sent to your email (${email})! 📧`;
             sentVia = 'email';
+        } else if (whatsappSent) {
+            message = 'OTP sent to your WhatsApp! 📱';
+            sentVia = 'whatsapp';
         } else {
-            message = 'Could not send OTP. Please check your details and try again.';
+            message = 'Could not send OTP. Please provide your email address and try again.';
         }
 
         // In development, log OTP for testing
@@ -152,7 +154,7 @@ export async function POST(request) {
         }
 
         return NextResponse.json({
-            success: whatsappSent || emailSent,
+            success: emailSent || whatsappSent,
             message,
             sentVia,
             // Only in dev mode for testing

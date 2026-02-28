@@ -116,13 +116,14 @@ export default function AuthModal() {
                             </div>
 
                             <div className="auth-form-group" style={{ marginTop: '12px' }}>
-                                <label className="auth-label">Email <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)' }}>(backup for OTP)</span></label>
+                                <label className="auth-label">Email <span style={{ fontSize: '0.7rem', color: 'var(--color-accent)' }}>(OTP will be sent here)</span></label>
                                 <input
                                     className="auth-input"
                                     type="email"
                                     placeholder="your@email.com"
                                     value={emailInput}
                                     onChange={e => setEmailInput(e.target.value)}
+                                    required
                                 />
                             </div>
 
@@ -134,7 +135,7 @@ export default function AuthModal() {
                         </form>
 
                         <p style={{ textAlign: 'center', fontSize: '0.72rem', color: 'var(--color-text-muted)', marginTop: '20px', lineHeight: '1.6' }}>
-                            We&apos;ll send a 6-digit code via WhatsApp. If that fails, we&apos;ll email it to you.
+                            We&apos;ll send a 6-digit verification code to your email address.
                         </p>
                     </>
                 )}
@@ -144,9 +145,9 @@ export default function AuthModal() {
                     <>
                         <h2 className="auth-title">Verify OTP</h2>
                         <p className="auth-subtitle">
-                            {otpSentVia === 'email'
-                                ? '📧 Code sent to your email. Check your inbox!'
-                                : '📱 Code sent to your WhatsApp.'
+                            {otpSentVia === 'whatsapp'
+                                ? '📱 Code sent to your WhatsApp.'
+                                : '📧 Code sent to your email. Check your inbox!'
                             }
                         </p>
 
