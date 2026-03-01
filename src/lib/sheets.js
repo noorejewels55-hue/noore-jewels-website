@@ -36,28 +36,14 @@ async function fetchFromSheets() {
     return rows
         .filter(row => row[0]) // filter empty rows
         .map(row => {
-            const col4 = row[4] || '';
-            const col5 = row[5] || '';
+            // Fixed column layout:
+            // A=Product Id, B=Name, C=Category, D=Price,
+            // E=Image URL, F=Description, G=In Stock,
+            // H=Discount, I=Tags, J=Image 2, K=Image 3
+            const imageUrl = row[4] || '';
+            const description = row[5] || '';
 
-            // Smart detection: if col4 looks like a URL, it's the image
-            // This handles both column orderings gracefully
-            const isCol4Url = col4.startsWith('http') || col4.includes('drive.google.com');
-            const isCol5Url = col5.startsWith('http') || col5.includes('drive.google.com');
-
-            let imageUrl, description;
-            if (isCol4Url && !isCol5Url) {
-                imageUrl = col4;
-                description = col5;
-            } else if (isCol5Url && !isCol4Url) {
-                imageUrl = col5;
-                description = col4;
-            } else {
-                // Default: col4 = description, col5 = image
-                description = col4;
-                imageUrl = col5;
-            }
-
-            // Build images array: main image + Image2 (col J/index 9) + Image3 (col K/index 10)
+            // Build images array: main image (E) + Image 2 (J) + Image 3 (K)
             const allImageUrls = [imageUrl, row[9] || '', row[10] || '']
                 .map(u => u.trim())
                 .filter(Boolean)
