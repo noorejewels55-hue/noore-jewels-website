@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { saveOrder } from '@/lib/sheets';
+import { createShiprocketOrder } from '@/lib/shiprocket';
 import nodemailer from 'nodemailer';
 
 export async function POST(request) {
@@ -121,9 +122,35 @@ export async function POST(request) {
             console.error('Email notification error:', emailError);
         }
 
+        // Auto-generate Shiprocket order for tracking
+        let shiprocketOrderId = null;
+        try {
+            if (process.env.SHIPROCKET_EMAIL && process.env.SHIPROCKET_PASSWORD) {
+                const totalAmount = items.reduce((sum, i) => {
+                    const price = i.discount > 0 ? i.price * (1 - i.discount / 100) : i.price;
+                    return sum + price * i.quantity;
+                }, 0);
+
+                const shiprocketData = await createShiprocketOrder({
+                    orderId,
+                    customer,
+                    items,
+                    totalAmount: Math.round(totalAmount)
+                });
+
+                if (shiprocketData && shiprocketData.order_id) {
+                    shiprocketOrderId = shiprocketData.order_id;
+                    console.log('Automated Shiprocket Order Created successfully:', shiprocketOrderId);
+                }
+            }
+        } catch (shiprocketError) {
+            console.error('Error automating Shiprocket generation:', shiprocketError);
+        }
+
         return NextResponse.json({
             success: true,
             orderId,
+            shiprocketOrderId,
             paymentId: razorpay_payment_id,
         });
 

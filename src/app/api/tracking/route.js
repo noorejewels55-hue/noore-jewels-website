@@ -1,40 +1,6 @@
 import { NextResponse } from 'next/server';
 
-// Cache Shiprocket auth token (valid for 10 days)
-let cachedToken = null;
-let tokenExpiresAt = 0;
-
-async function getShiprocketToken() {
-    // Return cached token if still valid (refresh 1 day early)
-    if (cachedToken && Date.now() < tokenExpiresAt) {
-        return cachedToken;
-    }
-
-    const email = process.env.SHIPROCKET_EMAIL;
-    const password = process.env.SHIPROCKET_PASSWORD;
-
-    if (!email || !password) {
-        throw new Error('Shiprocket credentials not configured');
-    }
-
-    const response = await fetch('https://apiv2.shiprocket.in/v1/external/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok || !data.token) {
-        throw new Error(`Shiprocket auth failed: ${JSON.stringify(data)}`);
-    }
-
-    cachedToken = data.token;
-    // Token valid for 10 days, we refresh after 9
-    tokenExpiresAt = Date.now() + 9 * 24 * 60 * 60 * 1000;
-
-    return cachedToken;
-}
+import { getShiprocketToken } from '@/lib/shiprocket';
 
 // Track by order ID (Shiprocket order ID)
 async function trackByOrderId(orderId, token) {
