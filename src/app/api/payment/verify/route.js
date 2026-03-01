@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { saveOrder } from '@/lib/sheets';
 import nodemailer from 'nodemailer';
+import { createNimbusPostOrder } from '@/lib/nimbuspost';
 
 export async function POST(request) {
     try {
@@ -121,12 +122,26 @@ export async function POST(request) {
             console.error('Email notification error:', emailError);
         }
 
-        // Pending NimbusPost Automation
+        // Generate NimbusPost Order
         let nimbuspostOrderId = null;
         try {
             if (process.env.NIMBUSPOST_EMAIL && process.env.NIMBUSPOST_PASSWORD) {
-                // To be implemented once NimbusPost API keys are ready
-                console.log('Nimbuspost integration pending...');
+                const totalAmount = items.reduce((sum, i) => {
+                    const price = i.discount > 0 ? i.price * (1 - i.discount / 100) : i.price;
+                    return sum + price * i.quantity;
+                }, 0);
+
+                const nimbusData = await createNimbusPostOrder({
+                    orderId,
+                    customer,
+                    items,
+                    totalAmount
+                });
+
+                if (nimbusData && nimbusData.data && nimbusData.data.awb_number) {
+                    nimbuspostOrderId = nimbusData.data.awb_number;
+                    console.log('Automated Nimbuspost Order created successfully with AWB:', nimbuspostOrderId);
+                }
             }
         } catch (error) {
             console.error('Error with NimbusPost:', error);

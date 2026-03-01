@@ -1,12 +1,25 @@
 import { NextResponse } from 'next/server';
+import { getNimbusPostToken } from '@/lib/nimbuspost';
+
+async function trackShipment(awb, token) {
+    const response = await fetch(`https://api.nimbuspost.com/v1/shipments/track/${awb}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+    return response.json();
+}
 
 export async function POST(request) {
     try {
         const { orderId, phone, awb } = await request.json();
 
-        if (!orderId && !phone && !awb) {
+        // Standard Tracking is typically via AWB in Nimbuspost
+        if (!awb) {
             return NextResponse.json(
-                { success: false, message: 'Please provide an Order ID, AWB number, or phone number.' },
+                { success: false, message: 'Please provide your AWB tracking number sent to your email.' },
                 { status: 400 }
             );
         }
@@ -20,10 +33,32 @@ export async function POST(request) {
             });
         }
 
-        // Tracking Logic Pending Nimbuspost API Keys
+        const token = await getNimbusPostToken();
+        const trackingData = await trackShipment(awb, token);
+
+        if (trackingData && trackingData.status && trackingData.data) {
+            const data = trackingData.data;
+            const history = data.history || [];
+
+            return NextResponse.json({
+                success: true,
+                tracking: {
+                    status: data.status || 'Unknown',
+                    courier: data.courier_name || 'NimbusPost',
+                    awb: awb,
+                    etd: data.edd || 'N/A', // Estimated Delivery Date
+                    activities: history.map(h => ({
+                        date: h.event_time,
+                        activity: h.message || h.status,
+                        location: h.location || ''
+                    }))
+                }
+            });
+        }
+
         return NextResponse.json({
             success: false,
-            message: 'Tracking information is temporarily unavailable as we upgrade our systems. Please check back later or contact us.',
+            message: 'No tracking information found for this AWB. Please check your details and try again.',
         });
 
     } catch (error) {
