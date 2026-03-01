@@ -1,54 +1,5 @@
 import { NextResponse } from 'next/server';
 
-import { getShiprocketToken } from '@/lib/shiprocket';
-
-// Track by order ID (Shiprocket order ID)
-async function trackByOrderId(orderId, token) {
-    const response = await fetch(
-        `https://apiv2.shiprocket.in/v1/external/courier/track?order_id=${orderId}`,
-        {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-        }
-    );
-    return response.json();
-}
-
-// Track by AWB (waybill number)
-async function trackByAWB(awb, token) {
-    const response = await fetch(
-        `https://apiv2.shiprocket.in/v1/external/courier/track/awb/${awb}`,
-        {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-        }
-    );
-    return response.json();
-}
-
-// Get orders by phone number
-async function getOrdersByPhone(phone, token) {
-    // Search orders — Shiprocket doesn't have a direct phone search,
-    // so we fetch recent orders and filter
-    const response = await fetch(
-        `https://apiv2.shiprocket.in/v1/external/orders?search=${phone}&per_page=10`,
-        {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-        }
-    );
-    return response.json();
-}
-
 export async function POST(request) {
     try {
         const { orderId, phone, awb } = await request.json();
@@ -60,74 +11,19 @@ export async function POST(request) {
             );
         }
 
-        // Check if Shiprocket is configured
-        if (!process.env.SHIPROCKET_EMAIL || !process.env.SHIPROCKET_PASSWORD) {
+        // Check if NimbusPost is configured
+        if (!process.env.NIMBUSPOST_EMAIL || !process.env.NIMBUSPOST_PASSWORD) {
             return NextResponse.json({
                 success: false,
-                message: 'Order tracking is being set up. Please contact us on WhatsApp or email for order updates.',
+                message: 'Order tracking is currently being updated to a new courier partner (NimbusPost). Please contact us on WhatsApp or email for immediate order updates.',
                 configured: false,
             });
         }
 
-        const token = await getShiprocketToken();
-
-        let trackingData = null;
-        let orders = null;
-
-        if (awb) {
-            // Track by AWB number
-            trackingData = await trackByAWB(awb, token);
-        } else if (orderId) {
-            // Track by order ID
-            trackingData = await trackByOrderId(orderId, token);
-        } else if (phone) {
-            // Search orders by phone
-            const cleanPhone = phone.replace(/\D/g, '');
-            const searchPhone = cleanPhone.length > 10 ? cleanPhone.slice(-10) : cleanPhone;
-            orders = await getOrdersByPhone(searchPhone, token);
-        }
-
-        // Format tracking response
-        if (trackingData) {
-            const tracking = trackingData.tracking_data || trackingData;
-
-            return NextResponse.json({
-                success: true,
-                tracking: {
-                    status: tracking.shipment_status || tracking.current_status || 'Unknown',
-                    statusId: tracking.shipment_status_id,
-                    courier: tracking.courier_name || 'N/A',
-                    awb: tracking.awb_code || awb || 'N/A',
-                    etd: tracking.etd || 'N/A',
-                    activities: (tracking.shipment_track_activities || tracking.track_activities || []).map(a => ({
-                        date: a.date,
-                        activity: a.activity || a.status,
-                        location: a.location || a['sr-status-label'] || '',
-                    })),
-                },
-            });
-        }
-
-        if (orders && orders.data) {
-            const orderList = (Array.isArray(orders.data) ? orders.data : [orders.data])
-                .map(o => ({
-                    id: o.id,
-                    orderId: o.channel_order_id || o.id,
-                    status: o.status,
-                    createdAt: o.created_at,
-                    products: o.products?.map(p => p.name).join(', ') || 'N/A',
-                    awb: o.shipments?.[0]?.awb || null,
-                }));
-
-            return NextResponse.json({
-                success: true,
-                orders: orderList,
-            });
-        }
-
+        // Tracking Logic Pending Nimbuspost API Keys
         return NextResponse.json({
             success: false,
-            message: 'No tracking information found. Please check your details and try again.',
+            message: 'Tracking information is temporarily unavailable as we upgrade our systems. Please check back later or contact us.',
         });
 
     } catch (error) {
