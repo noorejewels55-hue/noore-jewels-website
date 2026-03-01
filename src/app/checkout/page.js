@@ -28,9 +28,41 @@ function CheckoutContent() {
     const [orderId, setOrderId] = useState('');
     const [coupon, setCoupon] = useState('');
     const [discount, setDiscount] = useState(0);
+    const [couponApplied, setCouponApplied] = useState(false);
+    const [couponMsg, setCouponMsg] = useState('');
+    const [couponLoading, setCouponLoading] = useState(false);
 
     const handleChange = (field, value) => {
         setFormData(prev => ({ ...prev, [field]: value }));
+    };
+
+    const handleApplyCoupon = async () => {
+        if (!coupon.trim()) {
+            setCouponMsg('Please enter a coupon code.');
+            return;
+        }
+        setCouponLoading(true);
+        setCouponMsg('');
+        try {
+            const res = await fetch('/api/coupon', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code: coupon.trim(), orderAmount: subtotal }),
+            });
+            const data = await res.json();
+            if (data.success) {
+                setDiscount(data.coupon.discountAmount);
+                setCouponApplied(true);
+                setCouponMsg(data.message);
+            } else {
+                setDiscount(0);
+                setCouponApplied(false);
+                setCouponMsg(data.message);
+            }
+        } catch (err) {
+            setCouponMsg('Failed to validate coupon. Try again.');
+        }
+        setCouponLoading(false);
     };
 
     const handlePayment = async () => {
@@ -256,9 +288,31 @@ function CheckoutContent() {
                             <div style={{ marginTop: '24px' }}>
                                 <h2 className="checkout-section-title">Discount Code</h2>
                                 <div style={{ display: 'flex', gap: '8px' }}>
-                                    <input className="auth-input" type="text" value={coupon} onChange={e => setCoupon(e.target.value.toUpperCase())} placeholder="Enter coupon code" style={{ flex: 1 }} />
-                                    <button className="btn btn-outline btn-sm" onClick={() => { /* Apply coupon logic */ }}>Apply</button>
+                                    <input
+                                        className="auth-input"
+                                        type="text"
+                                        value={coupon}
+                                        onChange={e => { setCoupon(e.target.value.toUpperCase()); if (couponApplied) { setCouponApplied(false); setDiscount(0); setCouponMsg(''); } }}
+                                        placeholder="Enter coupon code"
+                                        style={{ flex: 1 }}
+                                        disabled={couponApplied}
+                                    />
+                                    {couponApplied ? (
+                                        <button className="btn btn-outline btn-sm" onClick={() => { setCoupon(''); setCouponApplied(false); setDiscount(0); setCouponMsg(''); }}>Remove</button>
+                                    ) : (
+                                        <button className="btn btn-outline btn-sm" onClick={handleApplyCoupon} disabled={couponLoading}>
+                                            {couponLoading ? '...' : 'Apply'}
+                                        </button>
+                                    )}
                                 </div>
+                                {couponMsg && (
+                                    <p style={{
+                                        fontSize: '0.78rem',
+                                        marginTop: '6px',
+                                        color: couponApplied ? '#38A169' : '#E53E3E',
+                                        fontWeight: 500,
+                                    }}>{couponMsg}</p>
+                                )}
                             </div>
                         </div>
 

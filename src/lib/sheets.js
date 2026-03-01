@@ -28,7 +28,7 @@ async function fetchFromSheets() {
 
     const response = await sheets.spreadsheets.values.get({
         spreadsheetId: process.env.GOOGLE_SHEET_ID,
-        range: 'Products!A2:I',
+        range: 'Products!A2:K',
     });
 
     const rows = response.data.values || [];
@@ -57,9 +57,8 @@ async function fetchFromSheets() {
                 imageUrl = col5;
             }
 
-            // Support multiple images separated by pipe (|)
-            const imageUrls = imageUrl
-                .split('|')
+            // Build images array: main image + Image2 (col J/index 9) + Image3 (col K/index 10)
+            const allImageUrls = [imageUrl, row[9] || '', row[10] || '']
                 .map(u => u.trim())
                 .filter(Boolean)
                 .map(u => convertDriveUrl(u));
@@ -70,8 +69,8 @@ async function fetchFromSheets() {
                 category: row[2] || '',
                 price: parseFloat(row[3]) || 0,
                 description: description,
-                image: imageUrls[0] || '/placeholder-product.jpg',
-                images: imageUrls.length > 0 ? imageUrls : ['/placeholder-product.jpg'],
+                image: allImageUrls[0] || '/placeholder-product.jpg',
+                images: allImageUrls.length > 0 ? allImageUrls : ['/placeholder-product.jpg'],
                 stock: (row[6] || '').toLowerCase() === 'yes',
                 discount: parseFloat(row[7]) || 0,
                 tags: (row[8] || '').split(',').map(t => t.trim().toLowerCase()).filter(Boolean),
@@ -210,6 +209,64 @@ export async function saveCustomer(customerData) {
     } catch (error) {
         console.error('Error saving customer:', error);
         return false;
+    }
+}
+
+// Save website customers to a separate 'Customer-Website' tab
+export async function saveWebsiteCustomer(customerData) {
+    try {
+        const auth = getAuth();
+        const sheets = google.sheets({ version: 'v4', auth });
+
+        await sheets.spreadsheets.values.append({
+            spreadsheetId: process.env.GOOGLE_SHEET_ID,
+            range: 'Customer-Website!A:F',
+            valueInputOption: 'USER_ENTERED',
+            resource: {
+                values: [[
+                    customerData.phone,
+                    customerData.name,
+                    customerData.email || '',
+                    customerData.city || '',
+                    'Website',
+                    new Date().toISOString(),
+                ]]
+            }
+        });
+
+        return true;
+    } catch (error) {
+        console.error('Error saving website customer:', error);
+        return false;
+    }
+}
+
+// Read coupons from the 'Coupons' tab
+export async function getCoupons() {
+    try {
+        const auth = getAuth();
+        const sheets = google.sheets({ version: 'v4', auth });
+
+        const response = await sheets.spreadsheets.values.get({
+            spreadsheetId: process.env.GOOGLE_SHEET_ID,
+            range: 'Coupons!A2:E',
+        });
+
+        const rows = response.data.values || [];
+
+        return rows
+            .filter(row => row[0])
+            .map(row => ({
+                code: (row[0] || '').toUpperCase().trim(),
+                type: (row[1] || 'percent').toLowerCase().trim(),   // 'percent' or 'flat'
+                value: parseFloat(row[2]) || 0,                     // e.g. 10 for 10% or 100 for ₹100
+                minOrder: parseFloat(row[3]) || 0,                  // Minimum order amount
+                active: (row[4] || 'yes').toLowerCase() === 'yes',  // Active?
+            }))
+            .filter(c => c.active);
+    } catch (error) {
+        console.error('Error reading coupons:', error);
+        return [];
     }
 }
 

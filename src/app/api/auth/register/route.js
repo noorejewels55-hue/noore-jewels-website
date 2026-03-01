@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { saveCustomer } from '@/lib/sheets';
+import { saveWebsiteCustomer } from '@/lib/sheets';
 
 export async function POST(request) {
     try {
@@ -15,9 +15,9 @@ export async function POST(request) {
         const cleanPhone = phone.replace(/\D/g, '');
         const cleanName = name.trim();
 
-        // Save to Google Sheets
+        // Save to Google Sheets - Customer-Website tab
         try {
-            await saveCustomer({
+            await saveWebsiteCustomer({
                 phone: cleanPhone,
                 name: cleanName,
             });
