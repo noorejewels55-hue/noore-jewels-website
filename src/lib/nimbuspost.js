@@ -15,6 +15,8 @@ export async function getNimbusPostToken() {
         throw new Error('NimbusPost credentials not configured');
     }
 
+    console.log('[NimbusPost] Attempting login with email:', email);
+
     const response = await fetch('https://api.nimbuspost.com/v1/users/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -22,32 +24,34 @@ export async function getNimbusPostToken() {
     });
 
     const data = await response.json();
+    console.log('[NimbusPost] Login response status:', response.status);
+    console.log('[NimbusPost] Login response:', JSON.stringify(data).substring(0, 500));
 
-    if (!data.status || !data.data) {
+    if (!data.status) {
         throw new Error(`NimbusPost auth failed: ${JSON.stringify(data)}`);
     }
 
-    cachedToken = data.data; // token is returned in data.data according to standard nimbuspost jwt response (or we assume data.data is the token string if it's a direct API token)
-
-    // Fallback: Sometimes token is in data.token
-    if (typeof data.data === 'object' && data.data.token) {
+    // Extract token - NimbusPost returns it in data field
+    if (typeof data.data === 'string') {
+        cachedToken = data.data;
+    } else if (typeof data.data === 'object' && data.data?.token) {
         cachedToken = data.data.token;
     } else if (data.token) {
         cachedToken = data.token;
-    } else if (typeof data.data === 'string') {
-        cachedToken = data.data; // fallback
+    } else {
+        cachedToken = data.data;
     }
 
-    // Cache for 23 hours (usually JWTs are valid for 24h)
-    tokenExpiresAt = Date.now() + 23 * 60 * 60 * 1000;
+    console.log('[NimbusPost] Token obtained successfully, type:', typeof cachedToken);
 
+    // Cache for 23 hours
+    tokenExpiresAt = Date.now() + 23 * 60 * 60 * 1000;
     return cachedToken;
 }
 
 export async function createNimbusPostOrder({ orderId, customer, items, totalAmount }) {
     try {
         const token = await getNimbusPostToken();
-
         const effectiveTotal = Math.round(totalAmount);
 
         // Map items to NimbusPost format
@@ -55,39 +59,38 @@ export async function createNimbusPostOrder({ orderId, customer, items, totalAmo
             const effectivePrice = item.discount > 0 ? item.price * (1 - item.discount / 100) : item.price;
             return {
                 name: item.name,
-                qty: String(item.quantity),
-                price: String(Math.round(effectivePrice)),
-                sku: item.id || `SKU-${Date.now()}-${index}`
+                qty: item.quantity,
+                price: Math.round(effectivePrice),
+                sku: item.id || `SKU-${index}`
             };
         });
 
-        // Use standard dimensions for jewelry
         const orderPayload = {
             order_number: orderId,
             payment_type: "prepaid",
             order_amount: effectiveTotal,
-            package_weight: 500, // 500 grams minimum standard
+            package_weight: 0.5,
             package_length: 10,
             package_breadth: 10,
-            package_height: 10,
+            package_height: 5,
             request_auto_pickup: "yes",
-            courier_id: "autoship", // Automatically assign best courier
-            is_insurance: "0",
             consignee: {
-                name: customer.name.trim() || 'Valued Customer',
+                name: customer.name?.trim() || 'Customer',
                 address: customer.address || 'N/A',
+                address_2: '',
                 city: customer.city || 'N/A',
                 state: customer.state || 'N/A',
-                pincode: String(customer.pincode).replace(/\D/g, '') || '000000',
-                phone: String(customer.phone).replace(/\D/g, '') || '9999999999',
-                email: customer.email || 'noore.jewels55@gmail.com'
+                pincode: String(customer.pincode || '').replace(/\D/g, '') || '000000',
+                phone: String(customer.phone || '').replace(/\D/g, '') || '0000000000',
+                email: customer.email || ''
             },
             pickup: {
-                // It typically falls back to default if minimal data is provided, but we pass warehouse name explicitly if required.
-                warehouse_name: "warehouse",
+                warehouse_name: "Noore Jewels",
             },
             order_items: orderItems
         };
+
+        console.log('[NimbusPost] Creating order with payload:', JSON.stringify(orderPayload, null, 2));
 
         const response = await fetch('https://api.nimbuspost.com/v1/shipments', {
             method: 'POST',
@@ -99,14 +102,19 @@ export async function createNimbusPostOrder({ orderId, customer, items, totalAmo
         });
 
         const data = await response.json();
+        console.log('[NimbusPost] Create order response status:', response.status);
+        console.log('[NimbusPost] Create order response:', JSON.stringify(data));
 
-        if (!response.ok) {
-            console.error('NimbusPost order creation error:', data);
+        if (!data.status) {
+            console.error('[NimbusPost] ORDER CREATION FAILED:', JSON.stringify(data));
+        } else {
+            console.log('[NimbusPost] ORDER CREATED SUCCESSFULLY!');
         }
 
         return data;
     } catch (e) {
-        console.error('Error in createNimbusPostOrder:', e);
+        console.error('[NimbusPost] Error in createNimbusPostOrder:', e.message || e);
         return null;
     }
 }
+
