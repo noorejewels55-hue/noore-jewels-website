@@ -59,6 +59,13 @@ function ReturnPolicyContent() {
         marginBottom: '12px',
     };
 
+    const steps = [
+        { step: '01', title: 'Contact Us', desc: 'Reach out via WhatsApp or email within 48 hours of delivery.' },
+        { step: '02', title: 'Share Evidence', desc: 'Send the unboxing video and photos of the issue.' },
+        { step: '03', title: 'We Review', desc: 'Our team will review your case and respond within 2-3 business days.' },
+        { step: '04', title: 'Resolution', desc: 'If approved, we will arrange a replacement or provide store credit.' },
+    ];
+
     return (
         <>
             <Navbar />
@@ -91,7 +98,7 @@ function ReturnPolicyContent() {
 
                     {/* General Policy */}
                     <div style={sectionStyle}>
-                        <div style={iconBadgeStyle}>📋</div>
+                        <div style={iconBadgeStyle}>&#128203;</div>
                         <h2 style={headingStyle}>General Policy</h2>
                         <div style={highlightBoxStyle}>
                             <p style={{ ...textStyle, marginBottom: 0, fontWeight: 400, color: 'var(--color-text)' }}>
@@ -108,8 +115,8 @@ function ReturnPolicyContent() {
 
                     {/* Exceptions */}
                     <div style={sectionStyle}>
-                        <div style={iconBadgeStyle}>🔄</div>
-                        <h2 style={headingStyle}>Exceptions — When We May Accept Returns</h2>
+                        <div style={iconBadgeStyle}>&#128260;</div>
+                        <h2 style={headingStyle}>Exceptions &mdash; When We May Accept Returns</h2>
                         <p style={textStyle}>
                             While we generally do not process returns, we understand that certain situations are beyond
                             your control. Returns or replacements may be considered <strong>on a case-by-case basis</strong> under
@@ -129,7 +136,7 @@ function ReturnPolicyContent() {
 
                     {/* Mandatory Evidence */}
                     <div style={sectionStyle}>
-                        <div style={iconBadgeStyle}>🎥</div>
+                        <div style={iconBadgeStyle}>&#127909;</div>
                         <h2 style={headingStyle}>Mandatory: Unboxing Video Required</h2>
                         <div style={highlightBoxStyle}>
                             <p style={{ ...textStyle, marginBottom: 0, fontWeight: 400, color: 'var(--color-text)' }}>
@@ -156,7 +163,7 @@ function ReturnPolicyContent() {
 
                     {/* How to Request */}
                     <div style={sectionStyle}>
-                        <div style={iconBadgeStyle}>📞</div>
+                        <div style={iconBadgeStyle}>&#128222;</div>
                         <h2 style={headingStyle}>How to Request a Return</h2>
                         <p style={textStyle}>
                             If you believe your order qualifies for a return or replacement, please follow these steps:
@@ -167,46 +174,41 @@ function ReturnPolicyContent() {
                             gap: '20px',
                             margin: '24px 0',
                         }}>
-                            {[
-                                { step: '01', title: 'Contact Us', desc: 'Reach out via WhatsApp or email within 48 hours of delivery.' },
-                                { step: '02', title: 'Share Evidence', desc: 'Send the unboxing video and photos of the issue.' },
-                                { step: '03', title: 'We Review', desc: 'Our team will review your case and respond within 2-3 business days.' },
-                                { step: '04', title: 'Resolution', desc: 'If approved, we'll arrange a replacement or provide store credit.' },
-                            ].map((item, i) => (
-                                    <div key={i} style={{
-                                        padding: '24px 20px',
-                                        border: '1px solid rgba(0,0,0,0.06)',
-                                        borderRadius: '12px',
-                                        textAlign: 'center',
-                                        transition: 'all 0.3s ease',
-                                    }}>
-                                        <div style={{
-                                            fontSize: '1.6rem',
-                                            fontWeight: 200,
-                                            color: 'var(--color-gold)',
-                                            fontFamily: 'var(--font-heading)',
-                                            marginBottom: '8px',
-                                        }}>{item.step}</div>
-                                        <h4 style={{
-                                            fontSize: '0.85rem',
-                                            fontWeight: 500,
-                                            marginBottom: '8px',
-                                            letterSpacing: '0.02em',
-                                        }}>{item.title}</h4>
-                                        <p style={{
-                                            fontSize: '0.78rem',
-                                            fontWeight: 300,
-                                            color: 'var(--color-text-light)',
-                                            lineHeight: 1.7,
-                                        }}>{item.desc}</p>
-                                    </div>
-                                ))}
+                            {steps.map((item, i) => (
+                                <div key={i} style={{
+                                    padding: '24px 20px',
+                                    border: '1px solid rgba(0,0,0,0.06)',
+                                    borderRadius: '12px',
+                                    textAlign: 'center',
+                                    transition: 'all 0.3s ease',
+                                }}>
+                                    <div style={{
+                                        fontSize: '1.6rem',
+                                        fontWeight: 200,
+                                        color: 'var(--color-gold)',
+                                        fontFamily: 'var(--font-heading)',
+                                        marginBottom: '8px',
+                                    }}>{item.step}</div>
+                                    <h4 style={{
+                                        fontSize: '0.85rem',
+                                        fontWeight: 500,
+                                        marginBottom: '8px',
+                                        letterSpacing: '0.02em',
+                                    }}>{item.title}</h4>
+                                    <p style={{
+                                        fontSize: '0.78rem',
+                                        fontWeight: 300,
+                                        color: 'var(--color-text-light)',
+                                        lineHeight: 1.7,
+                                    }}>{item.desc}</p>
+                                </div>
+                            ))}
                         </div>
                     </div>
 
                     {/* Refund */}
                     <div style={sectionStyle}>
-                        <div style={iconBadgeStyle}>💰</div>
+                        <div style={iconBadgeStyle}>&#128176;</div>
                         <h2 style={headingStyle}>Refund Information</h2>
                         <p style={textStyle}>
                             If a return is approved, we primarily offer <strong>replacement of the product</strong> or
@@ -221,7 +223,7 @@ function ReturnPolicyContent() {
 
                     {/* Non-Returnable */}
                     <div style={sectionStyle}>
-                        <div style={iconBadgeStyle}>🚫</div>
+                        <div style={iconBadgeStyle}>&#128683;</div>
                         <h2 style={headingStyle}>Non-Returnable Cases</h2>
                         <p style={textStyle}>
                             Returns will <strong>not</strong> be accepted in the following situations:
@@ -251,7 +253,7 @@ function ReturnPolicyContent() {
                             marginBottom: '16px',
                             letterSpacing: '0.04em',
                         }}>
-                            Need Help? <em style={{ color: 'var(--color-gold-light)' }}>We're Here for You</em>
+                            Need Help? <em style={{ color: 'var(--color-gold-light)' }}>We Are Here for You</em>
                         </h2>
                         <p style={{
                             fontSize: '0.85rem',
@@ -262,7 +264,7 @@ function ReturnPolicyContent() {
                             maxWidth: '480px',
                             margin: '0 auto 24px',
                         }}>
-                            For any queries or concerns about your order, feel free to reach out. We're always happy to help!
+                            For any queries or concerns about your order, feel free to reach out. We are always happy to help!
                         </p>
                         <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
                             <a
