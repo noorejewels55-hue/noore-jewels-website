@@ -1,16 +1,16 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Noore Jewels — Trendy Jewellery That Shines Forever",
-  description: "Discover stunning, affordable jewellery at Noore Jewels. Shop rings, necklaces, bracelets, earrings and more. Starting at ₹199 with free shipping above ₹999.",
+  title: "Noore Jewels — Premium American Diamond (AD) Imitation Jewellery",
+  description: "Shop premium American Diamond (AD/CZ) imitation jewellery at Noore Jewels. Anti-tarnish rings, necklaces, bracelets & earrings starting at ₹199. Free shipping above ₹999.",
   keywords: "jewellery, rings, necklaces, bracelets, earrings, affordable jewellery, Noore Jewels, Indian jewellery, AD jewellery, American Diamond",
   icons: {
     icon: '/favicon.png',
     apple: '/favicon.png',
   },
   openGraph: {
-    title: "Noore Jewels — Trendy Jewellery That Shines Forever",
-    description: "Discover stunning, affordable jewellery at Noore Jewels. Shop rings, necklaces, bracelets, earrings and more.",
+    title: "Noore Jewels — Premium American Diamond (AD) Imitation Jewellery",
+    description: "Shop premium American Diamond (AD/CZ) imitation jewellery at Noore Jewels. Anti-tarnish rings, necklaces, bracelets & earrings.",
     type: "website",
     url: "https://noorejewels.in",
     siteName: "Noore Jewels",

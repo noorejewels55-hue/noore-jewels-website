@@ -57,13 +57,21 @@ async function fetchFromSheets() {
                 imageUrl = col5;
             }
 
+            // Support multiple images separated by pipe (|)
+            const imageUrls = imageUrl
+                .split('|')
+                .map(u => u.trim())
+                .filter(Boolean)
+                .map(u => convertDriveUrl(u));
+
             return {
                 id: row[0] || '',
                 name: row[1] || '',
                 category: row[2] || '',
                 price: parseFloat(row[3]) || 0,
                 description: description,
-                image: convertDriveUrl(imageUrl),
+                image: imageUrls[0] || '/placeholder-product.jpg',
+                images: imageUrls.length > 0 ? imageUrls : ['/placeholder-product.jpg'],
                 stock: (row[6] || '').toLowerCase() === 'yes',
                 discount: parseFloat(row[7]) || 0,
                 tags: (row[8] || '').split(',').map(t => t.trim().toLowerCase()).filter(Boolean),
@@ -148,13 +156,14 @@ export async function saveOrder(orderData) {
 
         await sheets.spreadsheets.values.append({
             spreadsheetId: process.env.GOOGLE_SHEET_ID,
-            range: 'Order-Website!A:K',
+            range: 'Order-Website!A:P',
             valueInputOption: 'USER_ENTERED',
             resource: {
                 values: [[
                     orderData.orderId,
                     orderData.phone,
                     orderData.name,
+                    orderData.email || '',
                     orderData.productId,
                     orderData.productName,
                     orderData.quantity,
@@ -162,6 +171,10 @@ export async function saveOrder(orderData) {
                     orderData.discount || 0,
                     orderData.finalAmount,
                     orderData.paymentStatus,
+                    orderData.address || '',
+                    orderData.city || '',
+                    orderData.state || '',
+                    orderData.pincode || '',
                     new Date().toISOString(),
                 ]]
             }

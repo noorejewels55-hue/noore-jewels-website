@@ -9,8 +9,7 @@ import { CartProvider } from '@/context/CartContext';
 import { AuthProvider } from '@/context/AuthContext';
 
 function TrackOrderPage() {
-    const [orderId, setOrderId] = useState('');
-    const [phone, setPhone] = useState('');
+    const [awb, setAwb] = useState('');
     const [tracking, setTracking] = useState(null);
     const [orders, setOrders] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -19,8 +18,8 @@ function TrackOrderPage() {
 
     const handleTrack = async (e) => {
         e.preventDefault();
-        if (!orderId.trim() && !phone.trim()) {
-            setError('Please enter an Order ID or your phone number.');
+        if (!awb.trim()) {
+            setError('Please enter your AWB tracking number.');
             return;
         }
         setLoading(true);
@@ -34,8 +33,7 @@ function TrackOrderPage() {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    orderId: orderId.trim() || undefined,
-                    phone: phone.trim() ? (phone.length === 10 ? '91' + phone : phone) : undefined,
+                    awb: awb.trim(),
                 }),
             });
             const data = await res.json();
@@ -111,7 +109,7 @@ function TrackOrderPage() {
                 <div className="container">
                     <h1 className="section-title">Track Your Order</h1>
                     <div className="section-divider"></div>
-                    <p className="section-subtitle">Enter Your Order Details Below</p>
+                    <p className="section-subtitle">Enter your AWB tracking number to check your order status</p>
 
                     <div style={{
                         maxWidth: '560px',
@@ -130,12 +128,12 @@ function TrackOrderPage() {
                                     color: 'var(--color-text)',
                                     marginBottom: '6px',
                                     letterSpacing: '0.05em',
-                                }}>Order ID / AWB Number</label>
+                                }}>AWB Tracking Number</label>
                                 <input
                                     type="text"
-                                    placeholder="e.g. 123456 or AWB number"
-                                    value={orderId}
-                                    onChange={e => setOrderId(e.target.value)}
+                                    placeholder="Enter your AWB number (e.g. 59632218892)"
+                                    value={awb}
+                                    onChange={e => setAwb(e.target.value)}
                                     style={{
                                         width: '100%',
                                         padding: '12px 16px',
@@ -149,61 +147,9 @@ function TrackOrderPage() {
                                         boxSizing: 'border-box',
                                     }}
                                 />
-                            </div>
-
-                            <div style={{
-                                textAlign: 'center',
-                                fontSize: '0.8rem',
-                                color: 'var(--color-text-muted)',
-                                fontWeight: 400,
-                            }}>— or —</div>
-
-                            <div>
-                                <label style={{
-                                    display: 'block',
-                                    fontSize: '0.8rem',
-                                    fontWeight: 500,
-                                    color: 'var(--color-text)',
-                                    marginBottom: '6px',
-                                    letterSpacing: '0.05em',
-                                }}>Phone Number</label>
-                                <div style={{ display: 'flex', gap: '8px' }}>
-                                    <input
-                                        type="text"
-                                        value="+91"
-                                        readOnly
-                                        style={{
-                                            width: '60px',
-                                            padding: '12px 8px',
-                                            border: '1px solid var(--color-border, #E8E0D4)',
-                                            borderRadius: '6px',
-                                            fontSize: '0.88rem',
-                                            background: 'var(--color-bg)',
-                                            color: 'var(--color-text)',
-                                            textAlign: 'center',
-                                            boxSizing: 'border-box',
-                                        }}
-                                    />
-                                    <input
-                                        type="tel"
-                                        placeholder="Enter mobile number"
-                                        value={phone}
-                                        onChange={e => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
-                                        maxLength={10}
-                                        style={{
-                                            flex: 1,
-                                            padding: '12px 16px',
-                                            border: '1px solid var(--color-border, #E8E0D4)',
-                                            borderRadius: '6px',
-                                            fontSize: '0.88rem',
-                                            background: 'var(--color-bg)',
-                                            color: 'var(--color-text)',
-                                            outline: 'none',
-                                            transition: 'border-color 0.3s',
-                                            boxSizing: 'border-box',
-                                        }}
-                                    />
-                                </div>
+                                <p style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)', marginTop: '6px' }}>
+                                    Your AWB number is shared via email once your order is shipped.
+                                </p>
                             </div>
 
                             {error && (

@@ -19,18 +19,18 @@ function HomePage() {
   const heroSlides = [
     {
       badge: 'New Collection 2026',
-      title: <>Jewellery That<br />Tells <em>Your Story</em></>,
-      text: 'Discover our handpicked collection of stunning, affordable jewellery designed to make every moment shine.',
+      title: <>Stunning <em>American Diamond</em><br />Jewellery</>,
+      text: 'Discover our handpicked collection of premium American Diamond (AD) imitation jewellery — designed to dazzle at every occasion.',
     },
     {
       badge: 'Trending Now',
       title: <>Elegance in<br />Every <em>Detail</em></>,
-      text: 'From delicate rings to statement necklaces, find the perfect piece that speaks to your style.',
+      text: 'From sparkling AD rings to statement CZ necklaces, find the perfect piece that speaks to your style.',
     },
     {
       badge: 'Best Sellers',
       title: <>Shine <em>Forever</em><br />Starting ₹199</>,
-      text: 'Premium quality jewellery at prices that make you smile. Free shipping on orders above ₹999.',
+      text: 'Premium anti-tarnish American Diamond jewellery at prices that make you smile. Free shipping on orders above ₹999.',
     },
   ];
 
@@ -121,8 +121,8 @@ function HomePage() {
           <div className="trust-grid">
             <div className="trust-item">
               <div className="trust-icon">✦</div>
-              <div className="trust-title">Premium Quality</div>
-              <div className="trust-text">Every piece crafted with care & precision</div>
+              <div className="trust-title">Premium AD Jewellery</div>
+              <div className="trust-text">Finest American Diamond & CZ stones, anti-tarnish finish</div>
             </div>
             <div className="trust-item">
               <div className="trust-icon">🚚</div>
@@ -232,16 +232,16 @@ function HomePage() {
             </div>
             <div className="story-content">
               <div className="story-label">Our Story</div>
-              <h2 className="story-title">Born from a Love for Timeless Elegance</h2>
+              <h2 className="story-title">India's Finest American Diamond Jewellery</h2>
               <p className="story-text">
-                Noore Jewels was born from a simple belief — that every woman deserves to feel extraordinary,
-                without an extraordinary price tag. We curate pieces that blend traditional Indian artistry
-                with contemporary design, creating jewellery that transitions seamlessly from morning meetings
-                to moonlit dinners.
+                Noore Jewels specialises in premium American Diamond (AD/CZ) imitation jewellery
+                for the modern Indian woman. Our expertise lies in crafting stunning pieces that
+                mirror the brilliance of real diamonds — without the hefty price tag. Every stone
+                is carefully selected and set in anti-tarnish metal for lasting shine.
               </p>
               <p className="story-text">
-                Each piece in our collection is carefully selected to ensure it meets our standards of beauty,
-                quality, and affordability. Because we believe luxury should be accessible to all.
+                From elegant solitaire rings to dazzling AD necklace sets, each piece is designed
+                to make you feel extraordinary. Because we believe luxury should be accessible to all.
               </p>
               <Link href="/our-story" className="btn btn-outline">Read Our Story</Link>
             </div>

@@ -41,6 +41,7 @@ export async function POST(request) {
                     orderId,
                     phone: customer.phone,
                     name: customer.name,
+                    email: customer.email || '',
                     productId: item.id,
                     productName: item.name,
                     quantity: item.quantity,
@@ -48,6 +49,10 @@ export async function POST(request) {
                     discount: item.discount || 0,
                     finalAmount: Math.round(effectivePrice * item.quantity),
                     paymentStatus: 'Paid',
+                    address: customer.address || '',
+                    city: customer.city || '',
+                    state: customer.state || '',
+                    pincode: customer.pincode || '',
                 });
             } catch (e) {
                 console.error('Error saving order line:', e);

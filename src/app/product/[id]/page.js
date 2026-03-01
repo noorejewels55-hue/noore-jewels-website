@@ -16,6 +16,7 @@ function ProductDetail({ params }) {
     const [related, setRelated] = useState([]);
     const [loading, setLoading] = useState(true);
     const [quantity, setQuantity] = useState(1);
+    const [selectedImage, setSelectedImage] = useState(0);
     const { addItem } = useCart();
 
     useEffect(() => {
@@ -29,6 +30,7 @@ function ProductDetail({ params }) {
             if (data.success) {
                 const found = data.products.find(p => p.id === id);
                 setProduct(found || null);
+                setSelectedImage(0);
 
                 // Get related products in same category
                 if (found) {
@@ -47,6 +49,8 @@ function ProductDetail({ params }) {
     const effectivePrice = product?.discount > 0
         ? product.price * (1 - product.discount / 100)
         : product?.price || 0;
+
+    const productImages = product?.images || (product?.image ? [product.image] : []);
 
     const handleAddToCart = () => {
         if (product && product.stock) {
@@ -123,8 +127,45 @@ function ProductDetail({ params }) {
                         {/* Gallery */}
                         <div className="product-gallery">
                             <div className="product-gallery-main">
-                                <img src={product.image} alt={product.name} />
+                                <img src={productImages[selectedImage] || product.image} alt={product.name} />
                             </div>
+                            {productImages.length > 1 && (
+                                <div style={{
+                                    display: 'flex',
+                                    gap: '8px',
+                                    marginTop: '12px',
+                                    overflowX: 'auto',
+                                    paddingBottom: '4px',
+                                }}>
+                                    {productImages.map((img, idx) => (
+                                        <button
+                                            key={idx}
+                                            onClick={() => setSelectedImage(idx)}
+                                            style={{
+                                                width: '64px',
+                                                height: '64px',
+                                                borderRadius: '6px',
+                                                overflow: 'hidden',
+                                                border: selectedImage === idx
+                                                    ? '2px solid var(--color-rose-gold, #C5A467)'
+                                                    : '1px solid var(--color-border, #E8E0D4)',
+                                                cursor: 'pointer',
+                                                padding: 0,
+                                                background: 'var(--color-bg)',
+                                                opacity: selectedImage === idx ? 1 : 0.6,
+                                                transition: 'all 0.2s ease',
+                                                flexShrink: 0,
+                                            }}
+                                        >
+                                            <img
+                                                src={img}
+                                                alt={`${product.name} - view ${idx + 1}`}
+                                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                            />
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
                         </div>
 
                         {/* Info */}
