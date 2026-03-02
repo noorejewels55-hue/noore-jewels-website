@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import AuthModal from '@/components/AuthModal';
@@ -8,6 +9,33 @@ import { CartProvider } from '@/context/CartContext';
 import { AuthProvider } from '@/context/AuthContext';
 
 function ContactPage() {
+    const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+    const [sending, setSending] = useState(false);
+    const [result, setResult] = useState(null);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setSending(true);
+        setResult(null);
+
+        try {
+            const res = await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData),
+            });
+            const data = await res.json();
+            setResult({ success: data.success, message: data.message });
+
+            if (data.success) {
+                setFormData({ name: '', email: '', message: '' });
+            }
+        } catch (err) {
+            setResult({ success: false, message: 'Failed to send message. Please try WhatsApp.' });
+        }
+        setSending(false);
+    };
+
     return (
         <>
             <Navbar />
@@ -134,10 +162,23 @@ function ContactPage() {
                                 letterSpacing: '0.05em',
                             }}>Send a Message</h2>
 
+                            {result && (
+                                <div style={{
+                                    padding: '12px 16px',
+                                    marginBottom: '16px',
+                                    borderRadius: '6px',
+                                    fontSize: '0.85rem',
+                                    fontWeight: 500,
+                                    background: result.success ? '#F0FFF4' : '#FFF5F5',
+                                    color: result.success ? '#38A169' : '#E53E3E',
+                                    border: `1px solid ${result.success ? '#C6F6D5' : '#FED7D7'}`,
+                                }}>
+                                    {result.success ? '✅' : '❌'} {result.message}
+                                </div>
+                            )}
+
                             <form
-                                action={`mailto:noore.jewels55@gmail.com`}
-                                method="POST"
-                                encType="text/plain"
+                                onSubmit={handleSubmit}
                                 style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
                             >
                                 <div>
@@ -151,7 +192,8 @@ function ContactPage() {
                                     }}>Your Name</label>
                                     <input
                                         type="text"
-                                        name="name"
+                                        value={formData.name}
+                                        onChange={e => setFormData(prev => ({ ...prev, name: e.target.value }))}
                                         placeholder="Enter your name"
                                         required
                                         style={{
@@ -180,7 +222,8 @@ function ContactPage() {
                                     }}>Your Email</label>
                                     <input
                                         type="email"
-                                        name="email"
+                                        value={formData.email}
+                                        onChange={e => setFormData(prev => ({ ...prev, email: e.target.value }))}
                                         placeholder="your@email.com"
                                         required
                                         style={{
@@ -208,7 +251,8 @@ function ContactPage() {
                                         letterSpacing: '0.05em',
                                     }}>Message</label>
                                     <textarea
-                                        name="message"
+                                        value={formData.message}
+                                        onChange={e => setFormData(prev => ({ ...prev, message: e.target.value }))}
                                         placeholder="How can we help you?"
                                         rows={5}
                                         required
@@ -229,8 +273,13 @@ function ContactPage() {
                                     />
                                 </div>
 
-                                <button type="submit" className="btn btn-primary" style={{ marginTop: '8px' }}>
-                                    Send Message
+                                <button
+                                    type="submit"
+                                    className="btn btn-primary"
+                                    style={{ marginTop: '8px', opacity: sending ? 0.7 : 1 }}
+                                    disabled={sending}
+                                >
+                                    {sending ? 'Sending...' : 'Send Message'}
                                 </button>
                             </form>
                         </div>

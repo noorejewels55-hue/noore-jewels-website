@@ -330,11 +330,21 @@ export async function getOrdersByPhone(phone) {
         });
 
         const rows = response.data.values || [];
-        // Skip header row if present
-        const dataRows = rows.length > 0 && rows[0][0] === 'Order ID' ? rows.slice(1) : rows;
+        // Skip header row - detect header by checking if first row looks like a header (not an order ID)
+        const firstRow = rows[0] || [];
+        const isHeader = firstRow.length > 0 && !firstRow[0]?.startsWith?.('NJ-');
+        const dataRows = isHeader ? rows.slice(1) : rows;
 
-        // Filter rows matching the customer's phone number
-        const customerRows = dataRows.filter(row => row[1] === phone);
+        // Normalize phone for comparison - compare last 10 digits
+        const normalizePhone = (p) => {
+            const digits = (p || '').replace(/\D/g, '');
+            return digits.length >= 10 ? digits.slice(-10) : digits;
+        };
+
+        const searchPhone = normalizePhone(phone);
+
+        // Filter rows matching the customer's phone number (flexible matching)
+        const customerRows = dataRows.filter(row => normalizePhone(row[1]) === searchPhone);
 
         // Group by order ID
         const ordersMap = {};
