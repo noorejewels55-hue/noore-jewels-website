@@ -51,6 +51,7 @@ export default function Footer() {
                         <div className="footer-links">
                             <Link href="/our-story">Our Story</Link>
                             <Link href="/contact">Contact Us</Link>
+                            <Link href="/my-orders">My Orders</Link>
                             <a href="https://wa.me/919217945235?text=Hi! I need help with my order" target="_blank" rel="noopener noreferrer">WhatsApp Support</a>
                             <Link href="/track-order">Track Order</Link>
                             <Link href="/return-policy">Return Policy</Link>

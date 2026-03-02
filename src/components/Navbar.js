@@ -71,6 +71,20 @@ export default function Navbar() {
                                     }}>
                                         <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '4px', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Welcome</p>
                                         <p style={{ fontSize: '0.85rem', fontWeight: 600, marginBottom: '12px', color: 'var(--color-text)' }}>{user.name}</p>
+                                        <Link
+                                            href="/my-orders"
+                                            onClick={() => setUserMenuOpen(false)}
+                                            style={{
+                                                display: 'block', width: '100%', padding: '8px 12px', fontSize: '0.75rem',
+                                                fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase',
+                                                border: '1px solid var(--color-gold, #C5A467)', background: 'transparent',
+                                                color: 'var(--color-gold, #C5A467)', cursor: 'pointer',
+                                                transition: 'all 0.3s ease', textAlign: 'center', textDecoration: 'none',
+                                                marginBottom: '8px',
+                                            }}
+                                        >
+                                            My Orders
+                                        </Link>
                                         <button
                                             onClick={() => { logout(); setUserMenuOpen(false); }}
                                             style={{
@@ -131,7 +145,8 @@ export default function Navbar() {
                         {user ? (
                             <div>
                                 <p style={{ fontSize: '0.85rem', marginBottom: '12px' }}>Welcome, <strong>{user.name}</strong></p>
-                                <button onClick={() => { logout(); setMobileOpen(false); }} className="btn btn-outline btn-sm">Sign Out</button>
+                                <Link href="/my-orders" className="btn btn-outline btn-sm" onClick={() => setMobileOpen(false)} style={{ display: 'block', marginBottom: '8px', textAlign: 'center' }}>My Orders</Link>
+                                <button onClick={() => { logout(); setMobileOpen(false); }} className="btn btn-outline btn-sm" style={{ width: '100%' }}>Sign Out</button>
                             </div>
                         ) : (
                             <button onClick={() => { openAuth(); setMobileOpen(false); }} className="btn btn-primary btn-full">Sign In</button>

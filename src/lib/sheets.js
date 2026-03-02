@@ -306,6 +306,68 @@ function convertDriveUrl(url) {
     return url;
 }
 
+// Get orders for a specific customer by phone number
+export async function getOrdersByPhone(phone) {
+    try {
+        const auth = getAuth();
+        const sheets = google.sheets({ version: 'v4', auth });
+
+        const response = await sheets.spreadsheets.values.get({
+            spreadsheetId: process.env.GOOGLE_SHEET_ID,
+            range: 'Order-Website!A:P',
+        });
+
+        const rows = response.data.values || [];
+        // Skip header row if present
+        const dataRows = rows.length > 0 && rows[0][0] === 'Order ID' ? rows.slice(1) : rows;
+
+        // Filter rows matching the customer's phone number
+        const customerRows = dataRows.filter(row => row[1] === phone);
+
+        // Group by order ID
+        const ordersMap = {};
+        for (const row of customerRows) {
+            const orderId = row[0];
+            if (!ordersMap[orderId]) {
+                ordersMap[orderId] = {
+                    orderId,
+                    phone: row[1],
+                    name: row[2],
+                    email: row[3] || '',
+                    items: [],
+                    paymentStatus: row[10] || 'Paid',
+                    address: row[11] || '',
+                    city: row[12] || '',
+                    state: row[13] || '',
+                    pincode: row[14] || '',
+                    date: row[15] || '',
+                    totalAmount: 0,
+                };
+            }
+            const item = {
+                productId: row[4],
+                productName: row[5],
+                quantity: parseInt(row[6]) || 1,
+                price: parseFloat(row[7]) || 0,
+                discount: parseFloat(row[8]) || 0,
+                finalAmount: parseFloat(row[9]) || 0,
+            };
+            ordersMap[orderId].items.push(item);
+            ordersMap[orderId].totalAmount += item.finalAmount;
+        }
+
+        // Convert to array and sort by date (newest first)
+        const orders = Object.values(ordersMap).sort((a, b) => {
+            return new Date(b.date) - new Date(a.date);
+        });
+
+        return orders;
+    } catch (error) {
+        console.error('Error fetching orders:', error);
+        return [];
+    }
+}
+
 export function clearCache() {
     cachedProducts = null;
     cacheTimestamp = 0;
