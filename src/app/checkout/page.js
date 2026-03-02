@@ -230,7 +230,7 @@ function CheckoutContent() {
 
             <section className="checkout-page">
                 <div className="container">
-                    <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: '2rem', fontWeight: 400, letterSpacing: '0.08em', textAlign: 'center', marginBottom: '48px', textTransform: 'uppercase' }}>
+                    <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.4rem, 4vw, 2rem)', fontWeight: 400, letterSpacing: '0.08em', textAlign: 'center', marginBottom: '32px', textTransform: 'uppercase' }}>
                         Checkout
                     </h1>
 
@@ -248,7 +248,7 @@ function CheckoutContent() {
                         <div>
                             <h2 className="checkout-section-title">Shipping Details</h2>
 
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '16px' }}>
                                 <div className="auth-form-group">
                                     <label className="auth-label">Full Name *</label>
                                     <input className="auth-input" type="text" value={formData.name} onChange={e => handleChange('name', e.target.value)} placeholder="Your full name" />
@@ -269,7 +269,7 @@ function CheckoutContent() {
                                 <textarea className="auth-input" rows={3} value={formData.address} onChange={e => handleChange('address', e.target.value)} placeholder="House no, Street, Landmark" style={{ resize: 'vertical' }} />
                             </div>
 
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '16px' }}>
                                 <div className="auth-form-group">
                                     <label className="auth-label">City *</label>
                                     <input className="auth-input" type="text" value={formData.city} onChange={e => handleChange('city', e.target.value)} placeholder="City" />
