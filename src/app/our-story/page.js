@@ -26,70 +26,77 @@ function StoryContent() {
                         Our Story
                     </div>
                     <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 5vw, 3.2rem)', fontWeight: 300, lineHeight: 1.2, marginBottom: '24px', letterSpacing: '0.04em' }}>
-                        Born from a Love for <em style={{ color: 'var(--color-gold)' }}>Timeless Beauty</em>
+                        Two Women, One <em style={{ color: 'var(--color-gold)' }}>Sparkling Dream</em>
                     </h1>
                     <p style={{ fontSize: '0.9rem', fontWeight: 300, color: 'var(--color-text-light)', lineHeight: 1.9, maxWidth: '550px', margin: '0 auto' }}>
-                        Every piece of jewellery has a story. Ours began with a simple dream — to make beautiful,
-                        high-quality jewellery accessible to every woman in India.
+                        Noore Jewels was born from a passion shared by two women who believed every woman
+                        deserves to sparkle — without breaking the bank.
                     </p>
                 </div>
             </section>
 
-            {/* The Beginning */}
+            {/* Meet the Founders */}
             <section style={{ padding: '80px 0' }}>
                 <div className="container">
                     <div className="story-grid">
                         <div className="story-image">
                             <img
-                                src="/story-image.png"
-                                alt="Noore Jewels — Where It All Started"
+                                src="/founders.png"
+                                alt="Founders of Noore Jewels — Kriti Kala"
                                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                             />
                         </div>
                         <div className="story-content">
-                            <div className="story-label">The Beginning</div>
-                            <h2 className="story-title">Where It All Started</h2>
+                            <div className="story-label">Meet the Founders</div>
+                            <h2 className="story-title">The Faces Behind Noore Jewels</h2>
                             <p className="story-text">
-                                Noore Jewels started out of a passion for bringing joy through beautiful accessories. We noticed
-                                that gorgeous jewellery often came with prices that made people hesitate. We wanted to change that.
+                                Hi, I&apos;m <strong>Kriti Kala</strong>, the heart and soul behind Noore Jewels. Along with
+                                my partner, we started this journey with a simple belief — that beautiful
+                                jewellery shouldn&apos;t come with a hefty price tag.
                             </p>
                             <p className="story-text">
-                                Starting from a small workshop with a handful of designs, we began sharing our creations on
-                                social media. The response was overwhelming — women from across India fell in love with our
-                                pieces, not just for how they looked, but for how they made them feel.
+                                As women ourselves, we understand the joy of finding that perfect piece — the one
+                                that makes you feel confident, beautiful, and ready to conquer the world. That&apos;s
+                                exactly what we set out to create. Every design at Noore Jewels is handpicked by us
+                                with love and care, ensuring it meets our own standards of beauty and quality.
+                            </p>
+                            <p className="story-text">
+                                We specialize in premium <strong>American Diamond (AD)</strong> imitation jewellery —
+                                pieces that look stunning, feel luxurious, and last long, all at prices that make
+                                you smile. From our family to yours, every order is packed with care and shipped with love.
                             </p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* Our Values */}
+            {/* Why AD Jewelry */}
             <section style={{ padding: '80px 0', background: 'var(--color-bg-alt)' }}>
                 <div className="container">
-                    <h2 className="section-title">What We Believe In</h2>
+                    <h2 className="section-title">Why American Diamond?</h2>
                     <div className="section-divider"></div>
-                    <p className="section-subtitle">Our Core Values</p>
+                    <p className="section-subtitle">Premium Look, Smart Price</p>
 
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '40px', marginTop: '20px' }}>
                         {[
                             {
-                                icon: '✦',
-                                title: 'Beauty for Everyone',
-                                text: 'Luxury jewellery shouldn\'t require a luxury budget. We make premium designs accessible, starting at just ₹199.'
+                                icon: '💎',
+                                title: 'Diamond-Like Brilliance',
+                                text: 'American Diamond (CZ) stones are precision-cut to reflect light just like real diamonds. The sparkle is real — only the price is different!'
                             },
                             {
-                                icon: '♡',
-                                title: 'Made with Love',
-                                text: 'Every piece is carefully curated and quality-checked to ensure it meets our high standards of beauty and durability.'
+                                icon: '🛡️',
+                                title: 'Anti-Tarnish Quality',
+                                text: 'Our pieces are coated with anti-tarnish layers to keep them shining for months. Wear them daily without worry — they\'re built to last.'
                             },
                             {
-                                icon: '✨',
-                                title: 'Trendy Yet Timeless',
-                                text: 'Our designs blend the latest trends with timeless elegance, so you can wear them today, tomorrow, and always.'
+                                icon: '🎯',
+                                title: 'Affordable Luxury',
+                                text: 'Why spend lakhs when you can shine for hundreds? Premium AD jewellery starting at just ₹199. Look like a million bucks, spend like a pro.'
                             },
                         ].map((val, i) => (
                             <div key={i} style={{ textAlign: 'center', padding: '32px 24px' }}>
-                                <div style={{ fontSize: '2rem', color: 'var(--color-gold)', marginBottom: '16px' }}>{val.icon}</div>
+                                <div style={{ fontSize: '2rem', marginBottom: '16px' }}>{val.icon}</div>
                                 <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.3rem', fontWeight: 400, marginBottom: '12px', letterSpacing: '0.04em' }}>
                                     {val.title}
                                 </h3>
@@ -102,14 +109,14 @@ function StoryContent() {
                 </div>
             </section>
 
-            {/* The Journey */}
+            {/* Our Journey */}
             <section style={{ padding: '80px 0' }}>
                 <div className="container">
                     <div className="story-grid" style={{ direction: 'rtl' }}>
                         <div className="story-image" style={{ direction: 'ltr' }}>
                             <img
                                 src="/story-journey.png"
-                                alt="Noore Jewels — Growing Together"
+                                alt="Noore Jewels Collection — American Diamond Jewelry"
                                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                             />
                         </div>
@@ -117,37 +124,228 @@ function StoryContent() {
                             <div className="story-label">The Journey</div>
                             <h2 className="story-title">Growing Together with You</h2>
                             <p className="story-text">
-                                From our first 10 customers to over 500 happy customers across India, every step of our
-                                journey has been fuelled by your love and trust. Your messages telling us how a simple
-                                necklace brightened your day, or how our earrings were the perfect gift — those stories
-                                keep us going.
+                                What started as a small dream has grown into a community of hundreds of happy
+                                customers across India. Every order, every review, every &quot;I love it!&quot; message
+                                from you pushes us to do better.
                             </p>
                             <p className="story-text">
-                                Today, we offer 200+ unique designs across rings, necklaces, earrings, bracelets, and
-                                more. Each piece is a promise — of quality, of beauty, and of bringing a little sparkle
-                                to your everyday.
+                                Kriti personally oversees every new design that enters our collection. If it
+                                doesn&apos;t make her go &quot;wow,&quot; it doesn&apos;t make it to the website. That&apos;s our
+                                quality promise — if we won&apos;t wear it ourselves, we won&apos;t sell it to you.
                             </p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* Promise */}
+            {/* Trust & Safety Section */}
+            <section style={{ padding: '80px 0', background: 'var(--color-bg-alt)' }}>
+                <div className="container">
+                    <h2 className="section-title">Shop with Confidence</h2>
+                    <div className="section-divider"></div>
+                    <p className="section-subtitle" style={{ maxWidth: '600px', margin: '0 auto 48px' }}>
+                        Your trust means everything to us. Here&apos;s why you can order worry-free
+                    </p>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '32px' }}>
+                        {/* Secure Payments */}
+                        <div style={{
+                            background: '#fff',
+                            padding: '36px 28px',
+                            borderRadius: '12px',
+                            border: '1px solid var(--color-border-light, #E8E0D4)',
+                            textAlign: 'center',
+                        }}>
+                            <div style={{ fontSize: '2.5rem', marginBottom: '16px' }}>🔒</div>
+                            <h3 style={{
+                                fontFamily: 'var(--font-heading)',
+                                fontSize: '1.2rem',
+                                fontWeight: 500,
+                                marginBottom: '12px',
+                                letterSpacing: '0.04em',
+                            }}>100% Secure Payments</h3>
+                            <p style={{
+                                fontSize: '0.85rem',
+                                fontWeight: 300,
+                                color: 'var(--color-text-light)',
+                                lineHeight: 1.8,
+                                marginBottom: '16px',
+                            }}>
+                                All payments are processed through <strong>Razorpay</strong> — India&apos;s most trusted
+                                payment gateway used by lakhs of businesses. Your card details are never stored
+                                with us. Pay via UPI, Credit/Debit Cards, Net Banking, or Wallets — 100% safe and encrypted.
+                            </p>
+                            <div style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                padding: '8px 20px',
+                                background: 'var(--color-bg-alt)',
+                                borderRadius: '6px',
+                                fontSize: '0.75rem',
+                                fontWeight: 500,
+                                color: 'var(--color-text)',
+                                letterSpacing: '0.05em',
+                            }}>
+                                💳 Powered by Razorpay
+                            </div>
+                        </div>
+
+                        {/* Fast Delivery */}
+                        <div style={{
+                            background: '#fff',
+                            padding: '36px 28px',
+                            borderRadius: '12px',
+                            border: '1px solid var(--color-border-light, #E8E0D4)',
+                            textAlign: 'center',
+                        }}>
+                            <div style={{ fontSize: '2.5rem', marginBottom: '16px' }}>🚚</div>
+                            <h3 style={{
+                                fontFamily: 'var(--font-heading)',
+                                fontSize: '1.2rem',
+                                fontWeight: 500,
+                                marginBottom: '12px',
+                                letterSpacing: '0.04em',
+                            }}>Automatic Shipping</h3>
+                            <p style={{
+                                fontSize: '0.85rem',
+                                fontWeight: 300,
+                                color: 'var(--color-text-light)',
+                                lineHeight: 1.8,
+                                marginBottom: '16px',
+                            }}>
+                                The moment you order, our courier partner <strong>NimbusPost</strong> automatically
+                                picks it up! No delays, no manual processing. Your order is packed with love
+                                and shipped the same or next business day. Track your order anytime from our website.
+                            </p>
+                            <div style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                padding: '8px 20px',
+                                background: 'var(--color-bg-alt)',
+                                borderRadius: '6px',
+                                fontSize: '0.75rem',
+                                fontWeight: 500,
+                                color: 'var(--color-text)',
+                                letterSpacing: '0.05em',
+                            }}>
+                                📦 Delivered by NimbusPost
+                            </div>
+                        </div>
+
+                        {/* Quality Guarantee */}
+                        <div style={{
+                            background: '#fff',
+                            padding: '36px 28px',
+                            borderRadius: '12px',
+                            border: '1px solid var(--color-border-light, #E8E0D4)',
+                            textAlign: 'center',
+                        }}>
+                            <div style={{ fontSize: '2.5rem', marginBottom: '16px' }}>✅</div>
+                            <h3 style={{
+                                fontFamily: 'var(--font-heading)',
+                                fontSize: '1.2rem',
+                                fontWeight: 500,
+                                marginBottom: '12px',
+                                letterSpacing: '0.04em',
+                            }}>You Will Receive Your Order</h3>
+                            <p style={{
+                                fontSize: '0.85rem',
+                                fontWeight: 300,
+                                color: 'var(--color-text-light)',
+                                lineHeight: 1.8,
+                                marginBottom: '16px',
+                            }}>
+                                We understand online shopping can feel scary. But at Noore Jewels, <strong>every
+                                    single order is delivered</strong>. We&apos;re real people — two women running a business
+                                we&apos;re proud of. Check our Instagram reviews, our WhatsApp support, and our happy
+                                customers. You can reach us anytime!
+                            </p>
+                            <div style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                padding: '8px 20px',
+                                background: 'var(--color-bg-alt)',
+                                borderRadius: '6px',
+                                fontSize: '0.75rem',
+                                fontWeight: 500,
+                                color: 'var(--color-text)',
+                                letterSpacing: '0.05em',
+                            }}>
+                                ⭐ 500+ Happy Customers
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Additional trust points */}
+                    <div style={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        justifyContent: 'center',
+                        gap: '24px',
+                        marginTop: '48px',
+                        padding: '32px 24px',
+                        background: '#fff',
+                        borderRadius: '12px',
+                        border: '1px solid var(--color-border-light, #E8E0D4)',
+                    }}>
+                        {[
+                            { icon: '📱', text: 'WhatsApp Support Available' },
+                            { icon: '🔄', text: 'Easy Returns & Exchanges' },
+                            { icon: '🆓', text: 'Free Shipping above ₹999' },
+                            { icon: '📦', text: 'Track Your Order Anytime' },
+                            { icon: '🏷️', text: 'Prices Starting at ₹199' },
+                            { icon: '🇮🇳', text: 'Pan India Delivery' },
+                        ].map((item, i) => (
+                            <div key={i} style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                fontSize: '0.82rem',
+                                fontWeight: 400,
+                                color: 'var(--color-text)',
+                                padding: '8px 16px',
+                                background: 'var(--color-bg-alt)',
+                                borderRadius: '20px',
+                            }}>
+                                <span>{item.icon}</span>
+                                <span>{item.text}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Promise / CTA */}
             <section style={{ padding: '100px 0', textAlign: 'center', background: 'var(--color-bg-dark)', color: 'var(--color-text-on-dark)' }}>
                 <div className="container" style={{ maxWidth: '600px' }}>
                     <div style={{ fontSize: '0.7rem', fontWeight: 500, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'var(--color-gold-light)', marginBottom: '20px' }}>
-                        Our Promise
+                        Our Promise to You
                     </div>
                     <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', fontWeight: 300, lineHeight: 1.3, marginBottom: '24px', letterSpacing: '0.04em' }}>
-                        Every piece we create is a celebration of <em style={{ fontStyle: 'italic', color: 'var(--color-gold-light)' }}>you</em>
+                        You deserve to <em style={{ fontStyle: 'italic', color: 'var(--color-gold-light)' }}>sparkle</em> — and we&apos;re here to make it happen
                     </h2>
                     <p style={{ fontSize: '0.88rem', fontWeight: 300, color: 'rgba(255,255,255,0.6)', lineHeight: 1.9, marginBottom: '36px' }}>
-                        We promise to keep bringing you trendy, beautiful, and affordable jewellery that makes
-                        you feel confident and radiant — because you deserve to shine, every single day.
+                        From Kriti&apos;s heart to your doorstep — every piece is chosen with love, packed with care,
+                        and shipped with a smile. Your satisfaction is not just our goal, it&apos;s our reputation.
+                        Shop with confidence, sparkle with pride.
                     </p>
-                    <Link href="/shop" className="btn btn-gold btn-lg">
-                        Explore Our Collection
-                    </Link>
+                    <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                        <Link href="/shop" className="btn btn-gold btn-lg">
+                            Explore Collection
+                        </Link>
+                        <a
+                            href="https://wa.me/919217945235?text=Hi Kriti! I have a question about Noore Jewels"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn btn-outline btn-lg"
+                            style={{ borderColor: 'rgba(255,255,255,0.3)', color: '#fff' }}
+                        >
+                            💬 Chat with Us
+                        </a>
+                    </div>
                 </div>
             </section>
 
