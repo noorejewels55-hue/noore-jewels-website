@@ -134,6 +134,18 @@ export async function getNewArrivals() {
     return products.filter(p => p.tags.includes('new'));
 }
 
+// Sanitize input to prevent Google Sheets formula injection
+// Strings starting with =, +, -, @, tab, or carriage return can execute formulas
+function sanitizeForSheets(value) {
+    if (typeof value !== 'string') return value;
+    const dangerous = ['=', '+', '-', '@', '\t', '\r', '\n'];
+    let cleaned = value.trim();
+    if (dangerous.some(ch => cleaned.startsWith(ch))) {
+        cleaned = "'" + cleaned; // Prefix with apostrophe to prevent formula execution
+    }
+    return cleaned;
+}
+
 export async function saveOrder(orderData) {
     try {
         const auth = getAuth();
@@ -142,24 +154,24 @@ export async function saveOrder(orderData) {
         await sheets.spreadsheets.values.append({
             spreadsheetId: process.env.GOOGLE_SHEET_ID,
             range: 'Order-Website!A:P',
-            valueInputOption: 'USER_ENTERED',
+            valueInputOption: 'RAW', // Use RAW instead of USER_ENTERED for safety
             resource: {
                 values: [[
                     orderData.orderId,
-                    orderData.phone,
-                    orderData.name,
-                    orderData.email || '',
+                    sanitizeForSheets(orderData.phone),
+                    sanitizeForSheets(orderData.name),
+                    sanitizeForSheets(orderData.email || ''),
                     orderData.productId,
-                    orderData.productName,
+                    sanitizeForSheets(orderData.productName),
                     orderData.quantity,
                     orderData.price,
                     orderData.discount || 0,
                     orderData.finalAmount,
                     orderData.paymentStatus,
-                    orderData.address || '',
-                    orderData.city || '',
-                    orderData.state || '',
-                    orderData.pincode || '',
+                    sanitizeForSheets(orderData.address || ''),
+                    sanitizeForSheets(orderData.city || ''),
+                    sanitizeForSheets(orderData.state || ''),
+                    sanitizeForSheets(orderData.pincode || ''),
                     new Date().toISOString(),
                 ]]
             }
