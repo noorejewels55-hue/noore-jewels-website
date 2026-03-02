@@ -126,8 +126,149 @@ function ProductDetail({ params }) {
                     <div className="product-detail-grid">
                         {/* Gallery */}
                         <div className="product-gallery">
-                            <div className="product-gallery-main">
-                                <img src={productImages[selectedImage] || product.image} alt={product.name} />
+                            <div
+                                className="product-gallery-main"
+                                style={{ position: 'relative', overflow: 'hidden', cursor: productImages.length > 1 ? 'grab' : 'default', userSelect: 'none' }}
+                                onTouchStart={(e) => {
+                                    if (productImages.length <= 1) return;
+                                    const touch = e.touches[0];
+                                    e.currentTarget._touchStartX = touch.clientX;
+                                    e.currentTarget._touchStartY = touch.clientY;
+                                    e.currentTarget._isSwiping = false;
+                                }}
+                                onTouchMove={(e) => {
+                                    if (productImages.length <= 1 || !e.currentTarget._touchStartX) return;
+                                    const touch = e.touches[0];
+                                    const diffX = Math.abs(touch.clientX - e.currentTarget._touchStartX);
+                                    const diffY = Math.abs(touch.clientY - e.currentTarget._touchStartY);
+                                    // If horizontal movement is more than vertical, it's a swipe
+                                    if (diffX > diffY && diffX > 10) {
+                                        e.currentTarget._isSwiping = true;
+                                    }
+                                }}
+                                onTouchEnd={(e) => {
+                                    if (productImages.length <= 1 || !e.currentTarget._touchStartX) return;
+                                    const touchEndX = e.changedTouches[0].clientX;
+                                    const diff = e.currentTarget._touchStartX - touchEndX;
+                                    if (e.currentTarget._isSwiping && Math.abs(diff) > 50) {
+                                        if (diff > 0) {
+                                            // Swipe left → next image
+                                            setSelectedImage(prev => Math.min(prev + 1, productImages.length - 1));
+                                        } else {
+                                            // Swipe right → previous image
+                                            setSelectedImage(prev => Math.max(prev - 1, 0));
+                                        }
+                                    }
+                                    e.currentTarget._touchStartX = null;
+                                    e.currentTarget._isSwiping = false;
+                                }}
+                                onMouseDown={(e) => {
+                                    if (productImages.length <= 1) return;
+                                    e.currentTarget._mouseStartX = e.clientX;
+                                    e.currentTarget.style.cursor = 'grabbing';
+                                }}
+                                onMouseUp={(e) => {
+                                    if (productImages.length <= 1 || !e.currentTarget._mouseStartX) return;
+                                    const diff = e.currentTarget._mouseStartX - e.clientX;
+                                    if (Math.abs(diff) > 50) {
+                                        if (diff > 0) {
+                                            setSelectedImage(prev => Math.min(prev + 1, productImages.length - 1));
+                                        } else {
+                                            setSelectedImage(prev => Math.max(prev - 1, 0));
+                                        }
+                                    }
+                                    e.currentTarget._mouseStartX = null;
+                                    e.currentTarget.style.cursor = 'grab';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget._mouseStartX = null;
+                                    e.currentTarget.style.cursor = productImages.length > 1 ? 'grab' : 'default';
+                                }}
+                            >
+                                <img
+                                    src={productImages[selectedImage] || product.image}
+                                    alt={product.name}
+                                    draggable={false}
+                                    style={{ pointerEvents: 'none' }}
+                                />
+
+                                {/* Arrow Buttons (desktop) */}
+                                {productImages.length > 1 && (
+                                    <>
+                                        {selectedImage > 0 && (
+                                            <button
+                                                onClick={(e) => { e.stopPropagation(); setSelectedImage(prev => prev - 1); }}
+                                                aria-label="Previous image"
+                                                style={{
+                                                    position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)',
+                                                    width: '40px', height: '40px', borderRadius: '50%',
+                                                    background: 'rgba(255,255,255,0.9)', border: '1px solid #E8E0D4',
+                                                    cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                    fontSize: '1.1rem', color: '#333', boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                                                    transition: 'all 0.2s ease', zIndex: 2,
+                                                }}
+                                                onMouseOver={(e) => e.currentTarget.style.background = '#fff'}
+                                                onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.9)'}
+                                            >
+                                                ‹
+                                            </button>
+                                        )}
+                                        {selectedImage < productImages.length - 1 && (
+                                            <button
+                                                onClick={(e) => { e.stopPropagation(); setSelectedImage(prev => prev + 1); }}
+                                                aria-label="Next image"
+                                                style={{
+                                                    position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)',
+                                                    width: '40px', height: '40px', borderRadius: '50%',
+                                                    background: 'rgba(255,255,255,0.9)', border: '1px solid #E8E0D4',
+                                                    cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                    fontSize: '1.1rem', color: '#333', boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                                                    transition: 'all 0.2s ease', zIndex: 2,
+                                                }}
+                                                onMouseOver={(e) => e.currentTarget.style.background = '#fff'}
+                                                onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.9)'}
+                                            >
+                                                ›
+                                            </button>
+                                        )}
+
+                                        {/* Dot indicators */}
+                                        <div style={{
+                                            position: 'absolute', bottom: '16px', left: '50%', transform: 'translateX(-50%)',
+                                            display: 'flex', gap: '8px', zIndex: 2,
+                                        }}>
+                                            {productImages.map((_, idx) => (
+                                                <button
+                                                    key={idx}
+                                                    onClick={(e) => { e.stopPropagation(); setSelectedImage(idx); }}
+                                                    aria-label={`View image ${idx + 1}`}
+                                                    style={{
+                                                        width: selectedImage === idx ? '20px' : '8px',
+                                                        height: '8px',
+                                                        borderRadius: '4px',
+                                                        border: 'none',
+                                                        background: selectedImage === idx ? 'var(--color-gold, #C5A467)' : 'rgba(255,255,255,0.7)',
+                                                        cursor: 'pointer',
+                                                        padding: 0,
+                                                        transition: 'all 0.3s ease',
+                                                        boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+                                                    }}
+                                                />
+                                            ))}
+                                        </div>
+
+                                        {/* Image counter */}
+                                        <div style={{
+                                            position: 'absolute', top: '12px', right: '12px',
+                                            background: 'rgba(0,0,0,0.5)', color: '#fff',
+                                            padding: '4px 10px', borderRadius: '12px',
+                                            fontSize: '0.72rem', fontWeight: 500, letterSpacing: '0.05em',
+                                            zIndex: 2,
+                                        }}>
+                                            {selectedImage + 1} / {productImages.length}
+                                        </div>
+                                    </>
+                                )}
                             </div>
                             {productImages.length > 1 && (
                                 <div style={{
