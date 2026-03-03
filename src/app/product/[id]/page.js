@@ -342,11 +342,6 @@ function ProductDetail({ params }) {
                                         <span>{quantity}</span>
                                         <button onClick={() => setQuantity(Math.min(quantity + 1, product.availableQty || 1))}>+</button>
                                     </div>
-                                    {product.availableQty <= 3 && product.availableQty > 0 && (
-                                        <p style={{ fontSize: '0.75rem', color: 'var(--color-rose-gold)', fontWeight: 500, marginTop: '6px' }}>
-                                            🔥 Only {product.availableQty} left in stock!
-                                        </p>
-                                    )}
                                 </div>
                             )}
 
