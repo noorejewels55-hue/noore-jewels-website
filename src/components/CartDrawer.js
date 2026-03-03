@@ -56,8 +56,8 @@ export default function CartDrawer() {
                                                 >−</button>
                                                 <span style={{ fontSize: '0.82rem', fontWeight: 500, minWidth: '20px', textAlign: 'center' }}>{item.quantity}</span>
                                                 <button
-                                                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                                    style={{ width: '28px', height: '28px', border: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem', background: 'none', cursor: 'pointer' }}
+                                                    onClick={() => updateQuantity(item.id, Math.min(item.quantity + 1, item.availableQty || 1))}
+                                                    style={{ width: '28px', height: '28px', border: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem', background: 'none', cursor: item.quantity >= (item.availableQty || 1) ? 'not-allowed' : 'pointer', opacity: item.quantity >= (item.availableQty || 1) ? 0.4 : 1 }}
                                                 >+</button>
                                             </div>
                                             <button className="cart-item-remove" onClick={() => removeItem(item.id)}>Remove</button>
