@@ -32,14 +32,16 @@ export function CartProvider({ children }) {
     const addItem = useCallback((product, qty = 1) => {
         setItems(prev => {
             const existing = prev.find(item => item.id === product.id);
+            const maxQty = product.availableQty || 99;
             if (existing) {
+                const newQty = Math.min(existing.quantity + qty, maxQty);
                 return prev.map(item =>
                     item.id === product.id
-                        ? { ...item, quantity: item.quantity + qty }
+                        ? { ...item, quantity: newQty }
                         : item
                 );
             }
-            return [...prev, { ...product, quantity: qty }];
+            return [...prev, { ...product, quantity: Math.min(qty, maxQty) }];
         });
         setIsCartOpen(true);
     }, []);

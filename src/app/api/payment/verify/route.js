@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
-import { saveOrder } from '@/lib/sheets';
+import { saveOrder, decreaseProductQuantity } from '@/lib/sheets';
 import nodemailer from 'nodemailer';
 import { createNimbusPostOrder } from '@/lib/nimbuspost';
 
@@ -54,6 +54,9 @@ export async function POST(request) {
                     state: customer.state || '',
                     pincode: customer.pincode || '',
                 });
+
+                // Decrease product stock in Google Sheets
+                await decreaseProductQuantity(item.id, item.quantity);
             } catch (e) {
                 console.error('Error saving order line:', e);
             }

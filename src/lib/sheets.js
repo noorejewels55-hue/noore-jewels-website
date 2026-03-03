@@ -28,7 +28,7 @@ async function fetchFromSheets() {
 
     const response = await sheets.spreadsheets.values.get({
         spreadsheetId: process.env.GOOGLE_SHEET_ID,
-        range: 'Products!A2:K',
+        range: 'Products!A2:L',
     });
 
     const rows = response.data.values || [];
@@ -39,15 +39,20 @@ async function fetchFromSheets() {
             // Fixed column layout:
             // A=Product Id, B=Name, C=Category, D=Price,
             // E=Image URL, F=Description, G=In Stock,
-            // H=Discount, I=Tags, J=Image 2, K=Image 3
+            // H=Discount, I=Tags, J=Image 2, K=Image 3, L=Quantity
             const imageUrl = row[4] || '';
             const description = row[5] || '';
+            const quantity = parseInt(row[11]) || 0; // Column L = Quantity
 
             // Build images array: main image (E) + Image 2 (J) + Image 3 (K)
             const allImageUrls = [imageUrl, row[9] || '', row[10] || '']
                 .map(u => u.trim())
                 .filter(Boolean)
                 .map(u => convertDriveUrl(u));
+
+            // Product is in stock only if "In Stock" is Yes AND quantity > 0
+            const inStock = (row[6] || '').toLowerCase() === 'yes';
+            const isAvailable = inStock && quantity > 0;
 
             return {
                 id: row[0] || '',
@@ -57,7 +62,8 @@ async function fetchFromSheets() {
                 description: description,
                 image: allImageUrls[0] || '/placeholder-product.jpg',
                 images: allImageUrls.length > 0 ? allImageUrls : ['/placeholder-product.jpg'],
-                stock: (row[6] || '').toLowerCase() === 'yes',
+                stock: isAvailable,
+                availableQty: quantity,
                 discount: parseFloat(row[7]) || 0,
                 tags: (row[8] || '').split(',').map(t => t.trim().toLowerCase()).filter(Boolean),
             };
@@ -394,4 +400,82 @@ export function clearCache() {
     cachedProducts = null;
     cacheTimestamp = 0;
     fetchPromise = null;
+}
+
+// Decrease product quantity in Google Sheets after a successful order
+// Also auto-marks product as "No" (out of stock) when quantity reaches 0
+export async function decreaseProductQuantity(productId, orderedQty = 1) {
+    try {
+        const auth = getAuth();
+        const sheets = google.sheets({ version: 'v4', auth });
+
+        // Get all products to find the row number
+        const response = await sheets.spreadsheets.values.get({
+            spreadsheetId: process.env.GOOGLE_SHEET_ID,
+            range: 'Products!A:L',
+        });
+
+        const rows = response.data.values || [];
+
+        // Find the row with matching Product ID (column A)
+        // Row 0 is the header, data starts from row 1 (which is row 2 in sheets)
+        let rowIndex = -1;
+        for (let i = 1; i < rows.length; i++) {
+            if (rows[i][0] === productId) {
+                rowIndex = i;
+                break;
+            }
+        }
+
+        if (rowIndex === -1) {
+            console.error(`Product ${productId} not found in sheet`);
+            return false;
+        }
+
+        const currentQty = parseInt(rows[rowIndex][11]) || 0;
+        const newQty = Math.max(0, currentQty - orderedQty);
+
+        // Update quantity (column L = column 12) — sheet row is rowIndex + 1 (1-indexed)
+        const sheetRow = rowIndex + 1;
+
+        if (newQty <= 0) {
+            // Quantity is 0 — update both "In Stock" (G) to "No" AND Quantity (L) to 0
+            await sheets.spreadsheets.values.batchUpdate({
+                spreadsheetId: process.env.GOOGLE_SHEET_ID,
+                resource: {
+                    valueInputOption: 'RAW',
+                    data: [
+                        {
+                            range: `Products!G${sheetRow}`,
+                            values: [['No']],
+                        },
+                        {
+                            range: `Products!L${sheetRow}`,
+                            values: [[0]],
+                        },
+                    ],
+                },
+            });
+            console.log(`Product ${productId}: SOLD OUT (qty 0), marked as out of stock`);
+        } else {
+            // Just decrease the quantity
+            await sheets.spreadsheets.values.update({
+                spreadsheetId: process.env.GOOGLE_SHEET_ID,
+                range: `Products!L${sheetRow}`,
+                valueInputOption: 'RAW',
+                resource: {
+                    values: [[newQty]],
+                },
+            });
+            console.log(`Product ${productId}: qty ${currentQty} → ${newQty}`);
+        }
+
+        // Clear cache so the website reflects the change immediately
+        clearCache();
+
+        return true;
+    } catch (error) {
+        console.error('Error decreasing product quantity:', error);
+        return false;
+    }
 }
