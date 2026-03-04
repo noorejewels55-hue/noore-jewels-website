@@ -87,7 +87,7 @@ function CheckoutContent() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     amount: Math.round((total - discount) * 100), // Razorpay expects paise
-                    items: items.map(i => ({ id: i.id, name: i.name, quantity: i.quantity, price: i.price })),
+                    items: items.map(i => ({ id: i.id, name: i.name, quantity: i.quantity, price: i.price, discount: i.discount || 0, availableQty: i.availableQty })),
                     customer: formData,
                     coupon: coupon || undefined,
                 }),
@@ -119,8 +119,9 @@ function CheckoutContent() {
                                 razorpay_order_id: response.razorpay_order_id,
                                 razorpay_payment_id: response.razorpay_payment_id,
                                 razorpay_signature: response.razorpay_signature,
-                                items,
+                                items: items.map(i => ({ id: i.id, name: i.name, quantity: i.quantity, price: i.price, discount: i.discount || 0, availableQty: i.availableQty })),
                                 customer: formData,
+                                couponDiscount: discount || 0,
                             }),
                         });
                         const verifyData = await verifyRes.json();

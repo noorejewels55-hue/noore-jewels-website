@@ -11,7 +11,8 @@ export async function POST(request) {
             razorpay_payment_id,
             razorpay_signature,
             items,
-            customer
+            customer,
+            couponDiscount
         } = await request.json();
 
         // Verify signature
@@ -31,10 +32,25 @@ export async function POST(request) {
         // Payment verified — save orders to Google Sheets
         const orderId = `NJ-${Date.now().toString(36).toUpperCase()}`;
 
+        // Calculate total for coupon distribution across items
+        const orderSubtotal = items.reduce((sum, i) => {
+            const ep = i.discount > 0 ? i.price * (1 - i.discount / 100) : i.price;
+            return sum + ep * i.quantity;
+        }, 0);
+        const totalCouponDiscount = couponDiscount || 0;
+
         for (const item of items) {
             const effectivePrice = item.discount > 0
                 ? item.price * (1 - item.discount / 100)
                 : item.price;
+
+            // Distribute coupon discount proportionally across items
+            const itemTotal = effectivePrice * item.quantity;
+            const itemCouponShare = orderSubtotal > 0
+                ? Math.round((itemTotal / orderSubtotal) * totalCouponDiscount)
+                : 0;
+
+            const finalAmount = Math.round(itemTotal - itemCouponShare);
 
             try {
                 await saveOrder({
@@ -47,7 +63,7 @@ export async function POST(request) {
                     quantity: item.quantity,
                     price: item.price,
                     discount: item.discount || 0,
-                    finalAmount: Math.round(effectivePrice * item.quantity),
+                    finalAmount: finalAmount,
                     paymentStatus: 'Paid',
                     address: customer.address || '',
                     city: customer.city || '',

@@ -1,16 +1,16 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Noore Jewels — Premium American Diamond (AD) Imitation Jewellery",
-  description: "Shop premium American Diamond (AD/CZ) imitation jewellery at Noore Jewels. Anti-tarnish rings, necklaces, bracelets & earrings starting at ₹199. Free shipping above ₹999.",
-  keywords: "jewellery, rings, necklaces, bracelets, earrings, affordable jewellery, Noore Jewels, Indian jewellery, AD jewellery, American Diamond",
+  title: "Noore Jewels — Trendy American Diamond (AD) Jewellery Online | CZ Imitation Jewelry India",
+  description: "Buy trendy American Diamond (AD) jewellery online at Noore Jewels. Premium CZ necklaces, rings, bracelets & earrings. Anti-tarnish, diamond-look jewellery starting ₹199. Free shipping above ₹999. Best AD jewelry store in India.",
+  keywords: "American Diamond jewellery, AD jewellery, CZ jewellery, trendy diamond jewellery, imitation jewellery, American Diamond necklace, AD necklace set, CZ earrings, trendy jewellery online India, affordable diamond jewellery, anti-tarnish jewellery, cubic zirconia jewelry, American Diamond rings, AD bracelet, fashion jewellery India, Noore Jewels, best AD jewellery online, trendy CZ jewelry, diamond look jewellery, premium imitation jewelry",
   icons: {
     icon: '/favicon.png',
     apple: '/favicon.png',
   },
   openGraph: {
-    title: "Noore Jewels — Premium American Diamond (AD) Imitation Jewellery",
-    description: "Shop premium American Diamond (AD/CZ) imitation jewellery at Noore Jewels. Anti-tarnish rings, necklaces, bracelets & earrings.",
+    title: "Noore Jewels — Trendy American Diamond (AD) Jewellery Online India",
+    description: "Shop premium American Diamond (AD/CZ) imitation jewellery at Noore Jewels. Trendy diamond-look necklaces, rings, earrings & bracelets. Anti-tarnish quality starting ₹199.",
     type: "website",
     url: "https://noorejewels.in",
     siteName: "Noore Jewels",
@@ -19,7 +19,7 @@ export const metadata = {
         url: '/favicon.png',
         width: 512,
         height: 512,
-        alt: 'Noore Jewels',
+        alt: 'Noore Jewels - Trendy American Diamond Jewellery',
       }
     ],
   },

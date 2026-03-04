@@ -26,10 +26,10 @@ function StoryContent() {
                         Our Story
                     </div>
                     <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 5vw, 3.2rem)', fontWeight: 300, lineHeight: 1.2, marginBottom: '24px', letterSpacing: '0.04em' }}>
-                        Two Women, One <em style={{ color: 'var(--color-gold)' }}>Sparkling Dream</em>
+                        One Woman, One <em style={{ color: 'var(--color-gold)' }}>Sparkling Dream</em>
                     </h1>
                     <p style={{ fontSize: '0.9rem', fontWeight: 300, color: 'var(--color-text-light)', lineHeight: 1.9, maxWidth: '550px', margin: '0 auto' }}>
-                        Noore Jewels was born from a passion shared by two women who believed every woman
+                        Noore Jewels was born from the creative passion of one woman who believes every woman
                         deserves to sparkle — without breaking the bank.
                     </p>
                 </div>
@@ -47,23 +47,24 @@ function StoryContent() {
                             />
                         </div>
                         <div className="story-content">
-                            <div className="story-label">Meet the Founders</div>
-                            <h2 className="story-title">The Faces Behind Noore Jewels</h2>
+                            <div className="story-label">Meet the Founder</div>
+                            <h2 className="story-title">The Face Behind Noore Jewels</h2>
                             <p className="story-text">
-                                Hi, I&apos;m <strong>Kriti Kala</strong>, the heart and soul behind Noore Jewels. Along with
-                                my partner, we started this journey with a simple belief — that beautiful
-                                jewellery shouldn&apos;t come with a hefty price tag.
+                                Hi, I&apos;m <strong>Kriti</strong> — and my name &quot;Kala&quot; means <em>Kalakar</em> (कलाकार) — an artist.
+                                That&apos;s exactly what drives me every day — the inner passion to create the most
+                                beautiful, high-quality jewellery for women across India.
                             </p>
                             <p className="story-text">
-                                As women ourselves, we understand the joy of finding that perfect piece — the one
-                                that makes you feel confident, beautiful, and ready to conquer the world. That&apos;s
-                                exactly what we set out to create. Every design at Noore Jewels is handpicked by us
-                                with love and care, ensuring it meets our own standards of beauty and quality.
+                                I started Noore Jewels with a simple belief — that gorgeous jewellery
+                                shouldn&apos;t come with a hefty price tag. As a woman myself, I understand the joy
+                                of finding that perfect piece — the one that makes you feel confident, beautiful,
+                                and ready to conquer the world. Every design at Noore Jewels is handpicked by me
+                                with love and care.
                             </p>
                             <p className="story-text">
-                                We specialize in premium <strong>American Diamond (AD)</strong> imitation jewellery —
+                                I specialize in premium <strong>American Diamond (AD)</strong> imitation jewellery —
                                 pieces that look stunning, feel luxurious, and last long, all at prices that make
-                                you smile. From our family to yours, every order is packed with care and shipped with love.
+                                you smile. From my hands to your doorstep, every order is packed with care and shipped with love.
                             </p>
                         </div>
                     </div>
@@ -293,7 +294,7 @@ function StoryContent() {
                     }}>
                         {[
                             { icon: '📱', text: 'WhatsApp Support Available' },
-                            { icon: '🔄', text: 'Easy Returns & Exchanges' },
+                            { icon: '🔄', text: 'Exchange Policy Available' },
                             { icon: '🆓', text: 'Free Shipping above ₹999' },
                             { icon: '📦', text: 'Track Your Order Anytime' },
                             { icon: '🏷️', text: 'Prices Starting at ₹199' },
@@ -329,7 +330,7 @@ function StoryContent() {
                     </h2>
                     <p style={{ fontSize: '0.88rem', fontWeight: 300, color: 'rgba(255,255,255,0.6)', lineHeight: 1.9, marginBottom: '36px' }}>
                         From Kriti&apos;s heart to your doorstep — every piece is chosen with love, packed with care,
-                        and shipped with a smile. Your satisfaction is not just our goal, it&apos;s our reputation.
+                        and shipped with a smile. My satisfaction comes from your happiness.
                         Shop with confidence, sparkle with pride.
                     </p>
                     <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
