@@ -105,6 +105,38 @@ function ProductDetail({ params }) {
             <AuthModal />
             <CartDrawer />
 
+            {/* Product JSON-LD for Google Rich Results */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "Product",
+                        "name": product.name,
+                        "description": product.description || `${product.name} - Premium American Diamond (AD) jewellery by Noore Jewels`,
+                        "image": product.images || [product.image],
+                        "brand": {
+                            "@type": "Brand",
+                            "name": "Noore Jewels"
+                        },
+                        "category": product.category,
+                        "offers": {
+                            "@type": "Offer",
+                            "url": `https://noorejewels.in/product/${product.id}`,
+                            "priceCurrency": "INR",
+                            "price": effectivePrice,
+                            "availability": product.stock
+                                ? "https://schema.org/InStock"
+                                : "https://schema.org/OutOfStock",
+                            "seller": {
+                                "@type": "Organization",
+                                "name": "Noore Jewels"
+                            }
+                        }
+                    })
+                }}
+            />
+
             {/* Breadcrumb */}
             <div className="container" style={{ padding: '16px 24px' }}>
                 <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', letterSpacing: '0.08em' }}>

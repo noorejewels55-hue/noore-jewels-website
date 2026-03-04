@@ -1,0 +1,10 @@
+# Noore Jewels - robots.txt
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://noorejewels.in/sitemap.xml
+
+# Block API and internal routes
+Disallow: /api/
+Disallow: /_next/
