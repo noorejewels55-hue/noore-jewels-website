@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import googleTrends from 'google-trends-api';
 
+export const dynamic = 'force-dynamic';
+export const maxDuration = 60;
+
 // ─── Jewelry Keywords to Track ──────────────────────────────
 const CATEGORIES = {
     necklace: [
