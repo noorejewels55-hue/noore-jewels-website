@@ -45,6 +45,9 @@ function HomePage() {
     'Bracelet': '/category-bracelets.png',
     'Chain': '/category-chains.png',
     'Chains': '/category-chains.png',
+    'Hathphool': '/category-hathphool.png',
+    'Hand Accessories': '/category-hathphool.png',
+    'Hath Phool': '/category-hathphool.png',
   };
 
   useEffect(() => {
@@ -156,7 +159,8 @@ function HomePage() {
               { name: 'Necklaces', slug: 'necklaces', count: 0 },
               { name: 'Earrings', slug: 'earrings', count: 0 },
               { name: 'Bracelets', slug: 'bracelets', count: 0 },
-            ]).slice(0, 4).map((cat) => (
+              { name: 'Hathphool', slug: 'hathphool', count: 0 },
+            ]).slice(0, 5).map((cat) => (
               <Link key={cat.slug} href={`/shop?category=${cat.slug}`}>
                 <div className="category-card">
                   <div
