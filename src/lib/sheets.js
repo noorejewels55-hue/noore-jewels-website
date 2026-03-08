@@ -437,6 +437,33 @@ export async function saveVisitor(visitorData) {
     }
 }
 
+// Save lead (visitor who gave phone for welcome coupon) to 'Leads' tab
+export async function saveLead(leadData) {
+    try {
+        const auth = getAuth();
+        const sheets = google.sheets({ version: 'v4', auth });
+
+        await sheets.spreadsheets.values.append({
+            spreadsheetId: process.env.GOOGLE_SHEET_ID,
+            range: 'Leads!A:D',
+            valueInputOption: 'RAW',
+            resource: {
+                values: [[
+                    leadData.timestamp,
+                    sanitizeForSheets(leadData.name),
+                    sanitizeForSheets(leadData.phone),
+                    leadData.coupon,
+                ]]
+            }
+        });
+
+        return true;
+    } catch (error) {
+        console.error('Error saving lead:', error);
+        return false;
+    }
+}
+
 // Decrease product quantity in Google Sheets after a successful order
 // Also auto-marks product as "No" (out of stock) when quantity reaches 0
 export async function decreaseProductQuantity(productId, orderedQty = 1) {
