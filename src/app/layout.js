@@ -1,4 +1,5 @@
 import "./globals.css";
+import VisitorTracker from '@/components/VisitorTracker';
 
 export const metadata = {
   title: "Noore Jewels — Trendy American Diamond (AD) Jewellery Online | CZ Imitation Jewelry India",
@@ -129,6 +130,7 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
+        <VisitorTracker />
         {children}
       </body>
     </html>

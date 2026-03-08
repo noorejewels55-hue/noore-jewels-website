@@ -402,6 +402,40 @@ export function clearCache() {
     fetchPromise = null;
 }
 
+// Save visitor data to the 'Visitors' tab in Google Sheets
+export async function saveVisitor(visitorData) {
+    try {
+        const auth = getAuth();
+        const sheets = google.sheets({ version: 'v4', auth });
+
+        await sheets.spreadsheets.values.append({
+            spreadsheetId: process.env.GOOGLE_SHEET_ID,
+            range: 'Visitors!A:K',
+            valueInputOption: 'RAW',
+            resource: {
+                values: [[
+                    visitorData.timestamp,
+                    sanitizeForSheets(visitorData.page),
+                    sanitizeForSheets(visitorData.city),
+                    sanitizeForSheets(visitorData.region),
+                    sanitizeForSheets(visitorData.country),
+                    visitorData.device,
+                    visitorData.browser,
+                    visitorData.os,
+                    sanitizeForSheets(visitorData.referrer),
+                    visitorData.screenSize,
+                    visitorData.ip,
+                ]]
+            }
+        });
+
+        return true;
+    } catch (error) {
+        console.error('Error saving visitor:', error);
+        return false;
+    }
+}
+
 // Decrease product quantity in Google Sheets after a successful order
 // Also auto-marks product as "No" (out of stock) when quantity reaches 0
 export async function decreaseProductQuantity(productId, orderedQty = 1) {

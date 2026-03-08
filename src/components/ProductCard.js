@@ -22,6 +22,8 @@ export default function ProductCard({ product }) {
                     <img
                         src={product.image}
                         alt={product.name}
+                        loading="lazy"
+                        decoding="async"
                         onLoad={() => setImageLoaded(true)}
                         style={{ opacity: imageLoaded ? 1 : 0, transition: 'opacity 0.3s ease' }}
                     />
