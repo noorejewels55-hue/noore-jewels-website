@@ -44,9 +44,12 @@ export async function GET(request) {
             );
         }
 
-        // Filter by tag
+        // Filter by tag — partial match so "new" matches "new arrivals", "bestseller" matches "bestseller" etc.
         if (tag) {
-            products = products.filter(p => p.tags.includes(tag.toLowerCase()));
+            const tagLower = tag.toLowerCase();
+            products = products.filter(p =>
+                p.tags.some(t => t.includes(tagLower) || tagLower.includes(t))
+            );
         }
 
         // Sort
