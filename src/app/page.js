@@ -75,8 +75,12 @@ function HomePage() {
     setLoading(false);
   };
 
-  const featured = products.filter(p => p.tags?.includes('featured') || p.tags?.includes('bestseller')).slice(0, 8);
-  const newArrivals = products.filter(p => p.tags?.includes('new')).slice(0, 4);
+  // Partial tag matching — 'new arrivals' includes 'new', 'bestseller' includes 'bestseller'
+  const hasTag = (product, keyword) =>
+    product.tags?.some(t => t.includes(keyword) || keyword.includes(t));
+
+  const featured = products.filter(p => hasTag(p, 'featured') || hasTag(p, 'bestseller')).slice(0, 8);
+  const newArrivals = products.filter(p => hasTag(p, 'new')).slice(0, 4);
 
   // If no tagged products, Best Sellers = first 4, New Arrivals = last 4 (no overlap)
   const displayProducts = featured.length > 0 ? featured : products.slice(0, 4);
