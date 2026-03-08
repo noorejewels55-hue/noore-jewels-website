@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect } from 'react';
-import { usePathname } from 'next/navigation';
 
 // Maps pathname to a readable page name
 function getPageName(pathname) {
@@ -54,37 +53,54 @@ function getOS(ua) {
 }
 
 export default function VisitorTracker() {
-    const pathname = usePathname();
 
     useEffect(() => {
+        // Only track ONCE per browser session — not on every page navigation
+        const alreadyTracked = sessionStorage.getItem('nj_tracked');
+        if (alreadyTracked) return;
+
         // Fire-and-forget — never block the page
         const track = async () => {
             try {
                 const ua = navigator.userAgent;
 
+                // Try to get the visitor's name if they are logged in
+                // The auth system stores user info in localStorage
+                let visitorName = '';
+                try {
+                    const authUser = localStorage.getItem('nj_user');
+                    if (authUser) {
+                        const parsed = JSON.parse(authUser);
+                        visitorName = parsed.name || parsed.phone || '';
+                    }
+                } catch { /* ignore */ }
+
                 await fetch('/api/track', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        page: getPageName(pathname),
+                        page: document.title.split('—')[0].trim() || window.location.pathname,
                         device: getDevice(),
                         browser: getBrowser(ua),
                         os: getOS(ua),
                         referrer: document.referrer || '',
                         screenSize: `${window.screen.width}x${window.screen.height}`,
+                        visitorName,
                     }),
-                    // Don't wait for response — page load must not be affected
                     keepalive: true,
                 });
+
+                // Mark as tracked for this browser session
+                sessionStorage.setItem('nj_tracked', '1');
             } catch {
                 // Silently ignore all errors
             }
         };
 
         // Small delay so it runs after the page is painted (non-blocking)
-        const timer = setTimeout(track, 1500);
+        const timer = setTimeout(track, 2000);
         return () => clearTimeout(timer);
-    }, [pathname]);
+    }, []); // Empty deps — only runs ONCE on first load
 
     // Renders nothing — purely functional component
     return null;

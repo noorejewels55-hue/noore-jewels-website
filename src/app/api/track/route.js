@@ -36,7 +36,7 @@ export async function POST(request) {
         const forwarded = request.headers.get('x-forwarded-for');
         const ip = forwarded ? forwarded.split(',')[0].trim() : 'Unknown';
 
-        const { page, device, browser, os, referrer, screenSize } = body;
+        const { page, device, browser, os, referrer, screenSize, visitorName } = body;
 
         // Skip bots and empty pages
         if (!page) {
@@ -97,6 +97,7 @@ export async function POST(request) {
             referrer: referrerLabel,
             screenSize: screenSize || 'Unknown',
             ip,
+            visitorName: visitorName || 'Guest',
         });
 
         recordVisit(ip, page);

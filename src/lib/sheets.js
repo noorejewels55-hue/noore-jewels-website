@@ -410,7 +410,7 @@ export async function saveVisitor(visitorData) {
 
         await sheets.spreadsheets.values.append({
             spreadsheetId: process.env.GOOGLE_SHEET_ID,
-            range: 'Visitors!A:K',
+            range: 'Visitors!A:L',
             valueInputOption: 'RAW',
             resource: {
                 values: [[
@@ -425,6 +425,7 @@ export async function saveVisitor(visitorData) {
                     sanitizeForSheets(visitorData.referrer),
                     visitorData.screenSize,
                     visitorData.ip,
+                    sanitizeForSheets(visitorData.visitorName || 'Guest'),
                 ]]
             }
         });
