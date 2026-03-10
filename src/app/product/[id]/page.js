@@ -10,6 +10,17 @@ import ProductCard from '@/components/ProductCard';
 import { CartProvider, useCart } from '@/context/CartContext';
 import { AuthProvider } from '@/context/AuthContext';
 
+// Calculate dispatch countdown — if before 4 PM, "dispatch today"
+function getDispatchText() {
+    const now = new Date();
+    const hour = now.getHours();
+    if (hour < 16) {
+        const hoursLeft = 16 - hour;
+        return `Order within ${hoursLeft}h for same-day dispatch`;
+    }
+    return 'Order now for next-day dispatch';
+}
+
 function ProductDetail({ params }) {
     const { id } = use(params);
     const [product, setProduct] = useState(null);
@@ -55,12 +66,31 @@ function ProductDetail({ params }) {
     const handleAddToCart = () => {
         if (product && product.stock) {
             addItem(product, quantity);
+            // Meta Pixel: Track AddToCart
+            if (typeof fbq !== 'undefined') {
+                fbq('track', 'AddToCart', {
+                    content_name: product.name,
+                    content_ids: [product.id],
+                    content_type: 'product',
+                    value: effectivePrice,
+                    currency: 'INR',
+                });
+            }
         }
     };
 
     const handleBuyNow = () => {
         if (product && product.stock) {
             addItem(product, quantity);
+            // Meta Pixel: Track InitiateCheckout
+            if (typeof fbq !== 'undefined') {
+                fbq('track', 'InitiateCheckout', {
+                    content_name: product.name,
+                    content_ids: [product.id],
+                    value: effectivePrice,
+                    currency: 'INR',
+                });
+            }
             window.location.href = '/checkout';
         }
     };
@@ -377,6 +407,39 @@ function ProductDetail({ params }) {
                                 </div>
                             )}
 
+                            {/* ── Urgency & Scarcity Indicators ── */}
+                            {product.stock && (
+                                <div style={{ marginBottom: '20px' }}>
+                                    {/* Low stock warning */}
+                                    {product.availableQty && product.availableQty <= 5 && (
+                                        <div style={{
+                                            display: 'flex', alignItems: 'center', gap: '8px',
+                                            padding: '10px 14px', borderRadius: '8px',
+                                            background: 'linear-gradient(90deg, #FFF5F5, #FFF0F0)',
+                                            border: '1px solid #FFD4D4',
+                                            marginBottom: '10px',
+                                        }}>
+                                            <span style={{ fontSize: '1.1rem' }}>🔥</span>
+                                            <span style={{ fontSize: '0.82rem', fontWeight: '600', color: '#C0392B' }}>
+                                                Only {product.availableQty} left in stock — order soon!
+                                            </span>
+                                        </div>
+                                    )}
+                                    {/* Dispatch countdown */}
+                                    <div style={{
+                                        display: 'flex', alignItems: 'center', gap: '8px',
+                                        padding: '10px 14px', borderRadius: '8px',
+                                        background: 'linear-gradient(90deg, #F0FFF4, #E8FFF0)',
+                                        border: '1px solid #C6F6D5',
+                                    }}>
+                                        <span style={{ fontSize: '1.1rem' }}>🚚</span>
+                                        <span style={{ fontSize: '0.82rem', fontWeight: '500', color: '#276749' }}>
+                                            {getDispatchText()}
+                                        </span>
+                                    </div>
+                                </div>
+                            )}
+
                             {/* Actions */}
                             <div className="product-actions">
                                 {product.stock ? (
@@ -393,6 +456,32 @@ function ProductDetail({ params }) {
                                         Sold Out
                                     </button>
                                 )}
+                            </div>
+
+                            {/* ── Trust Badges ── */}
+                            <div style={{
+                                display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px',
+                                marginTop: '20px', marginBottom: '24px',
+                            }}>
+                                {[
+                                    { icon: '💎', label: 'Anti-Tarnish', sub: 'Long-lasting shine' },
+                                    { icon: '🚚', label: 'Free Shipping', sub: 'On orders ₹999+' },
+                                    { icon: '↩️', label: '7-Day Returns', sub: 'Easy return policy' },
+                                    { icon: '🔒', label: 'Secure Checkout', sub: 'Razorpay protected' },
+                                ].map((badge) => (
+                                    <div key={badge.label} style={{
+                                        display: 'flex', alignItems: 'center', gap: '10px',
+                                        padding: '12px', borderRadius: '10px',
+                                        background: 'var(--color-bg-alt, #FAF8F5)',
+                                        border: '1px solid var(--color-border, #E8E0D4)',
+                                    }}>
+                                        <span style={{ fontSize: '1.3rem' }}>{badge.icon}</span>
+                                        <div>
+                                            <div style={{ fontSize: '0.78rem', fontWeight: '600', color: 'var(--color-text)' }}>{badge.label}</div>
+                                            <div style={{ fontSize: '0.68rem', color: 'var(--color-text-muted)' }}>{badge.sub}</div>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
 
                             {/* WhatsApp */}

@@ -130,6 +130,16 @@ function CheckoutContent() {
                             setOrderId(verifyData.orderId);
                             setOrderComplete(true);
                             clearCart();
+                            // Meta Pixel: Track Purchase (critical for ad ROI tracking)
+                            if (typeof fbq !== 'undefined') {
+                                fbq('track', 'Purchase', {
+                                    content_ids: items.map(i => i.id),
+                                    content_type: 'product',
+                                    value: total - discount,
+                                    currency: 'INR',
+                                    num_items: items.length,
+                                });
+                            }
                         } else {
                             setError('Payment verification failed. Please contact support.');
                         }
