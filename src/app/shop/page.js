@@ -20,6 +20,7 @@ function ShopContent() {
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [activeCategory, setActiveCategory] = useState(categoryParam);
+    const [activeCollection, setActiveCollection] = useState('');
     const [sort, setSort] = useState('default');
     const [searchQuery, setSearchQuery] = useState(searchParam);
 
@@ -29,7 +30,7 @@ function ShopContent() {
 
     useEffect(() => {
         fetchProducts();
-    }, [activeCategory, sort, tagParam]);
+    }, [activeCategory, activeCollection, sort, tagParam]);
 
     const fetchProducts = async () => {
         setLoading(true);
@@ -37,7 +38,8 @@ function ShopContent() {
             const params = new URLSearchParams();
             if (activeCategory !== 'all') params.set('category', activeCategory);
             if (sort !== 'default') params.set('sort', sort);
-            if (tagParam) params.set('tag', tagParam);
+            if (activeCollection) params.set('tag', activeCollection);
+            else if (tagParam) params.set('tag', tagParam);
             if (searchQuery) params.set('search', searchQuery);
 
             const res = await fetch(`/api/products?${params.toString()}`);
@@ -58,6 +60,9 @@ function ShopContent() {
     };
 
     const getPageTitle = () => {
+        if (activeCollection === 'wedding') return '💍 Wedding Collection';
+        if (activeCollection === 'daily') return '✨ Daily Wear';
+        if (activeCollection === 'gift') return '🎁 Gift Collection';
         if (tagParam === 'new') return 'New Arrivals';
         if (tagParam === 'bestseller') return 'Best Sellers';
         if (activeCategory !== 'all') {
@@ -94,20 +99,47 @@ function ShopContent() {
                 </form>
 
                 {/* Category Filters */}
-                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '32px' }}>
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '16px' }}>
                     <button
-                        className={`btn btn-sm ${activeCategory === 'all' ? 'btn-primary' : 'btn-outline'}`}
-                        onClick={() => setActiveCategory('all')}
+                        className={`btn btn-sm ${activeCategory === 'all' && !activeCollection ? 'btn-primary' : 'btn-outline'}`}
+                        onClick={() => { setActiveCategory('all'); setActiveCollection(''); }}
                     >
                         All
                     </button>
                     {categories.map(cat => (
                         <button
                             key={cat.slug}
-                            className={`btn btn-sm ${activeCategory === cat.slug ? 'btn-primary' : 'btn-outline'}`}
-                            onClick={() => setActiveCategory(cat.slug)}
+                            className={`btn btn-sm ${activeCategory === cat.slug && !activeCollection ? 'btn-primary' : 'btn-outline'}`}
+                            onClick={() => { setActiveCategory(cat.slug); setActiveCollection(''); }}
                         >
                             {cat.name} ({cat.count})
+                        </button>
+                    ))}
+                </div>
+
+                {/* Collection Filters */}
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '32px' }}>
+                    {[
+                        { key: 'wedding', label: '💍 Wedding', emoji: '' },
+                        { key: 'daily', label: '✨ Daily Wear', emoji: '' },
+                        { key: 'gift', label: '🎁 Gifting', emoji: '' },
+                        { key: 'bestseller', label: '🏆 Best Sellers', emoji: '' },
+                        { key: 'new', label: '🆕 New Arrivals', emoji: '' },
+                    ].map(col => (
+                        <button
+                            key={col.key}
+                            className={`btn btn-sm ${activeCollection === col.key ? 'btn-gold' : 'btn-outline'}`}
+                            onClick={() => {
+                                setActiveCollection(activeCollection === col.key ? '' : col.key);
+                                setActiveCategory('all');
+                            }}
+                            style={{
+                                borderRadius: '20px',
+                                fontSize: '0.75rem',
+                                padding: '6px 16px',
+                            }}
+                        >
+                            {col.label}
                         </button>
                     ))}
                 </div>
