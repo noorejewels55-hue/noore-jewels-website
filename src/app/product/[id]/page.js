@@ -410,7 +410,7 @@ function ProductDetail({ params }) {
                             {/* ── Urgency & Scarcity Indicators ── */}
                             {product.stock && (
                                 <div style={{ marginBottom: '20px' }}>
-                                    {/* Low stock warning */}
+                                    {/* Selling fast / limited stock — no exact quantity shown */}
                                     {product.availableQty && product.availableQty <= 5 && (
                                         <div style={{
                                             display: 'flex', alignItems: 'center', gap: '8px',
@@ -421,7 +421,7 @@ function ProductDetail({ params }) {
                                         }}>
                                             <span style={{ fontSize: '1.1rem' }}>🔥</span>
                                             <span style={{ fontSize: '0.82rem', fontWeight: '600', color: '#C0392B' }}>
-                                                Only {product.availableQty} left in stock — order soon!
+                                                Selling Fast — Limited Availability!
                                             </span>
                                         </div>
                                     )}
