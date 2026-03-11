@@ -40,6 +40,9 @@ export default function Footer() {
                             <Link href="/shop?category=necklaces">Necklaces</Link>
                             <Link href="/shop?category=earrings">Earrings</Link>
                             <Link href="/shop?category=bracelets">Bracelets</Link>
+                            <Link href="/shop?tag=wedding">Wedding Collection</Link>
+                            <Link href="/shop?tag=daily">Daily Wear</Link>
+                            <Link href="/shop?tag=gift">Gifting</Link>
                             <Link href="/shop?tag=bestseller">Best Sellers</Link>
                             <Link href="/shop?tag=new">New Arrivals</Link>
                         </div>
