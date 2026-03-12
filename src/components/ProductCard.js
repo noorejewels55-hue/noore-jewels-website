@@ -4,13 +4,43 @@ import Link from 'next/link';
 import { useCart } from '@/context/CartContext';
 import { useState } from 'react';
 
-export default function ProductCard({ product }) {
+// Compact star display for product cards
+function MiniStarRating({ rating, count }) {
+    if (!rating || count === 0) return null;
+
+    return (
+        <div className="product-card-rating">
+            <span style={{
+                display: 'inline-flex',
+                gap: '1px',
+                fontSize: '12px',
+                lineHeight: 1,
+            }}>
+                {[1, 2, 3, 4, 5].map(star => (
+                    <span
+                        key={star}
+                        style={{
+                            color: star <= Math.round(rating) ? '#C5A467' : '#DDD5C8',
+                        }}
+                    >
+                        ★
+                    </span>
+                ))}
+            </span>
+            <span className="product-card-rating-count">({count})</span>
+        </div>
+    );
+}
+
+export default function ProductCard({ product, reviewSummary }) {
     const { addItem } = useCart();
     const [imageLoaded, setImageLoaded] = useState(false);
 
     const effectivePrice = product.discount > 0
         ? product.price * (1 - product.discount / 100)
         : product.price;
+
+    const review = reviewSummary?.[product.id];
 
     return (
         <div className="product-card">
@@ -63,6 +93,11 @@ export default function ProductCard({ product }) {
                             <>₹{product.price.toLocaleString('en-IN')}</>
                         )}
                     </div>
+                    {/* Star Rating */}
+                    <MiniStarRating
+                        rating={review?.averageRating || 0}
+                        count={review?.totalReviews || 0}
+                    />
                 </div>
             </Link>
         </div>

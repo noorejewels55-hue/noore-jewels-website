@@ -464,6 +464,176 @@ export async function saveLead(leadData) {
     }
 }
 
+// ─── REVIEWS SYSTEM ───
+
+// Cache for reviews to avoid hitting Google Sheets on every request
+let cachedReviews = null;
+let reviewsCacheTimestamp = 0;
+let reviewsFetchPromise = null;
+const REVIEWS_CACHE_DURATION = 3 * 60 * 1000; // 3 minutes
+
+async function fetchAllReviews() {
+    const auth = getAuth();
+    const sheets = google.sheets({ version: 'v4', auth });
+
+    try {
+        const response = await sheets.spreadsheets.values.get({
+            spreadsheetId: process.env.GOOGLE_SHEET_ID,
+            range: 'Reviews!A2:I',
+        });
+
+        const rows = response.data.values || [];
+
+        return rows
+            .filter(row => row[0])
+            .map(row => ({
+                productId: row[0] || '',
+                productName: row[1] || '',
+                customerName: row[2] || '',
+                customerPhone: row[3] || '',
+                rating: parseInt(row[4]) || 5,
+                title: row[5] || '',
+                reviewText: row[6] || '',
+                date: row[7] || '',
+                verified: (row[8] || '').toLowerCase() === 'yes',
+            }));
+    } catch (error) {
+        // If the Reviews sheet doesn't exist yet, return empty array
+        if (error.message?.includes('Unable to parse range') || error.code === 400) {
+            console.log('Reviews sheet not found — creating it...');
+            try {
+                // Try to create the Reviews sheet
+                await sheets.spreadsheets.batchUpdate({
+                    spreadsheetId: process.env.GOOGLE_SHEET_ID,
+                    resource: {
+                        requests: [{
+                            addSheet: {
+                                properties: { title: 'Reviews' }
+                            }
+                        }]
+                    }
+                });
+                // Add header row
+                await sheets.spreadsheets.values.update({
+                    spreadsheetId: process.env.GOOGLE_SHEET_ID,
+                    range: 'Reviews!A1:I1',
+                    valueInputOption: 'RAW',
+                    resource: {
+                        values: [['Product ID', 'Product Name', 'Customer Name', 'Customer Phone', 'Rating', 'Title', 'Review', 'Date', 'Verified']]
+                    }
+                });
+                console.log('Reviews sheet created successfully');
+            } catch (createError) {
+                console.error('Error creating Reviews sheet:', createError);
+            }
+            return [];
+        }
+        throw error;
+    }
+}
+
+// Get reviews with caching (similar pattern to products)
+async function getCachedReviews() {
+    const now = Date.now();
+
+    if (cachedReviews && now - reviewsCacheTimestamp < REVIEWS_CACHE_DURATION) {
+        return cachedReviews;
+    }
+
+    if (reviewsFetchPromise) {
+        if (cachedReviews) return cachedReviews;
+        return reviewsFetchPromise;
+    }
+
+    reviewsFetchPromise = fetchAllReviews()
+        .then(reviews => {
+            cachedReviews = reviews;
+            reviewsCacheTimestamp = Date.now();
+            reviewsFetchPromise = null;
+            return reviews;
+        })
+        .catch(error => {
+            console.error('Error fetching reviews:', error);
+            reviewsFetchPromise = null;
+            return cachedReviews || [];
+        });
+
+    if (cachedReviews) {
+        return cachedReviews;
+    }
+
+    return reviewsFetchPromise;
+}
+
+// Get reviews for a specific product
+export async function getReviews(productId) {
+    const allReviews = await getCachedReviews();
+    return allReviews
+        .filter(r => r.productId === productId)
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // newest first
+}
+
+// Get review summary for ALL products (for product cards)
+export async function getAllReviewsSummary() {
+    const allReviews = await getCachedReviews();
+
+    const summaryMap = {};
+    for (const review of allReviews) {
+        if (!summaryMap[review.productId]) {
+            summaryMap[review.productId] = { totalRating: 0, count: 0 };
+        }
+        summaryMap[review.productId].totalRating += review.rating;
+        summaryMap[review.productId].count++;
+    }
+
+    // Convert to { productId: { averageRating, totalReviews } }
+    const result = {};
+    for (const [productId, data] of Object.entries(summaryMap)) {
+        result[productId] = {
+            averageRating: parseFloat((data.totalRating / data.count).toFixed(1)),
+            totalReviews: data.count,
+        };
+    }
+    return result;
+}
+
+// Save a new review to Google Sheets
+export async function saveReview(reviewData) {
+    try {
+        const auth = getAuth();
+        const sheets = google.sheets({ version: 'v4', auth });
+
+        await sheets.spreadsheets.values.append({
+            spreadsheetId: process.env.GOOGLE_SHEET_ID,
+            range: 'Reviews!A:I',
+            valueInputOption: 'RAW',
+            resource: {
+                values: [[
+                    reviewData.productId,
+                    sanitizeForSheets(reviewData.productName),
+                    sanitizeForSheets(reviewData.customerName),
+                    sanitizeForSheets(reviewData.customerPhone),
+                    reviewData.rating,
+                    sanitizeForSheets(reviewData.title),
+                    sanitizeForSheets(reviewData.reviewText),
+                    reviewData.date,
+                    reviewData.verified || 'Yes',
+                ]]
+            }
+        });
+
+        // Clear reviews cache so new review appears immediately
+        cachedReviews = null;
+        reviewsCacheTimestamp = 0;
+        reviewsFetchPromise = null;
+
+        return true;
+    } catch (error) {
+        console.error('Error saving review:', error);
+        return false;
+    }
+}
+
 // Decrease product quantity in Google Sheets after a successful order
 // Also auto-marks product as "No" (out of stock) when quantity reaches 0
 export async function decreaseProductQuantity(productId, orderedQty = 1) {

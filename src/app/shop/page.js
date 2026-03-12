@@ -18,6 +18,7 @@ function ShopContent() {
 
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
+    const [reviewSummary, setReviewSummary] = useState({});
     const [loading, setLoading] = useState(true);
     const [activeCategory, setActiveCategory] = useState(categoryParam);
     const [activeCollection, setActiveCollection] = useState('');
@@ -42,11 +43,20 @@ function ShopContent() {
             else if (tagParam) params.set('tag', tagParam);
             if (searchQuery) params.set('search', searchQuery);
 
-            const res = await fetch(`/api/products?${params.toString()}`);
-            const data = await res.json();
+            const [productsRes, reviewsRes] = await Promise.all([
+                fetch(`/api/products?${params.toString()}`),
+                fetch('/api/reviews/summary'),
+            ]);
+
+            const data = await productsRes.json();
             if (data.success) {
                 setProducts(data.products);
                 setCategories(data.categories);
+            }
+
+            const reviewsData = await reviewsRes.json();
+            if (reviewsData.success) {
+                setReviewSummary(reviewsData.summary);
             }
         } catch (err) {
             console.error('Error:', err);
@@ -186,7 +196,7 @@ function ShopContent() {
                 ) : (
                     <div className="products-grid">
                         {products.map(product => (
-                            <ProductCard key={product.id} product={product} />
+                            <ProductCard key={product.id} product={product} reviewSummary={reviewSummary} />
                         ))}
                     </div>
                 )}

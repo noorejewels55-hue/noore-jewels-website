@@ -7,6 +7,7 @@ import Footer from '@/components/Footer';
 import AuthModal from '@/components/AuthModal';
 import CartDrawer from '@/components/CartDrawer';
 import ProductCard from '@/components/ProductCard';
+import ReviewSection from '@/components/ReviewSection';
 import { CartProvider, useCart } from '@/context/CartContext';
 import { AuthProvider } from '@/context/AuthContext';
 
@@ -518,6 +519,9 @@ function ProductDetail({ params }) {
                     </div>
                 </div>
             </section>
+
+            {/* Customer Reviews */}
+            <ReviewSection productId={product.id} productName={product.name} />
 
             {/* Related Products */}
             {related.length > 0 && (
