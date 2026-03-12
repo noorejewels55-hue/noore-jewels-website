@@ -150,6 +150,20 @@ export default function ProductCard({ product, reviewSummary }) {
                         rating={review?.averageRating || 0}
                         count={review?.totalReviews || 0}
                     />
+                    
+                    {/* Mobile visible add to bag */}
+                    {product.stock && (
+                        <button 
+                            className="mobile-add-to-bag"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                handleAddToBag(e);
+                            }}
+                        >
+                            {addedToBag ? '✓ Added' : '+ Add to Bag'}
+                        </button>
+                    )}
                 </div>
             </Link>
         </div>

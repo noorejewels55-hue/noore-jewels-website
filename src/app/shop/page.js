@@ -110,49 +110,54 @@ function ShopContent() {
                 </form>
 
                 {/* Category Filters */}
-                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '16px' }}>
-                    <button
-                        className={`btn btn-sm ${activeCategory === 'all' && !activeCollection ? 'btn-primary' : 'btn-outline'}`}
-                        onClick={() => { setActiveCategory('all'); setActiveCollection(''); }}
-                    >
-                        All
-                    </button>
-                    {categories.map(cat => (
+                <div className="shop-filters-container" style={{ marginBottom: '16px' }}>
+                    <div className="shop-filters-scroll">
                         <button
-                            key={cat.slug}
-                            className={`btn btn-sm ${activeCategory === cat.slug && !activeCollection ? 'btn-primary' : 'btn-outline'}`}
-                            onClick={() => { setActiveCategory(cat.slug); setActiveCollection(''); }}
+                            className={`btn btn-sm ${activeCategory === 'all' && !activeCollection ? 'btn-primary' : 'btn-outline'}`}
+                            onClick={() => { setActiveCategory('all'); setActiveCollection(''); }}
                         >
-                            {cat.name} ({cat.count})
+                            All
                         </button>
-                    ))}
+                        {categories.map(cat => (
+                            <button
+                                key={cat.slug}
+                                className={`btn btn-sm ${activeCategory === cat.slug && !activeCollection ? 'btn-primary' : 'btn-outline'}`}
+                                onClick={() => { setActiveCategory(cat.slug); setActiveCollection(''); }}
+                            >
+                                {cat.name} ({cat.count})
+                            </button>
+                        ))}
+                    </div>
                 </div>
 
                 {/* Collection Filters */}
-                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '32px' }}>
-                    {[
-                        { key: 'wedding', label: '💍 Wedding', emoji: '' },
-                        { key: 'daily', label: '✨ Daily Wear', emoji: '' },
-                        { key: 'gift', label: '🎁 Gifting', emoji: '' },
-                        { key: 'bestseller', label: '🏆 Best Sellers', emoji: '' },
-                        { key: 'new', label: '🆕 New Arrivals', emoji: '' },
-                    ].map(col => (
-                        <button
-                            key={col.key}
-                            className={`btn btn-sm ${activeCollection === col.key ? 'btn-gold' : 'btn-outline'}`}
-                            onClick={() => {
-                                setActiveCollection(activeCollection === col.key ? '' : col.key);
-                                setActiveCategory('all');
-                            }}
-                            style={{
-                                borderRadius: '20px',
-                                fontSize: '0.75rem',
-                                padding: '6px 16px',
-                            }}
-                        >
-                            {col.label}
-                        </button>
-                    ))}
+                <div className="shop-filters-container" style={{ marginBottom: '32px' }}>
+                    <div className="shop-filters-scroll">
+                        {[
+                            { key: 'wedding', label: '💍 Wedding', emoji: '' },
+                            { key: 'daily', label: '✨ Daily Wear', emoji: '' },
+                            { key: 'gift', label: '🎁 Gifting', emoji: '' },
+                            { key: 'bestseller', label: '🏆 Best Sellers', emoji: '' },
+                            { key: 'new', label: '🆕 New Arrivals', emoji: '' },
+                        ].map(col => (
+                            <button
+                                key={col.key}
+                                className={`btn btn-sm ${activeCollection === col.key ? 'btn-gold' : 'btn-outline'}`}
+                                onClick={() => {
+                                    setActiveCollection(activeCollection === col.key ? '' : col.key);
+                                    setActiveCategory('all');
+                                }}
+                                style={{
+                                    borderRadius: '20px',
+                                    fontSize: '0.75rem',
+                                    padding: '6px 16px',
+                                    whiteSpace: 'nowrap'
+                                }}
+                            >
+                                {col.label}
+                            </button>
+                        ))}
+                    </div>
                 </div>
 
                 {/* Toolbar */}

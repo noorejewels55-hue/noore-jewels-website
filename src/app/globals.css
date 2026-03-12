@@ -560,7 +560,6 @@ h1, h2, h3, h4, h5, h6 {
   aspect-ratio: 3/4;
   overflow: hidden;
   cursor: pointer;
-  group: true;
 }
 
 .category-card-bg {
@@ -768,6 +767,10 @@ h1, h2, h3, h4, h5, h6 {
 .product-card-wishlist:hover {
   color: var(--color-rose-gold);
   background: #fff;
+}
+
+.mobile-add-to-bag {
+  display: none;
 }
 
 /* ─── TRUST / FEATURES BAR ─── */
@@ -1697,7 +1700,7 @@ h1, h2, h3, h4, h5, h6 {
   }
   
   .hero-title {
-    font-size: clamp(1.8rem, 5vw, 2.5rem);
+    font-size: clamp(2rem, 8vw, 2.5rem);
   }
   
   .hero-text {
@@ -1873,6 +1876,75 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 1.3rem;
     bottom: 16px;
     left: 16px;
+  }
+
+  /* Product card - show Add to Bag on mobile */
+  .product-card-quick {
+    display: none; /* Hide hover quick add on mobile */
+  }
+
+  .mobile-add-to-bag {
+    display: block;
+    width: 100%;
+    margin-top: 8px;
+    padding: 10px 0;
+    background: var(--color-bg-dark);
+    color: var(--color-text-on-dark);
+    border: 1px solid var(--color-bg-dark);
+    font-size: 0.72rem;
+    font-family: var(--font-body);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: all var(--transition-fast);
+  }
+
+  /* Wishlist always visible on mobile */
+  .product-card-wishlist {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Shop page header compact */
+  .shop-header {
+    padding: 28px 0;
+  }
+
+  .shop-header h1 {
+    font-size: 1.6rem;
+  }
+
+  /* Product page actions less tall on mobile */
+  .product-actions .btn {
+    padding: 12px 20px;
+    font-size: 0.7rem;
+  }
+
+  .product-actions .btn-lg {
+    padding: 12px 20px;
+    font-size: 0.7rem;
+  }
+
+  /* Shop Filters horizontal scroll */
+  .shop-filters-container {
+    width: 100vw;
+    margin-left: -16px;
+    padding: 0 16px;
+  }
+  
+  .shop-filters-scroll {
+    display: flex;
+    gap: 8px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding-bottom: 8px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+  }
+  
+  .shop-filters-scroll::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, etc */
   }
 }
 
@@ -2069,6 +2141,7 @@ h1, h2, h3, h4, h5, h6 {
   
   .whatsapp-float {
     bottom: calc(16px + env(safe-area-inset-bottom));
+    left: 16px;
   }
   
   .toast {
