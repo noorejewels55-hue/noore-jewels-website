@@ -29,6 +29,8 @@ function ProductDetail({ params }) {
     const [loading, setLoading] = useState(true);
     const [quantity, setQuantity] = useState(1);
     const [selectedImage, setSelectedImage] = useState(0);
+    const [zoomStyle, setZoomStyle] = useState({});
+    const [isZooming, setIsZooming] = useState(false);
     const { addItem } = useCart();
 
     useEffect(() => {
@@ -191,7 +193,22 @@ function ProductDetail({ params }) {
                         <div className="product-gallery">
                             <div
                                 className="product-gallery-main"
-                                style={{ position: 'relative', overflow: 'hidden', cursor: productImages.length > 1 ? 'grab' : 'default', userSelect: 'none' }}
+                                style={{ position: 'relative', overflow: 'hidden', cursor: isZooming ? 'zoom-in' : (productImages.length > 1 ? 'grab' : 'zoom-in'), userSelect: 'none' }}
+                                onMouseMove={(e) => {
+                                    // Desktop hover-zoom
+                                    if (window.innerWidth < 768) return;
+                                    const rect = e.currentTarget.getBoundingClientRect();
+                                    const x = ((e.clientX - rect.left) / rect.width) * 100;
+                                    const y = ((e.clientY - rect.top) / rect.height) * 100;
+                                    setZoomStyle({ transformOrigin: `${x}% ${y}%`, transform: 'scale(2.5)' });
+                                    setIsZooming(true);
+                                }}
+                                onMouseLeave={(e) => {
+                                    setZoomStyle({});
+                                    setIsZooming(false);
+                                    e.currentTarget._mouseStartX = null;
+                                    e.currentTarget.style.cursor = productImages.length > 1 ? 'grab' : 'zoom-in';
+                                }}
                                 onTouchStart={(e) => {
                                     if (productImages.length <= 1) return;
                                     const touch = e.touches[0];
@@ -204,7 +221,6 @@ function ProductDetail({ params }) {
                                     const touch = e.touches[0];
                                     const diffX = Math.abs(touch.clientX - e.currentTarget._touchStartX);
                                     const diffY = Math.abs(touch.clientY - e.currentTarget._touchStartY);
-                                    // If horizontal movement is more than vertical, it's a swipe
                                     if (diffX > diffY && diffX > 10) {
                                         e.currentTarget._isSwiping = true;
                                     }
@@ -215,10 +231,8 @@ function ProductDetail({ params }) {
                                     const diff = e.currentTarget._touchStartX - touchEndX;
                                     if (e.currentTarget._isSwiping && Math.abs(diff) > 50) {
                                         if (diff > 0) {
-                                            // Swipe left → next image
                                             setSelectedImage(prev => Math.min(prev + 1, productImages.length - 1));
                                         } else {
-                                            // Swipe right → previous image
                                             setSelectedImage(prev => Math.max(prev - 1, 0));
                                         }
                                     }
@@ -243,16 +257,12 @@ function ProductDetail({ params }) {
                                     e.currentTarget._mouseStartX = null;
                                     e.currentTarget.style.cursor = 'grab';
                                 }}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget._mouseStartX = null;
-                                    e.currentTarget.style.cursor = productImages.length > 1 ? 'grab' : 'default';
-                                }}
                             >
                                 <img
                                     src={productImages[selectedImage] || product.image}
                                     alt={product.name}
                                     draggable={false}
-                                    style={{ pointerEvents: 'none' }}
+                                    style={{ pointerEvents: 'none', transition: isZooming ? 'none' : 'transform 0.3s ease', ...zoomStyle }}
                                 />
 
                                 {/* Arrow Buttons (desktop) */}

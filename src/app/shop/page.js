@@ -48,7 +48,7 @@ function ShopContent() {
         try {
             const params = new URLSearchParams();
             if (activeCategory !== 'all') params.set('category', activeCategory);
-            if (sort !== 'default') params.set('sort', sort);
+            if (sort !== 'default' && sort !== 'top-rated' && sort !== 'most-reviewed') params.set('sort', sort);
             if (activeCollection) params.set('tag', activeCollection);
             else if (tagParam) params.set('tag', tagParam);
             if (searchQuery) params.set('search', searchQuery);
@@ -163,6 +163,8 @@ function ShopContent() {
                             <option value="default">Sort by: Featured</option>
                             <option value="price-asc">Price: Low to High</option>
                             <option value="price-desc">Price: High to Low</option>
+                            <option value="top-rated">Top Rated</option>
+                            <option value="most-reviewed">Most Reviewed</option>
                             <option value="name-asc">Name: A to Z</option>
                             <option value="newest">Newest First</option>
                         </select>
@@ -196,7 +198,15 @@ function ShopContent() {
                     </div>
                 ) : (
                     <div className="products-grid">
-                        {products.map(product => (
+                        {(sort === 'top-rated' || sort === 'most-reviewed'
+                            ? [...products].sort((a, b) => {
+                                const ra = reviewSummary?.[a.id] || { averageRating: 0, totalReviews: 0 };
+                                const rb = reviewSummary?.[b.id] || { averageRating: 0, totalReviews: 0 };
+                                if (sort === 'top-rated') return rb.averageRating - ra.averageRating || rb.totalReviews - ra.totalReviews;
+                                return rb.totalReviews - ra.totalReviews || rb.averageRating - ra.averageRating;
+                            })
+                            : products
+                        ).map(product => (
                             <ProductCard key={product.id} product={product} reviewSummary={reviewSummary} />
                         ))}
                     </div>

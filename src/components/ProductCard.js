@@ -2,7 +2,29 @@
 
 import Link from 'next/link';
 import { useCart } from '@/context/CartContext';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+// Wishlist helpers
+function getWishlist() {
+    if (typeof window === 'undefined') return [];
+    try {
+        return JSON.parse(localStorage.getItem('noore_wishlist') || '[]');
+    } catch { return []; }
+}
+
+function toggleWishlist(productId) {
+    const list = getWishlist();
+    const idx = list.indexOf(productId);
+    if (idx > -1) {
+        list.splice(idx, 1);
+    } else {
+        list.push(productId);
+    }
+    localStorage.setItem('noore_wishlist', JSON.stringify(list));
+    // Dispatch event so other cards update
+    window.dispatchEvent(new Event('wishlistChange'));
+    return list.includes(productId);
+}
 
 // Compact star display for product cards
 function MiniStarRating({ rating, count }) {
@@ -35,12 +57,36 @@ function MiniStarRating({ rating, count }) {
 export default function ProductCard({ product, reviewSummary }) {
     const { addItem } = useCart();
     const [imageLoaded, setImageLoaded] = useState(false);
+    const [wishlisted, setWishlisted] = useState(false);
+    const [addedToBag, setAddedToBag] = useState(false);
+
+    useEffect(() => {
+        setWishlisted(getWishlist().includes(product.id));
+        const handler = () => setWishlisted(getWishlist().includes(product.id));
+        window.addEventListener('wishlistChange', handler);
+        return () => window.removeEventListener('wishlistChange', handler);
+    }, [product.id]);
 
     const effectivePrice = product.discount > 0
         ? product.price * (1 - product.discount / 100)
         : product.price;
 
     const review = reviewSummary?.[product.id];
+
+    const handleAddToBag = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        addItem(product);
+        setAddedToBag(true);
+        setTimeout(() => setAddedToBag(false), 1500);
+    };
+
+    const handleWishlist = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        const isNowWishlisted = toggleWishlist(product.id);
+        setWishlisted(isNowWishlisted);
+    };
 
     return (
         <div className="product-card">
@@ -70,14 +116,20 @@ export default function ProductCard({ product, reviewSummary }) {
             {/* Quick Add */}
             {product.stock && (
                 <div className="product-card-quick">
-                    <button onClick={(e) => { e.stopPropagation(); addItem(product); }}>
-                        Add to Bag
+                    <button onClick={handleAddToBag}>
+                        {addedToBag ? '✓ Added!' : 'Add to Bag'}
                     </button>
                 </div>
             )}
 
             {/* Wishlist */}
-            <button className="product-card-wishlist" title="Add to wishlist">♡</button>
+            <button
+                className={`product-card-wishlist ${wishlisted ? 'wishlisted' : ''}`}
+                title={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+                onClick={handleWishlist}
+            >
+                {wishlisted ? '♥' : '♡'}
+            </button>
 
             {/* Info */}
             <Link href={`/product/${product.id}`}>

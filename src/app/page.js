@@ -98,7 +98,15 @@ function HomePage() {
         <div className="hero-slider">
           {heroSlides.map((slide, i) => (
             <div key={i} className={`hero-slide ${heroSlide === i ? 'active' : ''}`}>
-              <div className="hero-overlay" style={{ background: `linear-gradient(135deg, rgba(253,251,247,0.92) 0%, rgba(247,243,237,0.7) 40%, rgba(212,186,130,0.15) 100%)` }}></div>
+              <div className="hero-bg-image" style={{
+                backgroundImage: 'url(/hero-jewellery.png)',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                position: 'absolute',
+                inset: 0,
+                zIndex: 0,
+              }} />
+              <div className="hero-overlay" style={{ background: `linear-gradient(135deg, rgba(253,251,247,0.88) 0%, rgba(247,243,237,0.75) 40%, rgba(212,186,130,0.25) 100%)` }}></div>
               <div className="hero-content">
                 <div className="hero-badge">{slide.badge}</div>
                 <h1 className="hero-title">{slide.title}</h1>

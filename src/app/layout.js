@@ -1,6 +1,22 @@
 import "./globals.css";
+import { Cormorant_Garamond, Montserrat } from 'next/font/google';
 import VisitorTracker from '@/components/VisitorTracker';
 import ExitIntentPopup from '@/components/ExitIntentPopup';
+
+const cormorant = Cormorant_Garamond({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  style: ['normal', 'italic'],
+  variable: '--font-cormorant',
+  display: 'swap',
+});
+
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-montserrat',
+  display: 'swap',
+});
 
 export const metadata = {
   title: "Noore Jewels — Trendy American Diamond (AD) Jewellery Online | CZ Imitation Jewelry India",
@@ -23,9 +39,9 @@ export const metadata = {
     locale: "en_IN",
     images: [
       {
-        url: '/favicon.png',
-        width: 512,
-        height: 512,
+        url: '/og-banner.png',
+        width: 1200,
+        height: 630,
         alt: 'Noore Jewels - Trendy American Diamond Jewellery',
       }
     ],
@@ -34,7 +50,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "Noore Jewels — Trendy American Diamond Jewellery Online",
     description: "Buy trendy AD jewellery online. Premium CZ necklaces, rings & earrings starting ₹199. Free shipping above ₹999.",
-    images: ['/favicon.png'],
+    images: ['/og-banner.png'],
   },
   robots: {
     index: true,
@@ -116,12 +132,11 @@ const jsonLd = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${cormorant.variable} ${montserrat.variable}`}>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="icon" type="image/png" href="/favicon.png" />
         <link rel="apple-touch-icon" href="/favicon.png" />
+        <link rel="manifest" href="/manifest.json" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#C5A467" />
         <link rel="canonical" href="https://noorejewels.in" />

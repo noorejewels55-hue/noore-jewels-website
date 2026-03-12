@@ -3,7 +3,7 @@
    Inspired by jennifermillerjewelry.com
    ============================================= */
 
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Montserrat:wght@300;400;500;600;700&display=swap');
+/* Fonts loaded via next/font (self-hosted, zero CLS) */
 
 /* ─── CSS VARIABLES ─── */
 :root {
@@ -32,9 +32,9 @@
   --color-error: #C0392B;
   --color-warning: #D4A843;
   
-  /* Typography */
-  --font-heading: 'Cormorant Garamond', Georgia, serif;
-  --font-body: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
+  /* Typography — uses next/font CSS variables */
+  --font-heading: var(--font-cormorant), Georgia, serif;
+  --font-body: var(--font-montserrat), 'Helvetica Neue', Arial, sans-serif;
   
   /* Sizes */
   --nav-height: 72px;
@@ -2557,3 +2557,50 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* ─── WISHLIST ACTIVE STATE ─── */
+.product-card-wishlist.wishlisted {
+  color: #E74C3C;
+  font-size: 1.1rem;
+  animation: heartPulse 0.4s ease;
+}
+
+@keyframes heartPulse {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.4); }
+  60% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+/* ─── ADD TO CART FEEDBACK ─── */
+.product-card-quick button {
+  transition: all 0.3s ease;
+}
+
+/* ─── ZOOM HINT ON PRODUCT GALLERY ─── */
+.product-gallery-main::after {
+  content: '🔍 Hover to zoom';
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: #fff;
+  background: rgba(0,0,0,0.5);
+  padding: 4px 10px;
+  border-radius: 8px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.product-gallery-main:hover::after {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .product-gallery-main::after {
+    display: none;
+  }
+}

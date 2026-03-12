@@ -1,0 +1,21 @@
+{
+  "name": "Noore Jewels — Trendy AD Jewellery",
+  "short_name": "Noore Jewels",
+  "description": "Premium American Diamond (AD) jewellery online. Anti-tarnish, diamond-look jewellery starting ₹199.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FDFBF7",
+  "theme_color": "#C5A467",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["shopping", "lifestyle"],
+  "lang": "en-IN",
+  "dir": "ltr"
+}
