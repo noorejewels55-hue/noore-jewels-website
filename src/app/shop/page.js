@@ -29,6 +29,16 @@ function ShopContent() {
         setActiveCategory(categoryParam);
     }, [categoryParam]);
 
+    // Fetch review summaries once on mount (they don't change with filters)
+    useEffect(() => {
+        fetch('/api/reviews/summary')
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) setReviewSummary(data.summary);
+            })
+            .catch(err => console.error('Reviews summary error:', err));
+    }, []);
+
     useEffect(() => {
         fetchProducts();
     }, [activeCategory, activeCollection, sort, tagParam]);
@@ -43,20 +53,11 @@ function ShopContent() {
             else if (tagParam) params.set('tag', tagParam);
             if (searchQuery) params.set('search', searchQuery);
 
-            const [productsRes, reviewsRes] = await Promise.all([
-                fetch(`/api/products?${params.toString()}`),
-                fetch('/api/reviews/summary'),
-            ]);
-
-            const data = await productsRes.json();
+            const res = await fetch(`/api/products?${params.toString()}`);
+            const data = await res.json();
             if (data.success) {
                 setProducts(data.products);
                 setCategories(data.categories);
-            }
-
-            const reviewsData = await reviewsRes.json();
-            if (reviewsData.success) {
-                setReviewSummary(reviewsData.summary);
             }
         } catch (err) {
             console.error('Error:', err);
