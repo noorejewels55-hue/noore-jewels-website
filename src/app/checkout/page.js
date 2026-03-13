@@ -72,10 +72,8 @@ function CheckoutContent() {
             return;
         }
 
-        if (!user) {
-            openAuth();
-            return;
-        }
+        // No longer blocking checkout for non-logged-in users (guest checkout allowed)
+        // Auth is optional for order tracking benefits
 
         setProcessing(true);
         setError('');
@@ -246,11 +244,11 @@ function CheckoutContent() {
                     </h1>
 
                     {!user && (
-                        <div style={{ textAlign: 'center', marginBottom: '32px', padding: '24px', background: 'var(--color-bg-alt)', border: '1px solid var(--color-border-light)' }}>
-                            <p style={{ fontSize: '0.85rem', color: 'var(--color-text-light)', marginBottom: '12px' }}>
-                                Please sign in to continue with your order
+                        <div style={{ textAlign: 'center', marginBottom: '24px', padding: '16px 20px', background: 'var(--color-bg-alt)', border: '1px solid var(--color-border-light)', borderRadius: '4px' }}>
+                            <p style={{ fontSize: '0.82rem', color: 'var(--color-text-light)', marginBottom: '10px', lineHeight: '1.6' }}>
+                                💡 <strong>Sign in</strong> for order tracking & faster checkout next time
                             </p>
-                            <button onClick={openAuth} className="btn btn-primary">Sign In</button>
+                            <button onClick={openAuth} className="btn btn-outline btn-sm">Sign In (Optional)</button>
                         </div>
                     )}
 
