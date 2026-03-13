@@ -631,6 +631,18 @@ h1, h2, h3, h4, h5, h6 {
   flex-direction: column;
 }
 
+/* Make the info Link stretch to fill remaining height */
+.product-card > a:last-of-type {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Push mobile add-to-bag to very bottom */
+.mobile-add-to-bag {
+  margin-top: auto;
+}
+
 .product-card:hover {
   box-shadow: var(--shadow-lg);
 }
