@@ -113,7 +113,7 @@ export default function ProductCard({ product, reviewSummary }) {
                 </div>
             </Link>
 
-            {/* Quick Add */}
+            {/* Quick Add — desktop hover only */}
             {product.stock && (
                 <div className="product-card-quick">
                     <button onClick={handleAddToBag}>
@@ -122,7 +122,7 @@ export default function ProductCard({ product, reviewSummary }) {
                 </div>
             )}
 
-            {/* Wishlist */}
+            {/* Wishlist heart — always visible on mobile */}
             <button
                 className={`product-card-wishlist ${wishlisted ? 'wishlisted' : ''}`}
                 title={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
@@ -150,22 +150,18 @@ export default function ProductCard({ product, reviewSummary }) {
                         rating={review?.averageRating || 0}
                         count={review?.totalReviews || 0}
                     />
-                    
-                    {/* Mobile visible add to bag */}
-                    {product.stock && (
-                        <button 
-                            className="mobile-add-to-bag"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                handleAddToBag(e);
-                            }}
-                        >
-                            {addedToBag ? '✓ Added' : '+ Add to Bag'}
-                        </button>
-                    )}
                 </div>
             </Link>
+
+            {/* Mobile Add to Bag — OUTSIDE the Link so taps work */}
+            {product.stock && (
+                <button 
+                    className="mobile-add-to-bag"
+                    onClick={handleAddToBag}
+                >
+                    {addedToBag ? '✓ Added' : '+ Add to Bag'}
+                </button>
+            )}
         </div>
     );
 }

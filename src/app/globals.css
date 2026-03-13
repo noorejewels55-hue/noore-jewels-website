@@ -757,6 +757,7 @@ h1, h2, h3, h4, h5, h6 {
   transform: translateY(-4px);
   transition: all var(--transition-base);
   cursor: pointer;
+  z-index: 5;
 }
 
 .product-card:hover .product-card-wishlist {
@@ -767,6 +768,10 @@ h1, h2, h3, h4, h5, h6 {
 .product-card-wishlist:hover {
   color: var(--color-rose-gold);
   background: #fff;
+}
+
+.product-card-wishlist.wishlisted {
+  color: var(--color-rose-gold);
 }
 
 .mobile-add-to-bag {
@@ -1897,23 +1902,35 @@ h1, h2, h3, h4, h5, h6 {
   .mobile-add-to-bag {
     display: block;
     width: 100%;
-    margin-top: 8px;
-    padding: 10px 0;
+    margin-top: 0;
+    padding: 11px 0;
     background: var(--color-bg-dark);
     color: var(--color-text-on-dark);
-    border: 1px solid var(--color-bg-dark);
+    border: none;
     font-size: 0.72rem;
     font-family: var(--font-body);
     font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.12em;
+    text-align: center;
+    cursor: pointer;
     transition: all var(--transition-fast);
+  }
+
+  .mobile-add-to-bag:active {
+    background: var(--color-gold);
   }
 
   /* Wishlist always visible on mobile */
   .product-card-wishlist {
-    opacity: 1;
-    transform: translateY(0);
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    z-index: 10;
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+    background: rgba(255,255,255,0.95);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.12);
   }
 
   /* Shop page header compact */
