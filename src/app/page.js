@@ -287,19 +287,18 @@ function HomePage() {
       )}
 
       {/* ── WHATSAPP CTA ── */}
-      <section style={{ padding: '80px 0', textAlign: 'center', background: 'var(--color-bg)' }}>
+      <section className="whatsapp-cta-section">
         <div className="container">
           <h2 className="section-title">Need Help Choosing?</h2>
           <div className="section-divider"></div>
-          <p style={{ fontSize: '0.9rem', fontWeight: 300, color: 'var(--color-text-light)', maxWidth: '500px', margin: '0 auto 36px', lineHeight: '1.8' }}>
+          <p className="whatsapp-cta-text">
             Chat with our AI-powered WhatsApp assistant for personalised jewellery recommendations, order tracking, and instant support.
           </p>
           <a
             href="https://wa.me/919217945235?text=Hi! I'm looking for some jewellery recommendations"
             target="_blank"
             rel="noopener noreferrer"
-            className="btn btn-primary btn-lg"
-            style={{ background: '#25D366', borderColor: '#25D366' }}
+            className="btn btn-primary btn-lg whatsapp-cta-btn"
           >
             💬&nbsp;&nbsp;Chat on WhatsApp
           </a>

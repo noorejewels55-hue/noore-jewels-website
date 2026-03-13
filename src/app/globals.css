@@ -510,6 +510,9 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.8;
   margin-bottom: 36px;
   letter-spacing: 0.04em;
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .hero-actions {
@@ -740,6 +743,7 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 0.04em;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   min-height: 2.4em;
@@ -1674,6 +1678,32 @@ h1, h2, h3, h4, h5, h6 {
   color: #fff;
 }
 
+/* ─── WHATSAPP CTA SECTION ─── */
+.whatsapp-cta-section {
+  padding: 80px 0;
+  text-align: center;
+  background: var(--color-bg);
+}
+
+.whatsapp-cta-text {
+  font-size: 0.9rem;
+  font-weight: 300;
+  color: var(--color-text-light);
+  max-width: 500px;
+  margin: 0 auto 36px;
+  line-height: 1.8;
+}
+
+.whatsapp-cta-btn {
+  background: #25D366 !important;
+  border-color: #25D366 !important;
+}
+
+.whatsapp-cta-btn:hover {
+  background: #1FB855 !important;
+  border-color: #1FB855 !important;
+}
+
 /* ─── RESPONSIVE ─── */
 @media (max-width: 1024px) {
   .categories-grid {
@@ -1740,21 +1770,58 @@ h1, h2, h3, h4, h5, h6 {
 
   /* Hero */
   .hero {
-    min-height: 400px;
-    max-height: 600px;
+    min-height: 420px;
+    max-height: 620px;
+  }
+  
+  .hero-content {
+    max-width: 90%;
   }
   
   .hero-title {
-    font-size: clamp(2rem, 8vw, 2.5rem);
+    font-size: clamp(2rem, 8vw, 2.8rem);
+    font-weight: 400;
+    color: #1A1A1A;
+    text-shadow: 0 1px 8px rgba(253, 251, 247, 0.7);
+  }
+  
+  .hero-title em {
+    color: var(--color-gold-dark);
+    text-shadow: 0 1px 6px rgba(253, 251, 247, 0.5);
   }
   
   .hero-text {
-    font-size: 0.82rem;
-    margin-bottom: 24px;
+    font-size: 0.84rem;
+    font-weight: 400;
+    color: #4A4A4A;
+    margin-bottom: 28px;
+    line-height: 1.7;
+    text-shadow: 0 1px 4px rgba(253, 251, 247, 0.6);
   }
   
   .hero-badge {
-    font-size: 0.62rem;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--color-gold-dark);
+    background: rgba(197, 164, 103, 0.12);
+    padding: 6px 16px;
+    border-radius: 20px;
+    display: inline-block;
+    border: 1px solid rgba(197, 164, 103, 0.25);
+  }
+
+  .hero-dots {
+    bottom: 20px;
+  }
+
+  /* Mobile hero overlay — reduce wash-out, let jewelry image show through more */
+  .hero-overlay {
+    background: linear-gradient(
+      160deg, 
+      rgba(253, 251, 247, 0.82) 0%, 
+      rgba(247, 243, 237, 0.65) 35%, 
+      rgba(212, 186, 130, 0.18) 100%
+    ) !important;
   }
 
   /* Products */
@@ -1777,13 +1844,30 @@ h1, h2, h3, h4, h5, h6 {
     padding: 48px 0;
   }
   
+  .category-card {
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  }
+  
+  .category-card-bg {
+    border-radius: 8px;
+  }
+  
   .category-card-name {
     font-size: 1.1rem;
     letter-spacing: 0.1em;
+    font-weight: 500;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
   }
   
   .category-card-overlay {
     padding: 20px 16px;
+    border-radius: 0 0 8px 8px;
+  }
+  
+  .category-card-count {
+    font-weight: 400;
+    letter-spacing: 0.12em;
   }
 
   /* Trust section */
@@ -1794,6 +1878,24 @@ h1, h2, h3, h4, h5, h6 {
   
   .trust-section {
     padding: 40px 0;
+    background: var(--color-bg);
+  }
+  
+  .trust-icon {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+  }
+  
+  .trust-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 4px;
+  }
+  
+  .trust-text {
+    font-size: 0.72rem;
+    line-height: 1.5;
   }
 
   /* Story section */
@@ -1807,8 +1909,27 @@ h1, h2, h3, h4, h5, h6 {
   }
   
   .story-content {
-    padding: 0;
+    padding: 0 8px;
     text-align: center;
+  }
+
+  .story-label {
+    font-weight: 600;
+    font-size: 0.68rem;
+  }
+  
+  .story-title {
+    font-size: 1.5rem;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+  
+  .story-text {
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 28px;
   }
 
   /* Product Detail */
@@ -1875,14 +1996,23 @@ h1, h2, h3, h4, h5, h6 {
 
   /* Section typography */
   .section-title {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     letter-spacing: 0.06em;
+    font-weight: 500;
   }
   
   .section-subtitle {
     font-size: 0.75rem;
     letter-spacing: 0.1em;
     margin-bottom: 32px;
+    color: var(--color-text-light);
+  }
+  
+  .section-divider {
+    width: 40px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--color-gold), var(--color-gold-light));
+    margin: 12px auto 18px;
   }
 
   /* Buttons */
@@ -1921,6 +2051,20 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 1.3rem;
     bottom: 16px;
     left: 16px;
+  }
+
+  /* WhatsApp CTA section */
+  .whatsapp-cta-section {
+    padding: 48px 0;
+  }
+  
+  .whatsapp-cta-text {
+    font-size: 0.82rem;
+    font-weight: 400;
+    color: #555;
+    max-width: 90%;
+    margin: 0 auto 28px;
+    line-height: 1.7;
   }
 
   /* Product card - show Add to Bag on mobile */
@@ -2047,12 +2191,27 @@ h1, h2, h3, h4, h5, h6 {
 
   /* Hero */
   .hero {
-    min-height: 350px;
-    max-height: 500px;
+    min-height: 380px;
+    max-height: 550px;
   }
   
   .hero-title {
-    font-size: 1.6rem;
+    font-size: clamp(1.8rem, 7vw, 2.2rem);
+    font-weight: 400;
+    line-height: 1.15;
+    margin-bottom: 14px;
+  }
+  
+  .hero-text {
+    font-size: 0.78rem;
+    line-height: 1.6;
+    margin-bottom: 22px;
+  }
+  
+  .hero-badge {
+    font-size: 0.6rem;
+    padding: 5px 14px;
+    margin-bottom: 14px;
   }
   
   .hero-actions {
@@ -2062,7 +2221,8 @@ h1, h2, h3, h4, h5, h6 {
   }
   
   .hero-actions .btn {
-    width: 80%;
+    width: 85%;
+    padding: 13px 20px;
   }
 
   /* OTP */
@@ -2153,7 +2313,8 @@ h1, h2, h3, h4, h5, h6 {
 
   /* Section titles */
   .section-title {
-    font-size: 1.3rem;
+    font-size: 1.35rem;
+    font-weight: 500;
   }
 
   /* Product meta on detail page */
