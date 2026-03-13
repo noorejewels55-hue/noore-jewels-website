@@ -10,7 +10,7 @@ import { CartProvider, useCart } from '@/context/CartContext';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 
 function CheckoutContent() {
-    const { items, subtotal, shipping, total, clearCart } = useCart();
+    const { items, subtotal, shipping, total, clearCart, updateQuantity, removeItem } = useCart();
     const { user, openAuth } = useAuth();
 
     const [formData, setFormData] = useState({
@@ -339,10 +339,62 @@ function CheckoutContent() {
                                             <img src={item.image} alt={item.name} />
                                         </div>
                                         <div style={{ flex: 1 }}>
-                                            <div style={{ fontFamily: 'var(--font-heading)', fontSize: '0.9rem', fontWeight: 500, marginBottom: '4px' }}>{item.name}</div>
-                                            <div style={{ fontSize: '0.78rem', color: 'var(--color-text-light)' }}>Qty: {item.quantity}</div>
+                                            <div style={{ fontFamily: 'var(--font-heading)', fontSize: '0.9rem', fontWeight: 500, marginBottom: '6px' }}>{item.name}</div>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0' }}>
+                                                <button
+                                                    onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                                                    style={{
+                                                        width: '28px', height: '28px',
+                                                        border: '1px solid var(--color-border)',
+                                                        background: 'var(--color-bg-card)',
+                                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                        fontSize: '0.9rem', color: 'var(--color-text)', cursor: 'pointer',
+                                                        borderRadius: '4px 0 0 4px',
+                                                    }}
+                                                    title={item.quantity <= 1 ? 'Remove item' : 'Decrease quantity'}
+                                                >
+                                                    −
+                                                </button>
+                                                <span style={{
+                                                    width: '32px', height: '28px',
+                                                    borderTop: '1px solid var(--color-border)',
+                                                    borderBottom: '1px solid var(--color-border)',
+                                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                    fontSize: '0.78rem', fontWeight: 500,
+                                                    background: 'var(--color-bg-card)',
+                                                }}>
+                                                    {item.quantity}
+                                                </span>
+                                                <button
+                                                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                                    style={{
+                                                        width: '28px', height: '28px',
+                                                        border: '1px solid var(--color-border)',
+                                                        background: 'var(--color-bg-card)',
+                                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                        fontSize: '0.9rem', color: 'var(--color-text)', cursor: 'pointer',
+                                                        borderRadius: '0 4px 4px 0',
+                                                    }}
+                                                    title="Increase quantity"
+                                                >
+                                                    +
+                                                </button>
+                                                <button
+                                                    onClick={() => removeItem(item.id)}
+                                                    style={{
+                                                        marginLeft: '10px',
+                                                        fontSize: '0.68rem', color: 'var(--color-text-muted)',
+                                                        textDecoration: 'underline', cursor: 'pointer',
+                                                        background: 'none', border: 'none',
+                                                        fontFamily: 'var(--font-body)',
+                                                    }}
+                                                    title="Remove item"
+                                                >
+                                                    Remove
+                                                </button>
+                                            </div>
                                         </div>
-                                        <div style={{ fontSize: '0.85rem', fontWeight: 500 }}>₹{Math.round(price * item.quantity).toLocaleString('en-IN')}</div>
+                                        <div style={{ fontSize: '0.85rem', fontWeight: 500, whiteSpace: 'nowrap' }}>₹{Math.round(price * item.quantity).toLocaleString('en-IN')}</div>
                                     </div>
                                 );
                             })}
