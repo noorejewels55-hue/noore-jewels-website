@@ -243,14 +243,7 @@ function CheckoutContent() {
                         Checkout
                     </h1>
 
-                    {!user && (
-                        <div style={{ textAlign: 'center', marginBottom: '24px', padding: '16px 20px', background: 'var(--color-bg-alt)', border: '1px solid var(--color-border-light)', borderRadius: '4px' }}>
-                            <p style={{ fontSize: '0.82rem', color: 'var(--color-text-light)', marginBottom: '10px', lineHeight: '1.6' }}>
-                                💡 <strong>Sign in</strong> for order tracking & faster checkout next time
-                            </p>
-                            <button onClick={openAuth} className="btn btn-outline btn-sm">Sign In (Optional)</button>
-                        </div>
-                    )}
+
 
                     <div className="checkout-grid">
                         {/* Form */}
