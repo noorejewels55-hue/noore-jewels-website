@@ -958,6 +958,17 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ─── SHOP / COLLECTION PAGE ─── */
+.shop-filters-container {
+  width: 100%;
+}
+
+.shop-filters-scroll {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
 .shop-header {
   padding: 48px 0;
   text-align: center;
@@ -1970,6 +1981,12 @@ h1, h2, h3, h4, h5, h6 {
   
   .product-card-price {
     font-size: 0.75rem;
+  }
+
+  /* Shop filters at narrower screens */
+  .shop-filters-container {
+    margin-left: -12px;
+    padding: 0 12px;
   }
 
   /* Hero */

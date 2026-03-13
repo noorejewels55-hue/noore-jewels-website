@@ -40,7 +40,7 @@ function HomePage() {
     'Necklaces': '/category-necklaces.png',
     'Necklace': '/category-necklaces.png',
     'Earrings': '/category-earrings.png',
-    'Earrings': '/category-earrings.png',
+    'Earings': '/category-earrings.png',
     'Bracelets': '/category-bracelets.png',
     'Bracelet': '/category-bracelets.png',
     'Chain': '/category-chains.png',
