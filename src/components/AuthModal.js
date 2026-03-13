@@ -145,7 +145,7 @@ export default function AuthModal() {
                     <>
                         <h2 className="auth-title">Verify OTP</h2>
                         <p className="auth-subtitle">
-                            📧 Code sent to your email. Check your inbox!
+                            📧 Code sent to your email. Check inbox & spam folder!
                         </p>
 
                         <div className="otp-inputs" onPaste={handleOtpPaste}>
@@ -177,6 +177,10 @@ export default function AuthModal() {
                         <div className="auth-resend">
                             Didn&apos;t receive? <button onClick={() => sendOTP(authPhone, emailInput)}>Resend OTP</button>
                         </div>
+
+                        <p style={{ textAlign: 'center', fontSize: '0.68rem', color: 'var(--color-text-muted)', marginTop: '12px', lineHeight: '1.5' }}>
+                            OTP is valid for 10 minutes. If you don&apos;t see the email, please check your Spam/Junk folder.
+                        </p>
                     </>
                 )}
 

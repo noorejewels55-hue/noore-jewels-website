@@ -974,6 +974,12 @@ h1, h2, h3, h4, h5, h6 {
   justify-content: center;
 }
 
+.shop-filters-scroll .btn {
+  overflow: visible;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 .shop-header {
   padding: 48px 0;
   text-align: center;
@@ -1968,11 +1974,20 @@ h1, h2, h3, h4, h5, h6 {
     justify-content: flex-start;
     padding-bottom: 8px;
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; /* Firefox */
+    scrollbar-width: none;
   }
   
   .shop-filters-scroll::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, etc */
+    display: none;
+  }
+
+  .shop-filters-scroll .btn {
+    overflow: visible;
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: 8px 14px;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
   }
 }
 

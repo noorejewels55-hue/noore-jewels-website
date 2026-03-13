@@ -37,7 +37,7 @@ async function sendEmailOTP(email, otp) {
                     <div style="background: linear-gradient(135deg, #2C2420, #3D3430); color: #C5A467; font-size: 32px; font-weight: 700; letter-spacing: 0.4em; padding: 20px 24px; border-radius: 8px; display: inline-block;">
                         ${otp}
                     </div>
-                    <p style="font-size: 12px; color: #999; margin-top: 20px;">This code expires in <strong>5 minutes</strong>.</p>
+                     <p style="font-size: 12px; color: #999; margin-top: 20px;">This code expires in <strong>10 minutes</strong>.</p>
                     <p style="font-size: 12px; color: #999;">Do not share this code with anyone.</p>
                 </div>
                 <div style="text-align: center; padding-top: 24px; border-top: 1px solid #E8E0D4;">
@@ -62,14 +62,22 @@ export async function POST(request) {
         // Clean phone number
         const cleanPhone = phone.replace(/\D/g, '');
 
-        // Rate limiting: max 3 OTPs per phone per 10 min
+        // Rate limiting: max 5 OTPs per phone per 5 min
         const existing = otpStore.get(cleanPhone);
-        if (existing && existing.attempts >= 3 && Date.now() - existing.firstAttempt < 10 * 60 * 1000) {
+        if (existing && existing.attempts >= 5 && Date.now() - existing.firstAttempt < 5 * 60 * 1000) {
             return NextResponse.json(
-                { success: false, message: 'Too many requests. Please try again in 10 minutes.' },
+                { success: false, message: 'Too many requests. Please try again in 5 minutes.' },
                 { status: 429 }
             );
         }
+
+        // Reset attempt counter if cooldown has passed
+        const attempts = (existing && Date.now() - existing.firstAttempt < 5 * 60 * 1000)
+            ? (existing.attempts || 0) + 1
+            : 1;
+        const firstAttempt = (existing && Date.now() - existing.firstAttempt < 5 * 60 * 1000)
+            ? existing.firstAttempt
+            : Date.now();
 
         // Generate 6-digit OTP
         const otp = crypto.randomInt(100000, 999999).toString();
@@ -80,12 +88,12 @@ export async function POST(request) {
             formattedPhone = '91' + formattedPhone;
         }
 
-        // Store OTP with 5-minute expiry
+        // Store OTP with 10-minute expiry (longer window for slow email delivery)
         otpStore.set(cleanPhone, {
             otp,
-            expiresAt: Date.now() + 5 * 60 * 1000,
-            attempts: (existing?.attempts || 0) + 1,
-            firstAttempt: existing?.firstAttempt || Date.now(),
+            expiresAt: Date.now() + 10 * 60 * 1000,
+            attempts,
+            firstAttempt,
             verifyAttempts: 0,
         });
 
@@ -113,10 +121,11 @@ export async function POST(request) {
         let sentVia = 'none';
 
         if (emailSent) {
-            message = `OTP sent to your email (${email})! 📧`;
+            message = `OTP sent to ${email}. Please check your inbox & spam folder 📧`;
             sentVia = 'email';
         } else {
-            message = 'Could not send OTP. Please check the email server configuration.';
+            console.error('OTP EMAIL DELIVERY FAILED — GMAIL_APP_PASSWORD set:', !!process.env.GMAIL_APP_PASSWORD);
+            message = 'Could not send OTP. Please check your email address and try again.';
         }
 
         // In development, log OTP for testing
