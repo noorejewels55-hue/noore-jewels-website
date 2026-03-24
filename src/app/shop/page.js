@@ -10,6 +10,8 @@ import ProductCard from '@/components/ProductCard';
 import { CartProvider } from '@/context/CartContext';
 import { AuthProvider } from '@/context/AuthContext';
 
+const PRODUCTS_PER_PAGE = 20;
+
 function ShopContent() {
     const searchParams = useSearchParams();
     const categoryParam = searchParams.get('category') || 'all';
@@ -24,9 +26,11 @@ function ShopContent() {
     const [activeCollection, setActiveCollection] = useState('');
     const [sort, setSort] = useState('default');
     const [searchQuery, setSearchQuery] = useState(searchParam);
+    const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
         setActiveCategory(categoryParam);
+        setCurrentPage(1);
     }, [categoryParam]);
 
     // Fetch review summaries once on mount (they don't change with filters)
@@ -41,6 +45,7 @@ function ShopContent() {
 
     useEffect(() => {
         fetchProducts();
+        setCurrentPage(1);
     }, [activeCategory, activeCollection, sort, tagParam]);
 
     const fetchProducts = async () => {
@@ -67,6 +72,7 @@ function ShopContent() {
 
     const handleSearch = (e) => {
         e.preventDefault();
+        setCurrentPage(1);
         fetchProducts();
     };
 
@@ -80,6 +86,47 @@ function ShopContent() {
             return activeCategory.charAt(0).toUpperCase() + activeCategory.slice(1).replace(/-/g, ' ');
         }
         return 'All Jewellery';
+    };
+
+    // Sort products (client-side for review-based sorts)
+    const sortedProducts = (sort === 'top-rated' || sort === 'most-reviewed')
+        ? [...products].sort((a, b) => {
+            const ra = reviewSummary?.[a.id] || { averageRating: 0, totalReviews: 0 };
+            const rb = reviewSummary?.[b.id] || { averageRating: 0, totalReviews: 0 };
+            if (sort === 'top-rated') return rb.averageRating - ra.averageRating || rb.totalReviews - ra.totalReviews;
+            return rb.totalReviews - ra.totalReviews || rb.averageRating - ra.averageRating;
+        })
+        : products;
+
+    // Pagination
+    const totalPages = Math.ceil(sortedProducts.length / PRODUCTS_PER_PAGE);
+    const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
+    const paginatedProducts = sortedProducts.slice(startIndex, startIndex + PRODUCTS_PER_PAGE);
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const goToPage = (page) => {
+        setCurrentPage(page);
+        scrollToTop();
+    };
+
+    // Generate page numbers to show (with ellipsis)
+    const getPageNumbers = () => {
+        const pages = [];
+        if (totalPages <= 7) {
+            for (let i = 1; i <= totalPages; i++) pages.push(i);
+        } else {
+            pages.push(1);
+            if (currentPage > 3) pages.push('...');
+            for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
+                pages.push(i);
+            }
+            if (currentPage < totalPages - 2) pages.push('...');
+            pages.push(totalPages);
+        }
+        return pages;
     };
 
     return (
@@ -100,7 +147,7 @@ function ShopContent() {
                         <input
                             type="text"
                             className="auth-input"
-                            placeholder="Search jewellery..."
+                            placeholder="Search diamond jewellery..."
                             value={searchQuery}
                             onChange={e => setSearchQuery(e.target.value)}
                             style={{ flex: 1 }}
@@ -162,7 +209,10 @@ function ShopContent() {
 
                 {/* Toolbar */}
                 <div className="shop-toolbar">
-                    <span className="shop-count">{products.length} products</span>
+                    <span className="shop-count">
+                        {products.length} products
+                        {totalPages > 1 && ` • Page ${currentPage} of ${totalPages}`}
+                    </span>
                     <div className="shop-sort">
                         <select value={sort} onChange={e => setSort(e.target.value)}>
                             <option value="default">Sort by: Featured</option>
@@ -202,19 +252,104 @@ function ShopContent() {
                         </button>
                     </div>
                 ) : (
-                    <div className="products-grid">
-                        {(sort === 'top-rated' || sort === 'most-reviewed'
-                            ? [...products].sort((a, b) => {
-                                const ra = reviewSummary?.[a.id] || { averageRating: 0, totalReviews: 0 };
-                                const rb = reviewSummary?.[b.id] || { averageRating: 0, totalReviews: 0 };
-                                if (sort === 'top-rated') return rb.averageRating - ra.averageRating || rb.totalReviews - ra.totalReviews;
-                                return rb.totalReviews - ra.totalReviews || rb.averageRating - ra.averageRating;
-                            })
-                            : products
-                        ).map(product => (
-                            <ProductCard key={product.id} product={product} reviewSummary={reviewSummary} />
-                        ))}
-                    </div>
+                    <>
+                        <div className="products-grid">
+                            {paginatedProducts.map(product => (
+                                <ProductCard key={product.id} product={product} reviewSummary={reviewSummary} />
+                            ))}
+                        </div>
+
+                        {/* Pagination */}
+                        {totalPages > 1 && (
+                            <div style={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                gap: '6px',
+                                marginTop: '48px',
+                                flexWrap: 'wrap',
+                            }}>
+                                {/* Prev */}
+                                <button
+                                    onClick={() => goToPage(currentPage - 1)}
+                                    disabled={currentPage === 1}
+                                    style={{
+                                        padding: '10px 16px',
+                                        border: '1px solid var(--color-border, #E8E0D4)',
+                                        borderRadius: '8px',
+                                        background: currentPage === 1 ? 'transparent' : 'var(--color-bg, #fff)',
+                                        color: currentPage === 1 ? 'var(--color-text-muted)' : 'var(--color-text)',
+                                        cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
+                                        fontSize: '0.82rem',
+                                        fontWeight: 500,
+                                        transition: 'all 0.2s ease',
+                                        opacity: currentPage === 1 ? 0.4 : 1,
+                                    }}
+                                >
+                                    ← Prev
+                                </button>
+
+                                {/* Page Numbers */}
+                                {getPageNumbers().map((page, idx) => (
+                                    page === '...' ? (
+                                        <span key={`ellipsis-${idx}`} style={{
+                                            padding: '10px 6px',
+                                            fontSize: '0.82rem',
+                                            color: 'var(--color-text-muted)',
+                                        }}>
+                                            …
+                                        </span>
+                                    ) : (
+                                        <button
+                                            key={page}
+                                            onClick={() => goToPage(page)}
+                                            style={{
+                                                width: '40px',
+                                                height: '40px',
+                                                border: currentPage === page
+                                                    ? '1.5px solid var(--color-gold, #C5A467)'
+                                                    : '1px solid var(--color-border, #E8E0D4)',
+                                                borderRadius: '8px',
+                                                background: currentPage === page
+                                                    ? 'var(--color-gold, #C5A467)'
+                                                    : 'var(--color-bg, #fff)',
+                                                color: currentPage === page ? '#fff' : 'var(--color-text)',
+                                                cursor: 'pointer',
+                                                fontSize: '0.82rem',
+                                                fontWeight: currentPage === page ? 600 : 400,
+                                                transition: 'all 0.2s ease',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                            }}
+                                        >
+                                            {page}
+                                        </button>
+                                    )
+                                ))}
+
+                                {/* Next */}
+                                <button
+                                    onClick={() => goToPage(currentPage + 1)}
+                                    disabled={currentPage === totalPages}
+                                    style={{
+                                        padding: '10px 16px',
+                                        border: '1px solid var(--color-border, #E8E0D4)',
+                                        borderRadius: '8px',
+                                        background: currentPage === totalPages ? 'transparent' : 'var(--color-bg, #fff)',
+                                        color: currentPage === totalPages ? 'var(--color-text-muted)' : 'var(--color-text)',
+                                        cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
+                                        fontSize: '0.82rem',
+                                        fontWeight: 500,
+                                        transition: 'all 0.2s ease',
+                                        opacity: currentPage === totalPages ? 0.4 : 1,
+                                    }}
+                                >
+                                    Next →
+                                </button>
+                            </div>
+                        )}
+                    </>
                 )}
             </div>
 
