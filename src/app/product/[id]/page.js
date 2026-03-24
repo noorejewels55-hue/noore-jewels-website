@@ -146,7 +146,7 @@ function ProductDetail({ params }) {
                         "@context": "https://schema.org",
                         "@type": "Product",
                         "name": product.name,
-                        "description": product.description || `${product.name} - Premium American Diamond (AD) jewellery by Noore Jewels`,
+                        "description": product.description || `${product.name} - IGI Certified Lab Grown Diamond Jewellery by Noore Jewels`,
                         "image": product.images || [product.image],
                         "brand": {
                             "@type": "Brand",
@@ -380,6 +380,49 @@ function ProductDetail({ params }) {
                                     ))}
                                 </div>
                             )}
+
+                            {/* Product Video */}
+                            {product.video && (
+                                <div style={{
+                                    marginTop: '20px',
+                                    borderRadius: '12px',
+                                    overflow: 'hidden',
+                                    border: '1px solid var(--color-border, #E8E0D4)',
+                                }}>
+                                    <div style={{
+                                        textAlign: 'center',
+                                        padding: '12px 0 8px',
+                                        fontSize: '0.72rem',
+                                        fontWeight: 500,
+                                        letterSpacing: '0.15em',
+                                        textTransform: 'uppercase',
+                                        color: 'var(--color-gold, #C5A467)',
+                                    }}>
+                                        ▶ Watch This Piece Come Alive
+                                    </div>
+                                    {product.video.includes('drive.google.com') ? (
+                                        <iframe
+                                            src={product.video}
+                                            width="100%"
+                                            height="300"
+                                            allow="autoplay; encrypted-media"
+                                            allowFullScreen
+                                            style={{ border: 'none', display: 'block' }}
+                                            title={`${product.name} video`}
+                                        />
+                                    ) : (
+                                        <video
+                                            controls
+                                            playsInline
+                                            preload="metadata"
+                                            style={{ width: '100%', display: 'block', maxHeight: '400px', objectFit: 'contain', background: '#000' }}
+                                        >
+                                            <source src={product.video} type="video/mp4" />
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    )}
+                                </div>
+                            )}
                         </div>
 
                         {/* Info */}
@@ -475,9 +518,9 @@ function ProductDetail({ params }) {
                                 marginTop: '20px', marginBottom: '24px',
                             }}>
                                 {[
-                                    { icon: '💎', label: 'Anti-Tarnish', sub: 'Long-lasting shine' },
-                                    { icon: '🚚', label: 'Free Shipping', sub: 'On orders ₹999+' },
-                                    { icon: '↩️', label: '7-Day Returns', sub: 'Easy return policy' },
+                                    { icon: '💎', label: 'IGI Certified', sub: 'Authentic diamonds' },
+                                    { icon: '🚚', label: 'Free Shipping', sub: 'Insured delivery' },
+                                    { icon: '↩️', label: '15-Day Returns', sub: 'Hassle-free policy' },
                                     { icon: '🔒', label: 'Secure Checkout', sub: 'Razorpay protected' },
                                 ].map((badge) => (
                                     <div key={badge.label} style={{
@@ -522,7 +565,7 @@ function ProductDetail({ params }) {
                                     <strong>Availability:</strong> <span style={{ color: product.stock ? 'var(--color-success)' : 'var(--color-error)' }}>{product.stock ? 'In Stock' : 'Out of Stock'}</span>
                                 </div>
                                 <div className="product-meta-item">
-                                    <strong>Shipping:</strong> <span>Free above ₹999</span>
+                                    <strong>Shipping:</strong> <span>Free Insured Shipping</span>
                                 </div>
                             </div>
                         </div>

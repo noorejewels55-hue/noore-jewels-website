@@ -28,7 +28,7 @@ async function fetchFromSheets() {
 
     const response = await sheets.spreadsheets.values.get({
         spreadsheetId: process.env.GOOGLE_SHEET_ID,
-        range: 'Products!A2:L',
+        range: 'Products!A2:M',
     });
 
     const rows = response.data.values || [];
@@ -39,10 +39,11 @@ async function fetchFromSheets() {
             // Fixed column layout:
             // A=Product Id, B=Name, C=Category, D=Price,
             // E=Image URL, F=Description, G=In Stock,
-            // H=Discount, I=Tags, J=Image 2, K=Image 3, L=Quantity
+            // H=Discount, I=Tags, J=Image 2, K=Image 3, L=Quantity, M=Video URL
             const imageUrl = row[4] || '';
             const description = row[5] || '';
             const quantity = parseInt(row[11]) || 0; // Column L = Quantity
+            const videoUrl = row[12] || ''; // Column M = Video URL
 
             // Build images array: main image (E) + Image 2 (J) + Image 3 (K)
             const allImageUrls = [imageUrl, row[9] || '', row[10] || '']
@@ -66,6 +67,7 @@ async function fetchFromSheets() {
                 availableQty: quantity,
                 discount: parseFloat(row[7]) || 0,
                 tags: (row[8] || '').split(',').map(t => t.trim().toLowerCase()).filter(Boolean),
+                video: convertDriveVideoUrl(videoUrl),
             };
         });
 }
@@ -319,6 +321,30 @@ function convertDriveUrl(url) {
     const openIdMatch = url.match(/[?&]id=([\w-]+)/);
     if (openIdMatch) {
         return `https://lh3.googleusercontent.com/d/${openIdMatch[1]}=w800`;
+    }
+
+    return url;
+}
+
+// Convert Google Drive sharing URL to a direct video preview URL
+function convertDriveVideoUrl(url) {
+    if (!url || !url.trim()) return '';
+
+    url = url.trim();
+
+    // Already a direct video link (YouTube, mp4, etc.)
+    if (!url.includes('drive.google.com')) return url;
+
+    // Format: https://drive.google.com/file/d/FILE_ID/view
+    const fileIdMatch = url.match(/\/file\/d\/([\w-]+)/);
+    if (fileIdMatch) {
+        return `https://drive.google.com/file/d/${fileIdMatch[1]}/preview`;
+    }
+
+    // Format: https://drive.google.com/open?id=FILE_ID
+    const openIdMatch = url.match(/[?&]id=([\w-]+)/);
+    if (openIdMatch) {
+        return `https://drive.google.com/file/d/${openIdMatch[1]}/preview`;
     }
 
     return url;
