@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { saveVisitor } from '@/lib/sheets';
+import { saveVisitor, updateVisitorName } from '@/lib/sheets';
 
 // Simple in-memory deduplication: don't log the same IP on the same page more than once per 30 minutes
 const recentVisits = new Map();
@@ -106,6 +106,24 @@ export async function POST(request) {
     } catch (error) {
         // Never return errors to client — tracking should be silent
         console.error('Visitor track error:', error);
+        return NextResponse.json({ ok: true });
+    }
+}
+
+// PATCH: Update visitor name retroactively (called when user submits exit-intent popup)
+export async function PATCH(request) {
+    try {
+        const { visitorName } = await request.json();
+        if (!visitorName) return NextResponse.json({ ok: true });
+
+        const forwarded = request.headers.get('x-forwarded-for');
+        const ip = forwarded ? forwarded.split(',')[0].trim() : 'Unknown';
+
+        await updateVisitorName(ip, visitorName);
+
+        return NextResponse.json({ ok: true });
+    } catch (error) {
+        console.error('Visitor name update error:', error);
         return NextResponse.json({ ok: true });
     }
 }

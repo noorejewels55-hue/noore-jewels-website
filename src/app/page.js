@@ -18,36 +18,36 @@ function HomePage() {
 
   const heroSlides = [
     {
-      badge: 'New Collection 2026',
-      title: <>Stunning <em>American Diamond</em><br />Jewellery</>,
-      text: 'Discover our handpicked collection of premium American Diamond (AD) imitation jewellery — designed to dazzle at every occasion.',
+      badge: 'The New Standard of Luxury',
+      title: <>Certified <em>Lab Grown Diamond</em><br />Jewellery</>,
+      text: 'Discover our exquisite collection of IGI-certified lab grown diamonds set in 9kt, 14kt, 18kt gold and 925 sterling silver — real diamonds, ethically made.',
     },
     {
-      badge: 'Trending Now',
-      title: <>Elegance in<br />Every <em>Detail</em></>,
-      text: 'From sparkling AD rings to statement CZ necklaces, find the perfect piece that speaks to your style.',
+      badge: 'Solitaire Collection',
+      title: <>Brilliance That<br />Lasts <em>Forever</em></>,
+      text: 'From stunning solitaire engagement rings to elegant diamond pendants — every piece is crafted with precision and certified for authenticity.',
     },
     {
-      badge: 'Best Sellers',
-      title: <>Shine <em>Forever</em><br />Starting ₹199</>,
-      text: 'Premium anti-tarnish American Diamond jewellery at prices that make you smile. Free shipping on orders above ₹999.',
+      badge: 'Ethical & Sustainable',
+      title: <>Real Diamonds,<br /><em>Reimagined</em></>,
+      text: 'Lab grown diamonds are chemically, physically, and optically identical to mined diamonds — at a fraction of the cost. Luxury you can feel good about.',
     },
   ];
 
   // Category images
   const categoryImages = {
     'Rings': '/category-chains.png',
+    'Solitaire Rings': '/category-chains.png',
     'Necklaces': '/category-necklaces.png',
     'Necklace': '/category-necklaces.png',
+    'Pendants': '/category-necklaces.png',
     'Earrings': '/category-earrings.png',
     'Earings': '/category-earrings.png',
     'Bracelets': '/category-bracelets.png',
     'Bracelet': '/category-bracelets.png',
+    'Bangles': '/category-bracelets.png',
     'Chain': '/category-chains.png',
     'Chains': '/category-chains.png',
-    'Hathphool': '/category-hathphool.png',
-    'Hand Accessories': '/category-hathphool.png',
-    'Hath Phool': '/category-hathphool.png',
   };
 
   useEffect(() => {
@@ -135,24 +135,24 @@ function HomePage() {
         <div className="container">
           <div className="trust-grid">
             <div className="trust-item">
-              <div className="trust-icon">✦</div>
-              <div className="trust-title">Premium AD Jewellery</div>
-              <div className="trust-text">Finest American Diamond & CZ stones, anti-tarnish finish</div>
+              <div className="trust-icon">💎</div>
+              <div className="trust-title">Certified Lab Grown Diamonds</div>
+              <div className="trust-text">IGI-certified lab diamonds — real, ethical, and brilliant</div>
             </div>
             <div className="trust-item">
-              <div className="trust-icon">🚚</div>
-              <div className="trust-title">Free Shipping</div>
-              <div className="trust-text">On all orders above ₹999</div>
+              <div className="trust-icon">✦</div>
+              <div className="trust-title">9kt / 14kt / 18kt Gold</div>
+              <div className="trust-text">Hallmarked gold & 925 sterling silver settings</div>
             </div>
             <div className="trust-item">
               <div className="trust-icon">🔒</div>
               <div className="trust-title">Secure Payments</div>
-              <div className="trust-text">Protected by Razorpay</div>
+              <div className="trust-text">Protected by Razorpay — UPI, cards, net banking</div>
             </div>
             <div className="trust-item">
-              <div className="trust-icon">💎</div>
-              <div className="trust-title">500+ Happy Customers</div>
-              <div className="trust-text">Trusted across India</div>
+              <div className="trust-icon">🚚</div>
+              <div className="trust-title">Free Insured Shipping</div>
+              <div className="trust-text">Pan-India delivery with full insurance</div>
             </div>
           </div>
         </div>
@@ -163,7 +163,7 @@ function HomePage() {
         <div className="container">
           <h2 className="section-title">Shop by Category</h2>
           <div className="section-divider"></div>
-          <p className="section-subtitle">Find Your Perfect Piece</p>
+          <p className="section-subtitle">Lab Grown Diamond Jewellery for Every Occasion</p>
 
           <div className="categories-grid">
             {(categories.length > 0 ? categories : [
@@ -171,7 +171,7 @@ function HomePage() {
               { name: 'Necklaces', slug: 'necklaces', count: 0 },
               { name: 'Earrings', slug: 'earrings', count: 0 },
               { name: 'Bracelets', slug: 'bracelets', count: 0 },
-              { name: 'Hathphool', slug: 'hathphool', count: 0 },
+              { name: 'Pendants', slug: 'pendants', count: 0 },
             ]).slice(0, 5).map((cat) => (
               <Link key={cat.slug} href={`/shop?category=${cat.slug}`}>
                 <div className="category-card">
@@ -238,7 +238,7 @@ function HomePage() {
             <div className="story-image">
               <img
                 src="/story-image.png"
-                alt="Noore Jewels — Timeless Elegance"
+                alt="Noore Jewels — Lab Grown Diamond Jewellery"
                 style={{
                   width: '100%',
                   height: '100%',
@@ -248,16 +248,17 @@ function HomePage() {
             </div>
             <div className="story-content">
               <div className="story-label">Our Story</div>
-              <h2 className="story-title">India's Finest American Diamond Jewellery</h2>
+              <h2 className="story-title">India&apos;s Finest Lab Grown Diamond Jewellery</h2>
               <p className="story-text">
-                Noore Jewels specialises in premium American Diamond (AD/CZ) imitation jewellery
-                for the modern Indian woman. Our expertise lies in crafting stunning pieces that
-                mirror the brilliance of real diamonds — without the hefty price tag. Every stone
-                is carefully selected and set in anti-tarnish metal for lasting shine.
+                Noore Jewels brings you certified lab grown diamonds — real diamonds that are
+                chemically, physically, and optically identical to mined diamonds. Set in
+                hallmarked 9kt, 14kt, 18kt gold and 925 sterling silver, every piece is a
+                masterwork of modern luxury.
               </p>
               <p className="story-text">
-                From elegant solitaire rings to dazzling AD necklace sets, each piece is designed
-                to make you feel extraordinary. Because we believe luxury should be accessible to all.
+                From brilliant solitaire engagement rings to breathtaking diamond necklace sets,
+                each piece is crafted to make you feel extraordinary. Because real luxury should
+                be ethical and accessible to all.
               </p>
               <Link href="/our-story" className="btn btn-outline">Read Our Story</Link>
             </div>
@@ -271,7 +272,7 @@ function HomePage() {
           <div className="container">
             <h2 className="section-title">New Arrivals</h2>
             <div className="section-divider"></div>
-            <p className="section-subtitle">Fresh Off The Bench</p>
+            <p className="section-subtitle">Fresh From The Workshop</p>
 
             <div className="products-grid">
               {displayNew.map(product => (
@@ -286,16 +287,44 @@ function HomePage() {
         </section>
       )}
 
+      {/* ── WHY LAB GROWN DIAMONDS ── */}
+      <section className="products-section">
+        <div className="container">
+          <h2 className="section-title">Why Lab Grown Diamonds?</h2>
+          <div className="section-divider"></div>
+          <p className="section-subtitle">The Smart Choice for Modern Luxury</p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '32px', marginTop: '20px' }}>
+            {[
+              { icon: '💎', title: '100% Real Diamonds', text: 'Lab grown diamonds are chemically, physically, and optically identical to mined diamonds. Same hardness (10 on Mohs scale), same brilliance, same fire.' },
+              { icon: '🌿', title: 'Ethical & Sustainable', text: 'No mining, no environmental damage, no conflict. Our diamonds are grown in controlled labs using advanced CVD/HPHT technology — guilt-free luxury.' },
+              { icon: '📜', title: 'IGI Certified', text: 'Every diamond comes with an internationally recognized IGI certificate verifying cut, clarity, colour, and carat — complete transparency.' },
+              { icon: '💰', title: '40-70% More Affordable', text: 'Lab grown diamonds cost 40-70% less than mined diamonds of the same quality. Get a bigger, better diamond for your budget.' },
+            ].map((val, i) => (
+              <div key={i} style={{ textAlign: 'center', padding: '32px 20px', background: 'rgba(212,186,130,0.06)', borderRadius: '16px', border: '1px solid rgba(212,186,130,0.15)' }}>
+                <div style={{ fontSize: '2rem', marginBottom: '16px' }}>{val.icon}</div>
+                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.15rem', fontWeight: 400, marginBottom: '12px', letterSpacing: '0.04em' }}>
+                  {val.title}
+                </h3>
+                <p style={{ fontSize: '0.83rem', fontWeight: 300, color: 'var(--color-text-light)', lineHeight: 1.8 }}>
+                  {val.text}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── WHATSAPP CTA ── */}
       <section className="whatsapp-cta-section">
         <div className="container">
           <h2 className="section-title">Need Help Choosing?</h2>
           <div className="section-divider"></div>
           <p className="whatsapp-cta-text">
-            Chat with our AI-powered WhatsApp assistant for personalised jewellery recommendations, order tracking, and instant support.
+            Chat with our AI-powered WhatsApp assistant for personalised diamond recommendations, custom orders, and instant support.
           </p>
           <a
-            href="https://wa.me/919217945235?text=Hi! I'm looking for some jewellery recommendations"
+            href="https://wa.me/919217945235?text=Hi! I'm looking for lab grown diamond jewellery"
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-primary btn-lg whatsapp-cta-btn"

@@ -26,11 +26,11 @@ function StoryContent() {
                         Our Story
                     </div>
                     <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 5vw, 3.2rem)', fontWeight: 300, lineHeight: 1.2, marginBottom: '24px', letterSpacing: '0.04em' }}>
-                        One Woman, One <em style={{ color: 'var(--color-gold)' }}>Sparkling Dream</em>
+                        One Woman, One <em style={{ color: 'var(--color-gold)' }}>Brilliant Vision</em>
                     </h1>
                     <p style={{ fontSize: '0.9rem', fontWeight: 300, color: 'var(--color-text-light)', lineHeight: 1.9, maxWidth: '550px', margin: '0 auto' }}>
-                        Noore Jewels was born from the creative passion of one woman who believes every woman
-                        deserves to sparkle — without breaking the bank.
+                        Noore Jewels was born from the belief that every woman deserves to own
+                        real diamonds — ethical, sustainable, and breathtakingly beautiful.
                     </p>
                 </div>
             </section>
@@ -42,58 +42,60 @@ function StoryContent() {
                         <div className="story-image">
                             <img
                                 src="/founders.png"
-                                alt="Founders of Noore Jewels — Kriti Kala"
+                                alt="Founder of Noore Jewels — Kriti Kala"
                                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                             />
                         </div>
                         <div className="story-content">
                             <div className="story-label">Meet the Founder</div>
-                            <h2 className="story-title">The Face Behind Noore Jewels</h2>
+                            <h2 className="story-title">The Vision Behind Noore Jewels</h2>
                             <p className="story-text">
                                 Hi, I&apos;m <strong>Kriti</strong> — and my name &quot;Kala&quot; means <em>Kalakar</em> (कलाकार) — an artist.
-                                That&apos;s exactly what drives me every day — the inner passion to create the most
-                                beautiful, high-quality jewellery for women across India.
+                                That&apos;s exactly what drives me every day — the passion to bring the most
+                                exquisite, real diamond jewellery to women across India, without the
+                                astronomical price tags of mined diamonds.
                             </p>
                             <p className="story-text">
-                                I started Noore Jewels with a simple belief — that gorgeous jewellery
-                                shouldn&apos;t come with a hefty price tag. As a woman myself, I understand the joy
-                                of finding that perfect piece — the one that makes you feel confident, beautiful,
-                                and ready to conquer the world. Every design at Noore Jewels is handpicked by me
-                                with love and care.
+                                I started Noore Jewels with a revolutionary idea — that <strong>lab grown
+                                diamonds</strong> are the future of luxury jewellery. They are real diamonds
+                                in every sense — same chemical composition (pure carbon), same hardness
+                                (10 on the Mohs scale), same breathtaking brilliance. The only difference?
+                                They&apos;re grown in state-of-the-art labs instead of being mined from the earth.
                             </p>
                             <p className="story-text">
-                                I specialize in premium <strong>American Diamond (AD)</strong> imitation jewellery —
-                                pieces that look stunning, feel luxurious, and last long, all at prices that make
-                                you smile. From my hands to your doorstep, every order is packed with care and shipped with love.
+                                Every diamond at Noore Jewels is <strong>IGI certified</strong> and set in
+                                hallmarked <strong>9kt, 14kt, or 18kt gold</strong> and <strong>925 sterling
+                                silver</strong>. From my hands to your doorstep, every order is packed with
+                                care and shipped with love and full insurance.
                             </p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* Why AD Jewelry */}
+            {/* Why Lab Grown Diamonds */}
             <section style={{ padding: '80px 0', background: 'var(--color-bg-alt)' }}>
                 <div className="container">
-                    <h2 className="section-title">Why American Diamond?</h2>
+                    <h2 className="section-title">Why Lab Grown Diamonds?</h2>
                     <div className="section-divider"></div>
-                    <p className="section-subtitle">Premium Look, Smart Price</p>
+                    <p className="section-subtitle">The Smart, Ethical Choice</p>
 
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '40px', marginTop: '20px' }}>
                         {[
                             {
                                 icon: '💎',
-                                title: 'Diamond-Like Brilliance',
-                                text: 'American Diamond (CZ) stones are precision-cut to reflect light just like real diamonds. The sparkle is real — only the price is different!'
+                                title: '100% Real Diamonds',
+                                text: 'Lab grown diamonds are chemically, physically, and optically identical to mined diamonds. They have the same hardness (10 Mohs), refractive index, and fire. Even expert gemologists need specialized equipment to tell them apart.'
                             },
                             {
-                                icon: '🛡️',
-                                title: 'Anti-Tarnish Quality',
-                                text: 'Our pieces are coated with anti-tarnish layers to keep them shining for months. Wear them daily without worry — they\'re built to last.'
+                                icon: '🌿',
+                                title: 'Ethical & Sustainable',
+                                text: 'No mining, no habitat destruction, no conflict. Our diamonds are created using advanced CVD (Chemical Vapour Deposition) and HPHT (High Pressure High Temperature) technology in controlled laboratory environments.'
                             },
                             {
-                                icon: '🎯',
-                                title: 'Affordable Luxury',
-                                text: 'Why spend lakhs when you can shine for hundreds? Premium AD jewellery starting at just ₹199. Look like a million bucks, spend like a pro.'
+                                icon: '💰',
+                                title: '40-70% More Affordable',
+                                text: 'Because lab grown diamonds don\'t involve expensive mining operations, they cost significantly less than mined diamonds of equivalent quality. Get a bigger, better diamond for your budget — real luxury, accessible to all.'
                             },
                         ].map((val, i) => (
                             <div key={i} style={{ textAlign: 'center', padding: '32px 24px' }}>
@@ -117,22 +119,23 @@ function StoryContent() {
                         <div className="story-image" style={{ direction: 'ltr' }}>
                             <img
                                 src="/story-journey.png"
-                                alt="Noore Jewels Collection — American Diamond Jewelry"
+                                alt="Noore Jewels Collection — Lab Grown Diamond Jewellery"
                                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                             />
                         </div>
                         <div className="story-content" style={{ direction: 'ltr' }}>
-                            <div className="story-label">The Journey</div>
-                            <h2 className="story-title">Growing Together with You</h2>
+                            <div className="story-label">Our Metals</div>
+                            <h2 className="story-title">Premium Settings, Hallmarked Quality</h2>
                             <p className="story-text">
-                                What started as a small dream has grown into a community of hundreds of happy
-                                customers across India. Every order, every review, every &quot;I love it!&quot; message
-                                from you pushes us to do better.
+                                Every Noore Jewels piece is set in the finest metals. Choose from <strong>9kt
+                                gold</strong> for everyday elegance, <strong>14kt gold</strong> for the perfect
+                                balance of durability and luxury, <strong>18kt gold</strong> for pure opulence,
+                                or <strong>925 sterling silver</strong> for timeless sophistication.
                             </p>
                             <p className="story-text">
-                                Kriti personally oversees every new design that enters our collection. If it
-                                doesn&apos;t make her go &quot;wow,&quot; it doesn&apos;t make it to the website. That&apos;s our
-                                quality promise — if we won&apos;t wear it ourselves, we won&apos;t sell it to you.
+                                All our gold jewellery is BIS hallmarked, and every lab grown diamond comes
+                                with an IGI certificate of authenticity. Kriti personally oversees every
+                                design — if it doesn&apos;t take her breath away, it doesn&apos;t make it to the collection.
                             </p>
                         </div>
                     </div>
@@ -149,6 +152,49 @@ function StoryContent() {
                     </p>
 
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '32px' }}>
+                        {/* Certified Diamonds */}
+                        <div style={{
+                            background: '#fff',
+                            padding: '36px 28px',
+                            borderRadius: '12px',
+                            border: '1px solid var(--color-border-light, #E8E0D4)',
+                            textAlign: 'center',
+                        }}>
+                            <div style={{ fontSize: '2.5rem', marginBottom: '16px' }}>📜</div>
+                            <h3 style={{
+                                fontFamily: 'var(--font-heading)',
+                                fontSize: '1.2rem',
+                                fontWeight: 500,
+                                marginBottom: '12px',
+                                letterSpacing: '0.04em',
+                            }}>IGI Certified Diamonds</h3>
+                            <p style={{
+                                fontSize: '0.85rem',
+                                fontWeight: 300,
+                                color: 'var(--color-text-light)',
+                                lineHeight: 1.8,
+                                marginBottom: '16px',
+                            }}>
+                                Every diamond comes with an <strong>IGI (International Gemological Institute)</strong> certificate
+                                verifying the 4Cs — cut, clarity, colour, and carat weight. Complete
+                                transparency and authenticity guaranteed.
+                            </p>
+                            <div style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                padding: '8px 20px',
+                                background: 'var(--color-bg-alt)',
+                                borderRadius: '6px',
+                                fontSize: '0.75rem',
+                                fontWeight: 500,
+                                color: 'var(--color-text)',
+                                letterSpacing: '0.05em',
+                            }}>
+                                💎 IGI Certified
+                            </div>
+                        </div>
+
                         {/* Secure Payments */}
                         <div style={{
                             background: '#fff',
@@ -173,8 +219,8 @@ function StoryContent() {
                                 marginBottom: '16px',
                             }}>
                                 All payments are processed through <strong>Razorpay</strong> — India&apos;s most trusted
-                                payment gateway used by lakhs of businesses. Your card details are never stored
-                                with us. Pay via UPI, Credit/Debit Cards, Net Banking, or Wallets — 100% safe and encrypted.
+                                payment gateway. Your card details are never stored with us. Pay via UPI,
+                                Credit/Debit Cards, Net Banking, or Wallets — 100% safe and encrypted.
                             </p>
                             <div style={{
                                 display: 'inline-flex',
@@ -192,7 +238,7 @@ function StoryContent() {
                             </div>
                         </div>
 
-                        {/* Fast Delivery */}
+                        {/* Insured Shipping */}
                         <div style={{
                             background: '#fff',
                             padding: '36px 28px',
@@ -207,7 +253,7 @@ function StoryContent() {
                                 fontWeight: 500,
                                 marginBottom: '12px',
                                 letterSpacing: '0.04em',
-                            }}>Automatic Shipping</h3>
+                            }}>Free Insured Shipping</h3>
                             <p style={{
                                 fontSize: '0.85rem',
                                 fontWeight: 300,
@@ -215,9 +261,9 @@ function StoryContent() {
                                 lineHeight: 1.8,
                                 marginBottom: '16px',
                             }}>
-                                The moment you order, our courier partner <strong>NimbusPost</strong> automatically
-                                picks it up! No delays, no manual processing. Your order is packed with love
-                                and shipped the same or next business day. Track your order anytime from our website.
+                                Every order is shipped with <strong>full insurance</strong> through our trusted
+                                courier partners. Your precious jewellery is fully protected during transit.
+                                Track your order anytime from our website. Pan-India delivery in 5-7 business days.
                             </p>
                             <div style={{
                                 display: 'inline-flex',
@@ -231,51 +277,7 @@ function StoryContent() {
                                 color: 'var(--color-text)',
                                 letterSpacing: '0.05em',
                             }}>
-                                📦 Delivered by NimbusPost
-                            </div>
-                        </div>
-
-                        {/* Quality Guarantee */}
-                        <div style={{
-                            background: '#fff',
-                            padding: '36px 28px',
-                            borderRadius: '12px',
-                            border: '1px solid var(--color-border-light, #E8E0D4)',
-                            textAlign: 'center',
-                        }}>
-                            <div style={{ fontSize: '2.5rem', marginBottom: '16px' }}>✅</div>
-                            <h3 style={{
-                                fontFamily: 'var(--font-heading)',
-                                fontSize: '1.2rem',
-                                fontWeight: 500,
-                                marginBottom: '12px',
-                                letterSpacing: '0.04em',
-                            }}>You Will Receive Your Order</h3>
-                            <p style={{
-                                fontSize: '0.85rem',
-                                fontWeight: 300,
-                                color: 'var(--color-text-light)',
-                                lineHeight: 1.8,
-                                marginBottom: '16px',
-                            }}>
-                                We understand online shopping can feel scary. But at Noore Jewels, <strong>every
-                                    single order is delivered</strong>. We&apos;re real people — two women running a business
-                                we&apos;re proud of. Check our Instagram reviews, our WhatsApp support, and our happy
-                                customers. You can reach us anytime!
-                            </p>
-                            <div style={{
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '8px',
-                                padding: '8px 20px',
-                                background: 'var(--color-bg-alt)',
-                                borderRadius: '6px',
-                                fontSize: '0.75rem',
-                                fontWeight: 500,
-                                color: 'var(--color-text)',
-                                letterSpacing: '0.05em',
-                            }}>
-                                ⭐ 500+ Happy Customers
+                                📦 Fully Insured Delivery
                             </div>
                         </div>
                     </div>
@@ -294,10 +296,10 @@ function StoryContent() {
                     }}>
                         {[
                             { icon: '📱', text: 'WhatsApp Support Available' },
-                            { icon: '🔄', text: 'Exchange Policy Available' },
-                            { icon: '🆓', text: 'Free Shipping above ₹999' },
+                            { icon: '📜', text: 'IGI Certified Diamonds' },
+                            { icon: '🏅', text: 'BIS Hallmarked Gold' },
                             { icon: '📦', text: 'Track Your Order Anytime' },
-                            { icon: '🏷️', text: 'Prices Starting at ₹199' },
+                            { icon: '🚚', text: 'Free Insured Shipping' },
                             { icon: '🇮🇳', text: 'Pan India Delivery' },
                         ].map((item, i) => (
                             <div key={i} style={{
@@ -326,12 +328,12 @@ function StoryContent() {
                         Our Promise to You
                     </div>
                     <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', fontWeight: 300, lineHeight: 1.3, marginBottom: '24px', letterSpacing: '0.04em' }}>
-                        You deserve to <em style={{ fontStyle: 'italic', color: 'var(--color-gold-light)' }}>sparkle</em> — and we&apos;re here to make it happen
+                        Real diamonds, <em style={{ fontStyle: 'italic', color: 'var(--color-gold-light)' }}>real brilliance</em> — ethically yours
                     </h2>
                     <p style={{ fontSize: '0.88rem', fontWeight: 300, color: 'rgba(255,255,255,0.6)', lineHeight: 1.9, marginBottom: '36px' }}>
-                        From Kriti&apos;s heart to your doorstep — every piece is chosen with love, packed with care,
-                        and shipped with a smile. My satisfaction comes from your happiness.
-                        Shop with confidence, sparkle with pride.
+                        From Kriti&apos;s vision to your doorstep — every diamond is certified, every setting
+                        is hallmarked, and every order is insured. We believe luxury should be ethical,
+                        transparent, and accessible. Shop with confidence, shine with pride.
                     </p>
                     <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
                         <Link href="/shop" className="btn btn-gold btn-lg">

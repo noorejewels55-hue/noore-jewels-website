@@ -47,6 +47,12 @@ export default async function sitemap() {
             changeFrequency: 'monthly',
             priority: 0.5,
         },
+        {
+            url: `${baseUrl}/9kt-diamond`,
+            lastModified: new Date(),
+            changeFrequency: 'weekly',
+            priority: 0.85,
+        },
     ];
 
     // Dynamic product pages

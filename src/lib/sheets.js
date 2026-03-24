@@ -437,6 +437,52 @@ export async function saveVisitor(visitorData) {
     }
 }
 
+// Update visitor name retroactively — finds the most recent "Guest" row
+// matching the given IP and replaces "Guest" with the actual name
+export async function updateVisitorName(ip, name) {
+    try {
+        if (!ip || !name || ip === 'Unknown') return false;
+
+        const auth = getAuth();
+        const sheets = google.sheets({ version: 'v4', auth });
+
+        const response = await sheets.spreadsheets.values.get({
+            spreadsheetId: process.env.GOOGLE_SHEET_ID,
+            range: 'Visitors!A:L',
+        });
+
+        const rows = response.data.values || [];
+        
+        // Find the LAST row where IP matches (column K = index 10)
+        // and name is still "Guest" (column L = index 11)
+        let targetRowIndex = -1;
+        for (let i = rows.length - 1; i >= 0; i--) {
+            if (rows[i][10] === ip && (rows[i][11] || '').toLowerCase() === 'guest') {
+                targetRowIndex = i;
+                break;
+            }
+        }
+
+        if (targetRowIndex === -1) return false;
+
+        // Update column L (name) for that row — sheet rows are 1-indexed
+        const sheetRow = targetRowIndex + 1;
+        await sheets.spreadsheets.values.update({
+            spreadsheetId: process.env.GOOGLE_SHEET_ID,
+            range: `Visitors!L${sheetRow}`,
+            valueInputOption: 'RAW',
+            resource: {
+                values: [[sanitizeForSheets(name)]],
+            },
+        });
+
+        return true;
+    } catch (error) {
+        console.error('Error updating visitor name:', error);
+        return false;
+    }
+}
+
 // Save lead (visitor who gave phone for welcome coupon) to 'Leads' tab
 export async function saveLead(leadData) {
     try {

@@ -70,6 +70,17 @@ export default function ExitIntentPopup() {
                 setCouponCode(data.couponCode);
                 setSubmitted(true);
                 localStorage.setItem('nj_lead_captured', '1');
+
+                // Retroactively update visitor name in Visitors sheet
+                // (fire-and-forget — don't block the UI)
+                if (name?.trim()) {
+                    fetch('/api/track', {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ visitorName: name.trim() }),
+                        keepalive: true,
+                    }).catch(() => {}); // silently ignore errors
+                }
             } else {
                 setError(data.message || 'Something went wrong. Please try again.');
             }

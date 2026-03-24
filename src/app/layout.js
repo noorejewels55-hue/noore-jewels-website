@@ -19,9 +19,9 @@ const montserrat = Montserrat({
 });
 
 export const metadata = {
-  title: "Noore Jewels — Trendy American Diamond (AD) Jewellery Online | CZ Imitation Jewelry India",
-  description: "Buy trendy American Diamond (AD) jewellery online at Noore Jewels. Premium CZ necklaces, rings, bracelets & earrings. Anti-tarnish, diamond-look jewellery starting ₹199. Free shipping above ₹999. Best AD jewelry store in India.",
-  keywords: "American Diamond jewellery, AD jewellery, CZ jewellery, trendy diamond jewellery, imitation jewellery, American Diamond necklace, AD necklace set, CZ earrings, trendy jewellery online India, affordable diamond jewellery, anti-tarnish jewellery, cubic zirconia jewelry, American Diamond rings, AD bracelet, fashion jewellery India, Noore Jewels, best AD jewellery online, trendy CZ jewelry, diamond look jewellery, premium imitation jewelry",
+  title: "Noore Jewels — Lab Grown Diamond Jewellery in 9kt, 14kt, 18kt Gold & 925 Silver | India",
+  description: "Buy certified lab grown diamond jewellery at Noore Jewels. Solitaire rings, diamond earrings, necklaces & bracelets in 9kt, 14kt, 18kt gold and 925 sterling silver. Ethical, sustainable, and affordable real diamonds. Free shipping across India.",
+  keywords: "lab grown diamond jewellery, lab grown diamond ring, solitaire ring, lab grown diamond necklace, lab grown diamond earrings, 9kt gold jewellery, 14kt gold jewellery, 18kt gold jewellery, 925 silver jewellery, CVD diamond, HPHT diamond, certified lab diamond India, ethical diamond jewellery, Noore Jewels, real diamond affordable, solitaire engagement ring, diamond bracelet, lab diamond India online",
   metadataBase: new URL('https://noorejewels.in'),
   alternates: {
     canonical: '/',
@@ -31,8 +31,8 @@ export const metadata = {
     apple: '/favicon.png',
   },
   openGraph: {
-    title: "Noore Jewels — Trendy American Diamond (AD) Jewellery Online India",
-    description: "Shop premium American Diamond (AD/CZ) imitation jewellery at Noore Jewels. Trendy diamond-look necklaces, rings, earrings & bracelets. Anti-tarnish quality starting ₹199.",
+    title: "Noore Jewels — Lab Grown Diamond Jewellery in Gold & Silver",
+    description: "Certified lab grown diamond jewellery in 9kt, 14kt, 18kt gold and 925 silver. Solitaire rings, earrings, necklaces & bracelets. Real diamonds, ethical & affordable.",
     type: "website",
     url: "https://noorejewels.in",
     siteName: "Noore Jewels",
@@ -42,14 +42,14 @@ export const metadata = {
         url: '/og-banner.png',
         width: 1200,
         height: 630,
-        alt: 'Noore Jewels - Trendy American Diamond Jewellery',
+        alt: 'Noore Jewels - Lab Grown Diamond Jewellery',
       }
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Noore Jewels — Trendy American Diamond Jewellery Online",
-    description: "Buy trendy AD jewellery online. Premium CZ necklaces, rings & earrings starting ₹199. Free shipping above ₹999.",
+    title: "Noore Jewels — Lab Grown Diamond Jewellery in Gold & Silver",
+    description: "Certified lab grown diamonds in 9kt, 14kt, 18kt gold & 925 silver. Solitaire rings, necklaces & earrings. Real diamonds, ethically made.",
     images: ['/og-banner.png'],
   },
   robots: {
@@ -78,7 +78,7 @@ const jsonLd = {
       "name": "Noore Jewels",
       "url": "https://noorejewels.in",
       "logo": "https://noorejewels.in/favicon.png",
-      "description": "Premium American Diamond (AD) imitation jewellery brand founded by Kriti. Trendy CZ jewelry at affordable prices.",
+      "description": "Premium lab grown diamond jewellery brand. Certified diamonds in 9kt, 14kt, 18kt gold and 925 sterling silver. Ethical, sustainable, and affordable luxury.",
       "foundingDate": "2024",
       "founder": {
         "@type": "Person",
@@ -112,18 +112,18 @@ const jsonLd = {
       "@id": "https://noorejewels.in/#store",
       "name": "Noore Jewels",
       "url": "https://noorejewels.in",
-      "description": "Buy trendy American Diamond (AD/CZ) imitation jewellery online. Premium anti-tarnish necklaces, rings, earrings & bracelets starting at ₹199.",
+      "description": "Buy certified lab grown diamond jewellery online. Solitaire rings, necklaces, earrings & bracelets in 9kt, 14kt, 18kt gold and 925 sterling silver.",
       "currenciesAccepted": "INR",
       "paymentAccepted": "UPI, Credit Card, Debit Card, Net Banking, Wallets",
-      "priceRange": "₹199 - ₹5000",
+      "priceRange": "₹5,000 - ₹2,00,000",
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
-        "name": "American Diamond Jewellery",
+        "name": "Lab Grown Diamond Jewellery",
         "itemListElement": [
-          { "@type": "OfferCatalog", "name": "AD Necklaces" },
-          { "@type": "OfferCatalog", "name": "AD Earrings" },
-          { "@type": "OfferCatalog", "name": "AD Rings" },
-          { "@type": "OfferCatalog", "name": "AD Bracelets" }
+          { "@type": "OfferCatalog", "name": "Diamond Solitaire Rings" },
+          { "@type": "OfferCatalog", "name": "Diamond Earrings" },
+          { "@type": "OfferCatalog", "name": "Diamond Necklaces" },
+          { "@type": "OfferCatalog", "name": "Diamond Bracelets" }
         ]
       }
     }

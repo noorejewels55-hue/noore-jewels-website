@@ -9,7 +9,7 @@ export default function Footer() {
                     <div>
                         <div className="footer-brand">Noore Jewels</div>
                         <p className="footer-desc">
-                            Trendy, affordable jewellery crafted to make you shine. Every piece tells a story of elegance and grace.
+                            Certified lab grown diamond jewellery in 9kt, 14kt, 18kt gold &amp; 925 silver. Real diamonds, ethically crafted.
                         </p>
                         <div className="footer-social">
                             <a href="https://www.instagram.com/noore.jewels/" target="_blank" rel="noopener noreferrer" title="Instagram">

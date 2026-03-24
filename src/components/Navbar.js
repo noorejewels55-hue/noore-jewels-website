@@ -40,6 +40,7 @@ export default function Navbar() {
                         <Link href="/shop?category=necklaces" className="nav-link">Necklaces</Link>
                         <Link href="/shop?category=earrings" className="nav-link">Earrings</Link>
                         <Link href="/shop?category=bracelets" className="nav-link">Bracelets</Link>
+                        <Link href="/9kt-diamond" className="nav-link" style={{ color: 'var(--color-gold, #C5A467)' }}>9KT Diamond</Link>
                         <Link href="/our-story" className="nav-link">Our Story</Link>
                     </div>
 
@@ -140,6 +141,7 @@ export default function Navbar() {
                     <Link href="/shop?category=necklaces" className="nav-link" onClick={() => setMobileOpen(false)}>Necklaces</Link>
                     <Link href="/shop?category=earrings" className="nav-link" onClick={() => setMobileOpen(false)}>Earrings</Link>
                     <Link href="/shop?category=bracelets" className="nav-link" onClick={() => setMobileOpen(false)}>Bracelets</Link>
+                    <Link href="/9kt-diamond" className="nav-link" onClick={() => setMobileOpen(false)} style={{ color: 'var(--color-gold, #C5A467)' }}>💎 9KT Diamond</Link>
                     <Link href="/our-story" className="nav-link" onClick={() => setMobileOpen(false)}>Our Story</Link>
                     <div style={{ marginTop: '24px' }}>
                         {user ? (
