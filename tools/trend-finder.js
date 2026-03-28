@@ -21,12 +21,12 @@ const googleTrends = require('google-trends-api');
 // ─── Configuration ────────────────────────────────────────────
 const JEWELRY_CATEGORIES = {
     necklace: [
-        'American Diamond necklace',
-        'AD necklace set',
-        'CZ necklace design',
-        'imitation necklace set',
+        'Lab Grown Diamond necklace',
+        'LGD necklace set',
+        'lab diamond necklace design',
+        'fine necklace set',
         'trendy necklace design 2026',
-        'bridal necklace imitation',
+        'bridal necklace fine jewellery',
         'choker necklace trending',
         'layered necklace fashion',
         'pearl necklace trendy',
@@ -35,9 +35,9 @@ const JEWELRY_CATEGORIES = {
         'statement necklace fashion',
     ],
     earrings: [
-        'American Diamond earrings',
-        'AD earrings design',
-        'CZ drop earrings',
+        'Lab Grown Diamond earrings',
+        'LGD earrings design',
+        'lab created diamond drop earrings',
         'jhumka design trending',
         'trendy earrings 2026',
         'stud earrings fashion',
@@ -49,8 +49,8 @@ const JEWELRY_CATEGORIES = {
         'pearl earrings fashion',
     ],
     bracelet: [
-        'American Diamond bracelet',
-        'AD bracelet design',
+        'Lab Grown Diamond bracelet',
+        'LGD bracelet design',
         'charm bracelet trendy',
         'tennis bracelet fashion',
         'bangle design trending 2026',
@@ -61,27 +61,27 @@ const JEWELRY_CATEGORIES = {
         'friendship bracelet trendy',
     ],
     ring: [
-        'American Diamond ring',
-        'AD ring design',
-        'CZ solitaire ring',
+        'Lab Grown Diamond ring',
+        'LGD ring design',
+        'lab diamond solitaire ring',
         'trendy ring design 2026',
         'cocktail ring fashion',
         'stackable rings trending',
-        'engagement ring imitation',
+        'engagement ring fine jewellery',
         'butterfly ring trending',
         'adjustable ring trendy',
         'couple ring trending',
     ],
     general: [
-        'American Diamond jewellery',
-        'AD jewellery trending',
-        'CZ jewellery online',
-        'imitation jewellery trending',
-        'fashion jewellery 2026',
+        'Lab Grown Diamond jewellery',
+        'LGD jewellery trending',
+        'lab created diamond jewellery online',
+        'fine jewellery trending',
+        'ethical jewellery 2026',
         'trendy jewellery India',
-        'affordable diamond jewellery',
-        'anti tarnish jewellery',
-        'wedding imitation jewellery',
+        'sustainable diamond jewellery',
+        'fine diamond jewellery',
+        'wedding fine jewellery',
         'office wear jewellery',
         'college wear jewellery',
         'party wear jewellery trendy',
@@ -135,11 +135,11 @@ const REEL_IDEAS_BY_TREND = {
 };
 
 const HASHTAG_SETS = {
-    necklace: '#ADnecklace #AmericanDiamondNecklace #CZnecklace #necklacedesign #trendynecklace #imitationnecklace #fashionjewellery #necklaceset #jewellerylovers #necklacelove #indianjewellery #affordableluxury #NJnecklace',
-    earrings: '#ADearrings #AmericanDiamondEarrings #trendyearrings #jhumka #earringsoftheday #fashionearrings #CZearrings #danglers #studearrings #earringslover #indianearrings #affordablejewellery',
-    bracelet: '#ADbracelet #braceletlovers #trendybracelet #fashionbracelet #CZbracelet #wristcandy #braceletstack #armcandy #affordablebracelets #indianjewellery',
-    ring: '#ADring #trendyring #CZring #fashionring #ringdesign #ringsofinstagram #imitationring #affordablerings #solitairering #stackablerings',
-    general: '#NJjewels #AmericanDiamond #ADjewellery #CZjewellery #trendyjewellery2026 #fashionjewelleryIndia #imitationjewellery #affordableluxury #antitarnish #jewellerytrends #smallbusinessindia #indianfashion #jewelleryonline #NJfamily',
+    necklace: '#LGDnecklace #LabGrownDiamondNecklace #labdiamondnecklace #necklacedesign #trendynecklace #finenecklace #finejewellery #necklaceset #jewellerylovers #necklacelove #indianjewellery #ethicalluxury #NJnecklace',
+    earrings: '#LGDearrings #LabGrownDiamondEarrings #trendyearrings #jhumka #earringsoftheday #fineearrings #labdiamondearrings #danglers #studearrings #earringslover #indianearrings #sustainablejewellery',
+    bracelet: '#LGDbracelet #braceletlovers #trendybracelet #finebracelet #labdiamondbracelet #wristcandy #braceletstack #armcandy #ethicalbracelets #indianjewellery',
+    ring: '#LGDring #trendyring #labdiamondring #finering #ringdesign #ringsofinstagram #finering #ethicalrings #solitairering #stackablerings',
+    general: '#NJjewels #LabGrownDiamond #LGDjewellery #labdiamondjewellery #trendyjewellery2026 #finejewelleryIndia #ethicaljewellery #sustainableluxury #finejewelry #jewellerytrends #smallbusinessindia #indianfashion #jewelleryonline #NJfamily',
 };
 
 // ─── Helper Functions ─────────────────────────────────────────
@@ -396,7 +396,7 @@ async function main() {
     console.log('═'.repeat(70));
     console.log('');
 
-    const risingQueries = await getRelatedQueries('American Diamond jewellery');
+    const risingQueries = await getRelatedQueries('Lab Grown Diamond jewellery');
     if (risingQueries.length > 0) {
         risingQueries.forEach((q, i) => {
             console.log(`  ${i + 1}. "${q.query}" — ${q.value}`);

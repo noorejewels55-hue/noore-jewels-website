@@ -1,27 +1,11 @@
 import "./globals.css";
-import { Cormorant_Garamond, Montserrat } from 'next/font/google';
 import VisitorTracker from '@/components/VisitorTracker';
 import ExitIntentPopup from '@/components/ExitIntentPopup';
 
-const cormorant = Cormorant_Garamond({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  style: ['normal', 'italic'],
-  variable: '--font-cormorant',
-  display: 'swap',
-});
-
-const montserrat = Montserrat({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-montserrat',
-  display: 'swap',
-});
-
 export const metadata = {
-  title: "Noore Jewels — Lab Grown Diamond Jewellery in 9kt, 14kt, 18kt Gold & 925 Silver | India",
-  description: "Buy certified lab grown diamond jewellery at Noore Jewels. Solitaire rings, diamond earrings, necklaces & bracelets in 9kt, 14kt, 18kt gold and 925 sterling silver. Ethical, sustainable, and affordable real diamonds. Free shipping across India.",
-  keywords: "lab grown diamond jewellery, lab grown diamond ring, solitaire ring, lab grown diamond necklace, lab grown diamond earrings, 9kt gold jewellery, 14kt gold jewellery, 18kt gold jewellery, 925 silver jewellery, CVD diamond, HPHT diamond, certified lab diamond India, ethical diamond jewellery, Noore Jewels, real diamond affordable, solitaire engagement ring, diamond bracelet, lab diamond India online",
+  title: "Noore Jewels — Exquisite Lab Grown Diamond Jewellery Online | Premium LGD Jewelry India",
+  description: "Buy exquisite Lab Grown Diamond jewellery online at Noore Jewels. Premium LGD necklaces, rings, bracelets & earrings. Ethically sourced, fine jewellery starting from ₹199. Free shipping above ₹999. Best Lab Grown Diamond jewelry store in India.",
+  keywords: "Lab Grown Diamond jewellery, LGD jewellery, lab diamond jewellery, exquisite diamond jewellery, fine jewellery, Lab Grown Diamond necklace, LGD necklace set, LGD earrings, exquisite jewellery online India, affordable diamond jewellery, ethical jewellery, lab created diamond jewelry, Lab Grown Diamond rings, LGD bracelet, luxury jewellery India, Noore Jewels, best LGD jewellery online, trendy lab diamond jewelry, sustainable diamond jewellery, premium fine jewelry",
   metadataBase: new URL('https://noorejewels.in'),
   alternates: {
     canonical: '/',
@@ -31,26 +15,26 @@ export const metadata = {
     apple: '/favicon.png',
   },
   openGraph: {
-    title: "Noore Jewels — Lab Grown Diamond Jewellery in Gold & Silver",
-    description: "Certified lab grown diamond jewellery in 9kt, 14kt, 18kt gold and 925 silver. Solitaire rings, earrings, necklaces & bracelets. Real diamonds, ethical & affordable.",
+    title: "Noore Jewels — Exquisite Lab Grown Diamond Jewellery Online India",
+    description: "Shop premium Lab Grown Diamond fine jewellery at Noore Jewels. Exquisite necklaces, rings, earrings & bracelets. Superior quality starting ₹199.",
     type: "website",
     url: "https://noorejewels.in",
     siteName: "Noore Jewels",
     locale: "en_IN",
     images: [
       {
-        url: '/og-banner.png',
-        width: 1200,
-        height: 630,
-        alt: 'Noore Jewels - Lab Grown Diamond Jewellery',
+        url: '/favicon.png',
+        width: 512,
+        height: 512,
+        alt: 'Noore Jewels - Exquisite Lab Grown Diamond Jewellery',
       }
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Noore Jewels — Lab Grown Diamond Jewellery in Gold & Silver",
-    description: "Certified lab grown diamonds in 9kt, 14kt, 18kt gold & 925 silver. Solitaire rings, necklaces & earrings. Real diamonds, ethically made.",
-    images: ['/og-banner.png'],
+    title: "Noore Jewels — Exquisite Lab Grown Diamond Jewellery Online",
+    description: "Buy exquisite Lab Grown Diamond jewellery online. Premium LGD necklaces, rings & earrings starting ₹199. Free shipping above ₹999.",
+    images: ['/favicon.png'],
   },
   robots: {
     index: true,
@@ -78,7 +62,7 @@ const jsonLd = {
       "name": "Noore Jewels",
       "url": "https://noorejewels.in",
       "logo": "https://noorejewels.in/favicon.png",
-      "description": "Premium lab grown diamond jewellery brand. Certified diamonds in 9kt, 14kt, 18kt gold and 925 sterling silver. Ethical, sustainable, and affordable luxury.",
+      "description": "Premium Lab Grown Diamond fine jewellery brand founded by Kriti. Exquisite LGD jewelry at accessible prices.",
       "foundingDate": "2024",
       "founder": {
         "@type": "Person",
@@ -112,18 +96,18 @@ const jsonLd = {
       "@id": "https://noorejewels.in/#store",
       "name": "Noore Jewels",
       "url": "https://noorejewels.in",
-      "description": "Buy certified lab grown diamond jewellery online. Solitaire rings, necklaces, earrings & bracelets in 9kt, 14kt, 18kt gold and 925 sterling silver.",
+      "description": "Buy exquisite Lab Grown Diamond fine jewellery online. Premium LGD necklaces, rings, earrings & bracelets starting at ₹199.",
       "currenciesAccepted": "INR",
       "paymentAccepted": "UPI, Credit Card, Debit Card, Net Banking, Wallets",
-      "priceRange": "₹5,000 - ₹2,00,000",
+      "priceRange": "₹199 - ₹5000",
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
         "name": "Lab Grown Diamond Jewellery",
         "itemListElement": [
-          { "@type": "OfferCatalog", "name": "Diamond Solitaire Rings" },
-          { "@type": "OfferCatalog", "name": "Diamond Earrings" },
-          { "@type": "OfferCatalog", "name": "Diamond Necklaces" },
-          { "@type": "OfferCatalog", "name": "Diamond Bracelets" }
+          { "@type": "OfferCatalog", "name": "LGD Necklaces" },
+          { "@type": "OfferCatalog", "name": "LGD Earrings" },
+          { "@type": "OfferCatalog", "name": "LGD Rings" },
+          { "@type": "OfferCatalog", "name": "LGD Bracelets" }
         ]
       }
     }
@@ -132,11 +116,12 @@ const jsonLd = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${cormorant.variable} ${montserrat.variable}`}>
+    <html lang="en">
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="icon" type="image/png" href="/favicon.png" />
         <link rel="apple-touch-icon" href="/favicon.png" />
-        <link rel="manifest" href="/manifest.json" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#C5A467" />
         <link rel="canonical" href="https://noorejewels.in" />

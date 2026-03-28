@@ -60,10 +60,10 @@ function ReturnPolicyContent() {
     };
 
     const steps = [
-        { step: '01', title: 'Contact Us', desc: 'Reach out via WhatsApp or email within 15 days of delivery to initiate your return.' },
-        { step: '02', title: 'Return Approved', desc: 'Our team will review your request and send a return shipping label within 24 hours.' },
-        { step: '03', title: 'Ship It Back', desc: 'Pack the item securely in its original packaging and ship it using our prepaid label.' },
-        { step: '04', title: 'Refund Processed', desc: 'Once we receive and inspect the item, your refund is processed within 5-7 business days.' },
+        { step: '01', title: 'Contact Us', desc: 'Reach out via WhatsApp or email within 48 hours of delivery.' },
+        { step: '02', title: 'Share Evidence', desc: 'Send the unboxing video and photos of the issue.' },
+        { step: '03', title: 'We Review', desc: 'Our team will review your case and respond within 2-3 business days.' },
+        { step: '04', title: 'Resolution', desc: 'If approved, we will arrange a replacement or provide store credit.' },
     ];
 
     return (
@@ -83,11 +83,11 @@ function ReturnPolicyContent() {
                         Policy
                     </div>
                     <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 5vw, 3rem)', fontWeight: 300, lineHeight: 1.2, marginBottom: '24px', letterSpacing: '0.04em' }}>
-                        Return, Exchange &amp; <em style={{ color: 'var(--color-gold)' }}>Refund Policy</em>
+                        Return &amp; <em style={{ color: 'var(--color-gold)' }}>Refund Policy</em>
                     </h1>
                     <p style={{ fontSize: '0.9rem', fontWeight: 300, color: 'var(--color-text-light)', lineHeight: 1.9, maxWidth: '550px', margin: '0 auto' }}>
-                        At Noore Jewels, your satisfaction is our top priority. We offer a hassle-free
-                        return and exchange policy on all our lab grown diamond jewellery.
+                        We want every Noore Jewels customer to have a delightful experience. Please read our return
+                        and refund policy carefully before placing your order.
                     </p>
                 </div>
             </section>
@@ -96,62 +96,78 @@ function ReturnPolicyContent() {
             <section style={{ padding: '80px 0' }}>
                 <div className="container" style={{ maxWidth: '780px' }}>
 
-                    {/* 15-Day Return Policy */}
+                    {/* General Policy */}
                     <div style={sectionStyle}>
                         <div style={iconBadgeStyle}>&#128203;</div>
-                        <h2 style={headingStyle}>15-Day Easy Return Policy</h2>
+                        <h2 style={headingStyle}>General Policy</h2>
                         <div style={highlightBoxStyle}>
                             <p style={{ ...textStyle, marginBottom: 0, fontWeight: 400, color: 'var(--color-text)' }}>
-                                We offer a <strong>15-day return window</strong> from the date of delivery on all
-                                our lab grown diamond jewellery. If you&apos;re not completely satisfied with your
-                                purchase, you can return it for a <strong>full refund</strong> or <strong>exchange</strong> — no questions asked.
+                                At Noore Jewels, all sales are considered <strong>final</strong>. We generally <strong>do not
+                                    accept returns or offer refunds</strong> once an order has been delivered. We encourage you
+                                to review product details, images, and descriptions carefully before making a purchase.
                             </p>
                         </div>
                         <p style={textStyle}>
-                            We want you to love every piece you buy from Noore Jewels. If for any reason
-                            you&apos;re not happy — whether it doesn&apos;t match your expectations, doesn&apos;t suit your
-                            style, or simply isn&apos;t what you imagined — we&apos;ll gladly accept the return.
+                            Since our jewellery features fine Lab Grown Diamonds at accessible prices, we maintain a
+                            strict no-return policy to keep our costs manageable and prices fair for all customers.
                         </p>
                     </div>
 
-                    {/* What You Can Return */}
+                    {/* Exceptions */}
                     <div style={sectionStyle}>
-                        <div style={iconBadgeStyle}>✅</div>
-                        <h2 style={headingStyle}>What You Can Return</h2>
-                        <ul style={listStyle}>
-                            <li><strong>Any product</strong> within 15 days of delivery</li>
-                            <li><strong>Change of mind</strong> — we understand; it happens!</li>
-                            <li><strong>Defective or damaged</strong> items — we&apos;ll replace or refund immediately</li>
-                            <li><strong>Wrong product</strong> received — we&apos;ll ship the correct one right away</li>
-                            <li><strong>Size doesn&apos;t fit</strong> — exchange for a different size, free of charge</li>
-                        </ul>
-                    </div>
-
-                    {/* Return Conditions */}
-                    <div style={sectionStyle}>
-                        <div style={iconBadgeStyle}>📋</div>
-                        <h2 style={headingStyle}>Return Conditions</h2>
+                        <div style={iconBadgeStyle}>&#128260;</div>
+                        <h2 style={headingStyle}>Exceptions &mdash; When We May Accept Returns</h2>
                         <p style={textStyle}>
-                            To ensure a smooth return process, please make sure:
+                            While we generally do not process returns, we understand that certain situations are beyond
+                            your control. Returns or replacements may be considered <strong>on a case-by-case basis</strong> under
+                            the following circumstances:
                         </p>
                         <ul style={listStyle}>
-                            <li>The item is in its <strong>original, unworn condition</strong></li>
-                            <li>All original tags, certificates (IGI), and packaging are intact</li>
-                            <li>The return is initiated within <strong>15 days</strong> of delivery</li>
-                            <li>The item has not been resized, altered, or engraved after delivery</li>
+                            <li><strong>Defective Product:</strong> If the item you received is broken, damaged, or defective upon arrival.</li>
+                            <li><strong>Missing Items:</strong> If any item from your order is missing from the delivered package.</li>
+                            <li><strong>Wrong Product:</strong> If you received a completely different product than what you ordered.</li>
+                            <li><strong>Courier Mishandling:</strong> If the product was visibly damaged due to rough handling during shipping.</li>
                         </ul>
+                        <p style={textStyle}>
+                            In all such cases, the decision to approve a return or replacement is at the <strong>sole
+                                discretion of Noore Jewels</strong> and will be evaluated individually.
+                        </p>
+                    </div>
+
+                    {/* Mandatory Evidence */}
+                    <div style={sectionStyle}>
+                        <div style={iconBadgeStyle}>&#127909;</div>
+                        <h2 style={headingStyle}>Mandatory: Unboxing Video Required</h2>
                         <div style={highlightBoxStyle}>
                             <p style={{ ...textStyle, marginBottom: 0, fontWeight: 400, color: 'var(--color-text)' }}>
-                                💡 <strong>Pro Tip:</strong> We recommend recording an unboxing video for every order.
-                                This helps speed up the return/exchange process, especially for damage claims.
+                                <strong>Important:</strong> To process any return or replacement request, you <strong>must</strong> provide
+                                a clear, unedited <strong>unboxing video</strong> of the package as proof. The video must show
+                                the sealed package being opened for the first time and clearly display the issue.
                             </p>
                         </div>
+                        <p style={textStyle}>
+                            Without a proper unboxing video, we will not be able to verify or process your claim.
+                            This policy protects both you and us from any disputes. We highly recommend that you
+                            <strong> always record a video while opening your package</strong>.
+                        </p>
+                        <p style={textStyle}>
+                            The unboxing video must include:
+                        </p>
+                        <ul style={listStyle}>
+                            <li>The sealed, unopened package with the shipping label visible</li>
+                            <li>The full unboxing process without any cuts or edits</li>
+                            <li>A clear view of the defect, damage, or wrong/missing item</li>
+                            <li>The invoice slip (if included in the package)</li>
+                        </ul>
                     </div>
 
-                    {/* How to Return */}
+                    {/* How to Request */}
                     <div style={sectionStyle}>
                         <div style={iconBadgeStyle}>&#128222;</div>
-                        <h2 style={headingStyle}>How to Return — 4 Simple Steps</h2>
+                        <h2 style={headingStyle}>How to Request a Return</h2>
+                        <p style={textStyle}>
+                            If you believe your order qualifies for a return or replacement, please follow these steps:
+                        </p>
                         <div style={{
                             display: 'grid',
                             gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
@@ -190,55 +206,36 @@ function ReturnPolicyContent() {
                         </div>
                     </div>
 
-                    {/* Exchange */}
-                    <div style={sectionStyle}>
-                        <div style={iconBadgeStyle}>🔄</div>
-                        <h2 style={headingStyle}>Exchange Policy</h2>
-                        <p style={textStyle}>
-                            Don&apos;t want a refund? No problem! You can <strong>exchange</strong> your piece for:
-                        </p>
-                        <ul style={listStyle}>
-                            <li>A <strong>different size</strong> of the same product</li>
-                            <li>A <strong>different design</strong> of equal or higher value</li>
-                            <li>A <strong>different metal</strong> (e.g., swap 9kt gold for 14kt gold — pay the difference)</li>
-                        </ul>
-                        <p style={textStyle}>
-                            Exchange shipping is <strong>completely free</strong>. We&apos;ll arrange pickup of the original
-                            item and send the new one at no extra cost.
-                        </p>
-                    </div>
-
                     {/* Refund */}
                     <div style={sectionStyle}>
                         <div style={iconBadgeStyle}>&#128176;</div>
                         <h2 style={headingStyle}>Refund Information</h2>
-                        <div style={highlightBoxStyle}>
-                            <p style={{ ...textStyle, marginBottom: 0, fontWeight: 400, color: 'var(--color-text)' }}>
-                                <strong>Full refund</strong> to your original payment method within <strong>5-7 business
-                                days</strong> after we receive and inspect the returned item.
-                            </p>
-                        </div>
-                        <ul style={listStyle}>
-                            <li>Refunds are processed to the <strong>original payment method</strong> (UPI, card, bank account)</li>
-                            <li>Return shipping is <strong>free</strong> — we provide a prepaid shipping label</li>
-                            <li>If you paid via credit card, the refund may take an additional 5-10 days to reflect in your statement</li>
-                            <li>For exchanges, no refund is needed — we simply send the replacement</li>
-                        </ul>
+                        <p style={textStyle}>
+                            If a return is approved, we primarily offer <strong>replacement of the product</strong> or
+                            <strong> store credit</strong> for future purchases. Monetary refunds are only considered in
+                            exceptional cases and are processed to the original payment method within 7-10 business days.
+                        </p>
+                        <p style={textStyle}>
+                            Shipping charges (if any) are non-refundable. In the case of a replacement, we will bear
+                            the shipping cost for sending the new product.
+                        </p>
                     </div>
 
-                    {/* Lifetime Warranty */}
+                    {/* Non-Returnable */}
                     <div style={sectionStyle}>
-                        <div style={iconBadgeStyle}>🛡️</div>
-                        <h2 style={headingStyle}>Lifetime Manufacturing Warranty</h2>
+                        <div style={iconBadgeStyle}>&#128683;</div>
+                        <h2 style={headingStyle}>Non-Returnable Cases</h2>
                         <p style={textStyle}>
-                            All Noore Jewels lab grown diamond jewellery comes with a <strong>lifetime warranty</strong> against
-                            manufacturing defects. If your piece has a structural issue (loose stone setting, clasp failure,
-                            etc.) at any time after purchase, we will repair or replace it <strong>free of charge</strong>.
+                            Returns will <strong>not</strong> be accepted in the following situations:
                         </p>
-                        <p style={textStyle}>
-                            This warranty does not cover normal wear and tear, accidental damage, or damage caused by
-                            improper care or exposure to chemicals.
-                        </p>
+                        <ul style={listStyle}>
+                            <li>Change of mind after delivery</li>
+                            <li>Slight colour variations due to screen settings (this is normal for all online products)</li>
+                            <li>Normal wear and tear or tarnishing over time</li>
+                            <li>Products without a valid unboxing video</li>
+                            <li>Claims raised after 48 hours of delivery</li>
+                            <li>Products that have been used, altered, or damaged by the customer</li>
+                        </ul>
                     </div>
 
                     {/* Contact */}
@@ -267,11 +264,11 @@ function ReturnPolicyContent() {
                             maxWidth: '480px',
                             margin: '0 auto 24px',
                         }}>
-                            For any queries about returns, exchanges, or refunds — reach out anytime. We respond within 2 hours during business hours.
+                            For any queries or concerns about your order, feel free to reach out. We are always happy to help!
                         </p>
                         <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
                             <a
-                                href="https://wa.me/919217945235?text=Hi! I'd like to initiate a return/exchange"
+                                href="https://wa.me/919217945235?text=Hi! I have a query about my order"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="btn btn-gold"
@@ -280,7 +277,7 @@ function ReturnPolicyContent() {
                                 WhatsApp Us
                             </a>
                             <a
-                                href="mailto:noore.jewels55@gmail.com?subject=Return/Exchange Request"
+                                href="mailto:noore.jewels55@gmail.com?subject=Return/Refund Query"
                                 className="btn btn-outline"
                                 style={{ fontSize: '0.8rem', borderColor: 'rgba(255,255,255,0.2)', color: '#fff' }}
                             >

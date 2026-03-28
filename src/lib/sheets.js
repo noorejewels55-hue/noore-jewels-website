@@ -28,7 +28,7 @@ async function fetchFromSheets() {
 
     const response = await sheets.spreadsheets.values.get({
         spreadsheetId: process.env.GOOGLE_SHEET_ID,
-        range: 'Products!A2:M',
+        range: 'Products!A2:T',
     });
 
     const rows = response.data.values || [];
@@ -40,6 +40,9 @@ async function fetchFromSheets() {
             // A=Product Id, B=Name, C=Category, D=Price,
             // E=Image URL, F=Description, G=In Stock,
             // H=Discount, I=Tags, J=Image 2, K=Image 3, L=Quantity, M=Video URL
+            // N=Gold Weight (g), O=Diamond Carat (total), P=Diamond Quality,
+            // Q=Diamond Shape, R=(unused - customer selects ring size),
+            // S=(unused), T=Num Diamonds
             const imageUrl = row[4] || '';
             const description = row[5] || '';
             const quantity = parseInt(row[11]) || 0; // Column L = Quantity
@@ -68,6 +71,12 @@ async function fetchFromSheets() {
                 discount: parseFloat(row[7]) || 0,
                 tags: (row[8] || '').split(',').map(t => t.trim().toLowerCase()).filter(Boolean),
                 video: convertDriveVideoUrl(videoUrl),
+                // Pricing detail columns
+                goldWeight: parseFloat(row[13]) || 0,
+                diamondCarat: parseFloat(row[14]) || 0,  // Total carat weight of all diamonds
+                diamondQuality: row[15] || '',
+                diamondShape: row[16] || '',  // Column Q = Diamond Shape (set by seller)
+                numDiamonds: parseInt(row[19]) || 0,  // Number of individual stones
             };
         });
 }
@@ -426,6 +435,131 @@ export function clearCache() {
     cachedProducts = null;
     cacheTimestamp = 0;
     fetchPromise = null;
+}
+
+// ─── PRICING SYSTEM ───
+
+let cachedPricing = null;
+let pricingCacheTimestamp = 0;
+const PRICING_CACHE_DURATION = 10 * 60 * 1000; // 10 minutes
+
+// Fetch master pricing data from 'Pricing' tab
+export async function getPricingData() {
+    const now = Date.now();
+    if (cachedPricing && now - pricingCacheTimestamp < PRICING_CACHE_DURATION) {
+        return cachedPricing;
+    }
+
+    try {
+        const auth = getAuth();
+        const sheets = google.sheets({ version: 'v4', auth });
+
+        const response = await sheets.spreadsheets.values.get({
+            spreadsheetId: process.env.GOOGLE_SHEET_ID,
+            range: 'Pricing!A2:D',
+        });
+
+        const rows = response.data.values || [];
+        const pricing = {};
+
+        for (const row of rows) {
+            if (row[0]) {
+                pricing[row[0].trim()] = {
+                    rate: parseFloat(row[1]) || 0,
+                    lastUpdated: row[2] || '',
+                    source: row[3] || '',
+                };
+            }
+        }
+
+        cachedPricing = pricing;
+        pricingCacheTimestamp = now;
+        return pricing;
+    } catch (error) {
+        console.error('Error fetching pricing data:', error);
+        return cachedPricing || {};
+    }
+}
+
+let cachedDiamondPricing = null;
+let diamondPricingCacheTimestamp = 0;
+
+// Fetch diamond pricing from 'Diamond-Pricing' tab
+export async function getDiamondPricing() {
+    const now = Date.now();
+    if (cachedDiamondPricing && now - diamondPricingCacheTimestamp < PRICING_CACHE_DURATION) {
+        return cachedDiamondPricing;
+    }
+
+    try {
+        const auth = getAuth();
+        const sheets = google.sheets({ version: 'v4', auth });
+
+        const response = await sheets.spreadsheets.values.get({
+            spreadsheetId: process.env.GOOGLE_SHEET_ID,
+            range: 'Diamond-Pricing!A2:F',
+        });
+
+        const rows = response.data.values || [];
+        const diamonds = rows
+            .filter(row => row[0])
+            .map(row => ({
+                qualityGrade: row[0] || '',
+                clarity: row[1] || '',
+                colour: row[2] || '',
+                tag: row[3] || '',
+                pricePerCarat: parseFloat(row[4]) || 0,
+                discount: parseFloat(row[5]) || 0,
+            }));
+
+        cachedDiamondPricing = diamonds;
+        diamondPricingCacheTimestamp = now;
+        return diamonds;
+    } catch (error) {
+        console.error('Error fetching diamond pricing:', error);
+        return cachedDiamondPricing || [];
+    }
+}
+
+// Get pricing tables for client-side calculation
+// Client passes customer selections (metal type, shape etc.) and calculates live
+export async function getProductPricingInfo(product) {
+    if (!product.goldWeight && !product.diamondCarat) return null;
+
+    try {
+        const [pricing, diamondPricing] = await Promise.all([
+            getPricingData(),
+            getDiamondPricing(),
+        ]);
+
+        // Return product data + pricing tables so client can calculate
+        return {
+            // Product-level attributes (from sheet)
+            goldWeight: product.goldWeight,
+            diamondCarat: product.diamondCarat,
+            diamondQuality: product.diamondQuality,
+            diamondShape: product.diamondShape,
+            numDiamonds: product.numDiamonds || 1,
+            // Pricing tables for client-side calculation
+            goldRates: {
+                '24K Gold': pricing['Gold 24K per gram']?.rate || 0,
+                '22K Gold': pricing['Gold 22K per gram']?.rate || 0,
+                '18K Gold': pricing['Gold 18K per gram']?.rate || 0,
+                '14K Gold': pricing['Gold 14K per gram']?.rate || 0,
+                '9K Gold': pricing['Gold 9K per gram']?.rate || 0,
+                '925 Silver': pricing['Silver 925 per gram']?.rate || 0,
+            },
+            makingPercent: pricing['Making Charges %']?.rate || 0,
+            shipping: pricing['Insured Shipping']?.rate || 0,
+            certification: pricing['Certification Fee']?.rate || 0,
+            gstPercent: pricing['GST %']?.rate || 3,
+            // Diamond quality options
+            diamondOptions: diamondPricing,
+        };
+    } catch (error) {
+        console.error('Error fetching pricing info:', error);
+        return null;
+    }
 }
 
 // Save visitor data to the 'Visitors' tab in Google Sheets

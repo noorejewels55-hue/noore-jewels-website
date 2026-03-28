@@ -48,7 +48,7 @@ export default async function sitemap() {
             priority: 0.5,
         },
         {
-            url: `${baseUrl}/9kt-diamond`,
+            url: `${baseUrl}/customize`,
             lastModified: new Date(),
             changeFrequency: 'weekly',
             priority: 0.85,

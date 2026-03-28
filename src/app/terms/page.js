@@ -81,7 +81,7 @@ function TermsContent() {
                         or making a purchase.
                     </p>
                     <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '16px' }}>
-                        Last updated: March 24, 2026
+                        Last updated: March 4, 2026
                     </p>
                 </div>
             </section>
@@ -112,15 +112,14 @@ function TermsContent() {
                         <div style={iconBadgeStyle}>💎</div>
                         <h2 style={headingStyle}>About Noore Jewels</h2>
                         <p style={textStyle}>
-                            Noore Jewels is an online fine jewellery brand specialising in <strong>IGI-certified
-                            lab grown diamond jewellery</strong>. Our pieces are set in <strong>9kt, 14kt, 18kt
-                            hallmarked gold</strong> and <strong>925 sterling silver</strong>.
+                            Noore Jewels is an online fine jewellery brand specialising in premium Lab 
+                            Grown Diamond jewellery. Our products feature <strong>authentic Lab Grown
+                            Diamonds</strong>, thoughtfully sourced and expertly crafted.
                         </p>
                         <p style={textStyle}>
-                            Lab grown diamonds are <strong>real diamonds</strong> — chemically, physically, and
-                            optically identical to mined diamonds. They are created in controlled laboratory
-                            environments using advanced CVD/HPHT technology. Every diamond sold by Noore Jewels
-                            comes with an IGI certificate of authenticity.
+                            All product descriptions, images, and materials mentioned on the website represent
+                            our Lab Grown Diamond fine jewellery. By purchasing from us, you acknowledge that you are
+                            buying ethically created Lab Grown Diamond jewellery.
                         </p>
                     </div>
 
@@ -130,12 +129,10 @@ function TermsContent() {
                         <h2 style={headingStyle}>Products &amp; Pricing</h2>
                         <ul style={listStyle}>
                             <li>All prices are listed in <strong>Indian Rupees (INR)</strong> and are inclusive of applicable taxes</li>
-                            <li>All diamonds are <strong>IGI certified</strong> with details of cut, clarity, colour, and carat weight</li>
-                            <li>All gold jewellery is <strong>BIS hallmarked</strong> with purity markings</li>
-                            <li>Product colours may vary slightly from images due to screen display settings</li>
+                            <li>Product colours may vary slightly from images due to screen display settings — this is common for all online purchases</li>
                             <li>We reserve the right to change product prices at any time without prior notice</li>
-                            <li>Product availability is subject to stock. Custom orders may take 7-14 business days</li>
-                            <li>Diamond weight mentioned is approximate and may vary by ±5% as per industry standards</li>
+                            <li>Product availability is subject to stock. If a product is sold out, it will be marked accordingly on the website</li>
+                            <li>We take every effort to ensure product descriptions are accurate, but minor variations may occur as our products are handcrafted</li>
                         </ul>
                     </div>
 
@@ -151,7 +148,6 @@ function TermsContent() {
                             <li>We accept UPI, credit cards, debit cards, net banking, and digital wallets</li>
                             <li>An order is confirmed only after successful payment verification</li>
                             <li>You will receive an order confirmation via email after successful payment</li>
-                            <li>Every order includes an IGI diamond certificate and a BIS hallmark card (for gold)</li>
                             <li>We reserve the right to cancel any order due to stock unavailability, pricing errors, or suspected fraudulent activity</li>
                         </ul>
                         <div style={highlightBoxStyle}>
@@ -167,13 +163,13 @@ function TermsContent() {
                         <div style={iconBadgeStyle}>🚚</div>
                         <h2 style={headingStyle}>Shipping &amp; Delivery</h2>
                         <ul style={listStyle}>
-                            <li><strong>Free insured shipping</strong> on all orders across India</li>
+                            <li><strong>Free shipping</strong> on orders above ₹999</li>
                             <li>Orders are typically dispatched within <strong>1-3 business days</strong></li>
-                            <li>Delivery takes approximately <strong>5-7 business days</strong> depending on your location</li>
-                            <li>All shipments are <strong>fully insured</strong> during transit</li>
-                            <li>You will receive a tracking ID via email and WhatsApp once your order is shipped</li>
+                            <li>Delivery takes approximately <strong>5-10 business days</strong> depending on your location</li>
+                            <li>We ship across India through our courier partner <strong>NimbusPost</strong></li>
+                            <li>You will receive a tracking ID via email once your order is shipped</li>
                             <li>Delivery timelines may vary during festivals, sales, or unforeseen circumstances</li>
-                            <li>Signature required upon delivery for high-value items</li>
+                            <li>We are not responsible for delays caused by courier partners or natural events</li>
                         </ul>
                     </div>
 
@@ -186,27 +182,13 @@ function TermsContent() {
                             <Link href="/return-policy" style={{ color: 'var(--color-gold)', textDecoration: 'underline' }}>
                                 Return Policy
                             </Link>{' '}
-                            page. Key highlights:
+                            page. Key points:
                         </p>
                         <ul style={listStyle}>
-                            <li><strong>15-day easy return</strong> from date of delivery</li>
-                            <li><strong>Full refund</strong> to original payment method within 5-7 business days</li>
-                            <li><strong>Free exchange</strong> for different size, design, or metal</li>
-                            <li><strong>Lifetime warranty</strong> against manufacturing defects</li>
-                            <li>Items must be in original, unworn condition with all certificates and packaging</li>
-                        </ul>
-                    </div>
-
-                    {/* Certification & Authenticity */}
-                    <div style={sectionStyle}>
-                        <div style={iconBadgeStyle}>📜</div>
-                        <h2 style={headingStyle}>Certification &amp; Authenticity Guarantee</h2>
-                        <ul style={listStyle}>
-                            <li>Every diamond is accompanied by an <strong>IGI (International Gemological Institute)</strong> certificate</li>
-                            <li>All gold settings carry <strong>BIS hallmark</strong> certification</li>
-                            <li>925 silver pieces are stamped with the <strong>925 purity mark</strong></li>
-                            <li>Certificates can be verified directly on the IGI website using the certificate number</li>
-                            <li>We guarantee 100% authenticity of all materials — if any product is found to be misrepresented, we offer a full refund plus compensation</li>
+                            <li>All sales are generally considered <strong>final</strong></li>
+                            <li>Exchanges may be considered on a <strong>case-by-case basis</strong> for defective, damaged, or wrong products</li>
+                            <li>An <strong>unboxing video</strong> is mandatory for any exchange request</li>
+                            <li>Exchange requests must be raised within <strong>48 hours</strong> of delivery</li>
                         </ul>
                     </div>
 
@@ -262,6 +244,21 @@ function TermsContent() {
                         </p>
                     </div>
 
+                    {/* Prohibited */}
+                    <div style={sectionStyle}>
+                        <div style={iconBadgeStyle}>🚫</div>
+                        <h2 style={headingStyle}>Prohibited Activities</h2>
+                        <p style={textStyle}>You agree not to:</p>
+                        <ul style={listStyle}>
+                            <li>Use the website for any unlawful purpose</li>
+                            <li>Attempt to hack, disrupt, or damage the website</li>
+                            <li>Place fraudulent orders or use stolen payment methods</li>
+                            <li>Resell our products commercially without written consent</li>
+                            <li>Use automated bots or scrapers on the website</li>
+                            <li>Harass, abuse, or threaten our staff or other customers</li>
+                        </ul>
+                    </div>
+
                     {/* Governing Law */}
                     <div style={sectionStyle}>
                         <div style={iconBadgeStyle}>🏛️</div>
@@ -271,6 +268,19 @@ function TermsContent() {
                             Any disputes arising from these terms or your use of the website shall be subject
                             to the exclusive jurisdiction of the courts in <strong>India</strong>.
                         </p>
+                    </div>
+
+                    {/* Coupons */}
+                    <div style={sectionStyle}>
+                        <div style={iconBadgeStyle}>🏷️</div>
+                        <h2 style={headingStyle}>Coupons &amp; Discounts</h2>
+                        <ul style={listStyle}>
+                            <li>Coupon codes are subject to specific terms and validity periods</li>
+                            <li>Only one coupon code can be used per order</li>
+                            <li>Coupons cannot be combined with other offers unless explicitly stated</li>
+                            <li>We reserve the right to cancel or modify coupon codes at any time</li>
+                            <li>Coupon codes are non-transferable and cannot be exchanged for cash</li>
+                        </ul>
                     </div>
 
                     {/* Contact */}

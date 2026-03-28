@@ -22,7 +22,7 @@ export default function Navbar() {
         <>
             {/* Announcement Bar */}
             <div className="announcement-bar">
-                Free Shipping on orders above <span>&nbsp;₹999&nbsp;</span> • Starting at <span>&nbsp;₹199</span>
+                Certified <span>&nbsp;Lab Grown Diamonds&nbsp;</span> ✦ BIS Hallmarked <span>&nbsp;Gold Jewellery</span>
             </div>
 
             {/* Navigation */}
@@ -40,7 +40,7 @@ export default function Navbar() {
                         <Link href="/shop?category=necklaces" className="nav-link">Necklaces</Link>
                         <Link href="/shop?category=earrings" className="nav-link">Earrings</Link>
                         <Link href="/shop?category=bracelets" className="nav-link">Bracelets</Link>
-                        <Link href="/9kt-diamond" className="nav-link" style={{ color: 'var(--color-gold, #C5A467)' }}>9KT Diamond</Link>
+                        <Link href="/customize" className="nav-link" style={{ color: 'var(--color-gold, #C5A467)' }}>Customize</Link>
                         <Link href="/our-story" className="nav-link">Our Story</Link>
                     </div>
 
@@ -141,7 +141,7 @@ export default function Navbar() {
                     <Link href="/shop?category=necklaces" className="nav-link" onClick={() => setMobileOpen(false)}>Necklaces</Link>
                     <Link href="/shop?category=earrings" className="nav-link" onClick={() => setMobileOpen(false)}>Earrings</Link>
                     <Link href="/shop?category=bracelets" className="nav-link" onClick={() => setMobileOpen(false)}>Bracelets</Link>
-                    <Link href="/9kt-diamond" className="nav-link" onClick={() => setMobileOpen(false)} style={{ color: 'var(--color-gold, #C5A467)' }}>💎 9KT Diamond</Link>
+                    <Link href="/customize" className="nav-link" onClick={() => setMobileOpen(false)} style={{ color: 'var(--color-gold, #C5A467)' }}>💎 Customize</Link>
                     <Link href="/our-story" className="nav-link" onClick={() => setMobileOpen(false)}>Our Story</Link>
                     <div style={{ marginTop: '24px' }}>
                         {user ? (

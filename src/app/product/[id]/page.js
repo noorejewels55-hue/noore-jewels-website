@@ -31,6 +31,11 @@ function ProductDetail({ params }) {
     const [selectedImage, setSelectedImage] = useState(0);
     const [zoomStyle, setZoomStyle] = useState({});
     const [isZooming, setIsZooming] = useState(false);
+    const [priceBreakdown, setPriceBreakdown] = useState(null);
+    const [pricingInfo, setPricingInfo] = useState(null);
+    const [selectedMetal, setSelectedMetal] = useState('18K Gold');
+    const [selectedColor, setSelectedColor] = useState('Yellow Gold');
+    const [selectedRingSize, setSelectedRingSize] = useState('');
     const { addItem } = useCart();
 
     useEffect(() => {
@@ -59,6 +64,60 @@ function ProductDetail({ params }) {
         }
         setLoading(false);
     };
+
+    // Fetch pricing tables when product loads
+    useEffect(() => {
+        if (product && (product.goldWeight || product.diamondCarat)) {
+            fetch(`/api/pricing?productId=${product.id}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success && data.pricingInfo) {
+                        setPricingInfo(data.pricingInfo);
+                    }
+                })
+                .catch(err => console.error('Pricing error:', err));
+        }
+    }, [product]);
+
+    // Calculate price breakdown client-side whenever selections change
+    useEffect(() => {
+        if (!pricingInfo) { setPriceBreakdown(null); return; }
+
+        const goldRate = pricingInfo.goldRates[selectedMetal] || 0;
+        const goldPrice = Math.round(goldRate * (pricingInfo.goldWeight || 0));
+
+        // Diamond price
+        const diamondInfo = pricingInfo.diamondOptions?.find(d => d.qualityGrade === pricingInfo.diamondQuality);
+        const diamondPricePerCarat = diamondInfo?.pricePerCarat || 0;
+        const diamondDiscount = diamondInfo?.discount || 0;
+        const diamondBasePrice = Math.round(diamondPricePerCarat * (pricingInfo.diamondCarat || 0));
+        const diamondDiscountAmount = Math.round(diamondBasePrice * diamondDiscount / 100);
+        const diamondFinalPrice = diamondBasePrice - diamondDiscountAmount;
+
+        const makingCharges = Math.round(goldPrice * (pricingInfo.makingPercent || 0) / 100);
+        const subtotal = goldPrice + diamondFinalPrice + makingCharges + (pricingInfo.shipping || 0) + (pricingInfo.certification || 0);
+        const gst = Math.round(subtotal * (pricingInfo.gstPercent || 3) / 100);
+        const total = subtotal + gst;
+
+        setPriceBreakdown({
+            goldWeight: pricingInfo.goldWeight,
+            goldRate,
+            goldPrice,
+            diamondCarat: pricingInfo.diamondCarat,
+            diamondQuality: pricingInfo.diamondQuality,
+            diamondTag: diamondInfo?.tag || '',
+            diamondBasePrice,
+            diamondDiscountAmount,
+            diamondFinalPrice,
+            numDiamonds: pricingInfo.numDiamonds || 1,
+            makingCharges,
+            shipping: pricingInfo.shipping || 0,
+            certification: pricingInfo.certification || 0,
+            gstPercent: pricingInfo.gstPercent || 3,
+            gst,
+            total,
+        });
+    }, [pricingInfo, selectedMetal]);
 
     const effectivePrice = product?.discount > 0
         ? product.price * (1 - product.discount / 100)
@@ -449,6 +508,313 @@ function ProductDetail({ params }) {
                             </div>
 
                             <p className="product-info-desc">{product.description}</p>
+
+                            {/* ── CUSTOMER SELECTIONS & PRICE BREAKDOWN ── */}
+                            {pricingInfo && (
+                                <div style={{
+                                    marginBottom: '24px',
+                                    border: '1px solid rgba(197,164,103,0.25)',
+                                    borderRadius: '12px',
+                                    overflow: 'hidden',
+                                }}>
+                                    {/* Metal Purity Selector */}
+                                    {pricingInfo.goldWeight > 0 && (
+                                        <div>
+                                            <div style={{
+                                                padding: '12px 16px',
+                                                background: 'linear-gradient(135deg, rgba(197,164,103,0.08), rgba(240,214,144,0.04))',
+                                                borderBottom: '1px solid rgba(197,164,103,0.15)',
+                                                display: 'flex', alignItems: 'center', gap: '8px',
+                                            }}>
+                                                <span style={{ fontSize: '0.9rem' }}>🪙</span>
+                                                <span style={{
+                                                    fontSize: '0.72rem', fontWeight: 600,
+                                                    letterSpacing: '0.12em', textTransform: 'uppercase',
+                                                    color: '#C5A467',
+                                                }}>Choose Metal</span>
+                                            </div>
+                                            <div style={{ padding: '12px 16px' }}>
+                                                <div style={{ marginBottom: '10px' }}>
+                                                    <div style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)', marginBottom: '8px', fontWeight: 500 }}>PURITY</div>
+                                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                                                        {['9K Gold', '14K Gold', '18K Gold', '22K Gold', '925 Silver'].map(metal => (
+                                                            <button
+                                                                key={metal}
+                                                                type="button"
+                                                                onClick={() => setSelectedMetal(metal)}
+                                                                style={{
+                                                                    padding: '6px 14px',
+                                                                    borderRadius: '20px',
+                                                                    border: selectedMetal === metal
+                                                                        ? '2px solid #C5A467'
+                                                                        : '1px solid rgba(197,164,103,0.2)',
+                                                                    background: selectedMetal === metal
+                                                                        ? 'linear-gradient(135deg, rgba(197,164,103,0.12), rgba(240,214,144,0.06))'
+                                                                        : '#fff',
+                                                                    color: selectedMetal === metal ? '#C5A467' : '#777',
+                                                                    fontSize: '0.75rem',
+                                                                    fontWeight: selectedMetal === metal ? 600 : 400,
+                                                                    cursor: 'pointer',
+                                                                    transition: 'all 0.2s ease',
+                                                                    fontFamily: 'inherit',
+                                                                }}
+                                                            >
+                                                                {metal}
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <div style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)', marginBottom: '8px', fontWeight: 500 }}>COLOUR</div>
+                                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                                                        {[
+                                                            { name: 'Yellow Gold', color: '#D4A843' },
+                                                            { name: 'Rose Gold', color: '#E8A090' },
+                                                            { name: 'White Gold', color: '#C0C0C0' },
+                                                        ].map(c => (
+                                                            <button
+                                                                key={c.name}
+                                                                type="button"
+                                                                onClick={() => setSelectedColor(c.name)}
+                                                                style={{
+                                                                    padding: '6px 14px',
+                                                                    borderRadius: '20px',
+                                                                    border: selectedColor === c.name
+                                                                        ? `2px solid ${c.color}`
+                                                                        : '1px solid rgba(197,164,103,0.2)',
+                                                                    background: selectedColor === c.name
+                                                                        ? `linear-gradient(135deg, ${c.color}15, ${c.color}08)`
+                                                                        : '#fff',
+                                                                    color: selectedColor === c.name ? c.color : '#777',
+                                                                    fontSize: '0.75rem',
+                                                                    fontWeight: selectedColor === c.name ? 600 : 400,
+                                                                    cursor: 'pointer',
+                                                                    transition: 'all 0.2s ease',
+                                                                    fontFamily: 'inherit',
+                                                                    display: 'flex', alignItems: 'center', gap: '6px',
+                                                                }}
+                                                            >
+                                                                <span style={{
+                                                                    width: '12px', height: '12px', borderRadius: '50%',
+                                                                    background: c.color, display: 'inline-block',
+                                                                    border: '1px solid rgba(0,0,0,0.1)',
+                                                                }} />
+                                                                {c.name}
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                                <div style={{
+                                                    display: 'flex', justifyContent: 'space-between',
+                                                    fontSize: '0.78rem', padding: '10px 0 0', marginTop: '10px',
+                                                    borderTop: '1px dashed rgba(197,164,103,0.15)',
+                                                    color: 'var(--color-text-light)',
+                                                }}>
+                                                    <span>Weight: {pricingInfo.goldWeight}g</span>
+                                                    <span>Rate: ₹{priceBreakdown?.goldRate?.toLocaleString('en-IN')}/g</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Diamond Details */}
+                                    {pricingInfo.diamondCarat > 0 && (
+                                        <div>
+                                            <div style={{
+                                                padding: '12px 16px',
+                                                background: 'linear-gradient(135deg, rgba(197,164,103,0.08), rgba(240,214,144,0.04))',
+                                                borderTop: '1px solid rgba(197,164,103,0.15)',
+                                                borderBottom: '1px solid rgba(197,164,103,0.15)',
+                                                display: 'flex', alignItems: 'center', gap: '8px',
+                                            }}>
+                                                <span style={{ fontSize: '0.9rem' }}>💎</span>
+                                                <span style={{
+                                                    fontSize: '0.72rem', fontWeight: 600,
+                                                    letterSpacing: '0.12em', textTransform: 'uppercase',
+                                                    color: '#C5A467',
+                                                }}>Diamond Details</span>
+                                                {priceBreakdown?.diamondTag && (
+                                                    <span style={{
+                                                        fontSize: '0.6rem', fontWeight: 700,
+                                                        letterSpacing: '0.08em', textTransform: 'uppercase',
+                                                        color: '#fff',
+                                                        background: priceBreakdown.diamondTag === 'PREMIUM' ? '#C5A467' : priceBreakdown.diamondTag === 'BEST' ? '#38A169' : '#8B7355',
+                                                        padding: '2px 8px',
+                                                        borderRadius: '4px',
+                                                        marginLeft: 'auto',
+                                                    }}>{priceBreakdown.diamondTag}</span>
+                                                )}
+                                            </div>
+                                            <div style={{ padding: '12px 16px' }}>
+                                                {pricingInfo.diamondShape && (
+                                                    <div style={{
+                                                        display: 'flex', justifyContent: 'space-between',
+                                                        fontSize: '0.78rem', padding: '6px 0',
+                                                        color: 'var(--color-text-light)',
+                                                    }}>
+                                                        <span>Shape</span>
+                                                        <span style={{ fontWeight: 500, color: 'var(--color-text)' }}>{pricingInfo.diamondShape}</span>
+                                                    </div>
+                                                )}
+                                                <div style={{
+                                                    display: 'flex', justifyContent: 'space-between',
+                                                    fontSize: '0.78rem', padding: '6px 0',
+                                                    color: 'var(--color-text-light)',
+                                                }}>
+                                                    <span>Quality</span>
+                                                    <span style={{ fontWeight: 500, color: 'var(--color-text)' }}>{pricingInfo.diamondQuality}</span>
+                                                </div>
+                                                <div style={{
+                                                    display: 'flex', justifyContent: 'space-between',
+                                                    fontSize: '0.78rem', padding: '6px 0',
+                                                    color: 'var(--color-text-light)',
+                                                }}>
+                                                    <span>Total Carat</span>
+                                                    <span style={{ fontWeight: 500, color: 'var(--color-text)' }}>{pricingInfo.diamondCarat} ct</span>
+                                                </div>
+                                                {pricingInfo.numDiamonds > 1 && (
+                                                    <div style={{
+                                                        display: 'flex', justifyContent: 'space-between',
+                                                        fontSize: '0.78rem', padding: '6px 0',
+                                                        color: 'var(--color-text-light)',
+                                                    }}>
+                                                        <span>Stones</span>
+                                                        <span style={{ fontWeight: 500, color: 'var(--color-text)' }}>{pricingInfo.numDiamonds} pieces</span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Price Breakdown (auto-calculated) */}
+                                    {priceBreakdown && (
+                                        <div>
+                                            <div style={{
+                                                padding: '12px 16px',
+                                                background: 'linear-gradient(135deg, rgba(197,164,103,0.08), rgba(240,214,144,0.04))',
+                                                borderTop: '1px solid rgba(197,164,103,0.15)',
+                                                borderBottom: '1px solid rgba(197,164,103,0.15)',
+                                                display: 'flex', alignItems: 'center', gap: '8px',
+                                            }}>
+                                                <span style={{ fontSize: '0.9rem' }}>💰</span>
+                                                <span style={{
+                                                    fontSize: '0.72rem', fontWeight: 600,
+                                                    letterSpacing: '0.12em', textTransform: 'uppercase',
+                                                    color: '#C5A467',
+                                                }}>Price Breakdown</span>
+                                            </div>
+                                            <div style={{ padding: '12px 16px' }}>
+                                                {priceBreakdown.goldPrice > 0 && (
+                                                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', padding: '6px 0', color: 'var(--color-text-light)' }}>
+                                                        <span>{selectedMetal} ({priceBreakdown.goldWeight}g)</span>
+                                                        <span style={{ fontWeight: 500, color: 'var(--color-text)' }}>₹{priceBreakdown.goldPrice.toLocaleString('en-IN')}</span>
+                                                    </div>
+                                                )}
+                                                {priceBreakdown.diamondFinalPrice > 0 && (
+                                                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', padding: '6px 0', color: 'var(--color-text-light)' }}>
+                                                        <span>Diamond ({priceBreakdown.diamondCarat} ct)</span>
+                                                        <div style={{ textAlign: 'right' }}>
+                                                            {priceBreakdown.diamondDiscountAmount > 0 && (
+                                                                <span style={{ fontSize: '0.72rem', color: '#38A169', marginRight: '6px' }}>-₹{priceBreakdown.diamondDiscountAmount.toLocaleString('en-IN')}</span>
+                                                            )}
+                                                            <span style={{ fontWeight: 500, color: 'var(--color-text)' }}>₹{priceBreakdown.diamondFinalPrice.toLocaleString('en-IN')}</span>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                                {priceBreakdown.makingCharges > 0 && (
+                                                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', padding: '6px 0', color: 'var(--color-text-light)' }}>
+                                                        <span>Making Charges</span>
+                                                        <span style={{ fontWeight: 500, color: 'var(--color-text)' }}>₹{priceBreakdown.makingCharges.toLocaleString('en-IN')}</span>
+                                                    </div>
+                                                )}
+                                                {priceBreakdown.certification > 0 && (
+                                                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', padding: '6px 0', color: 'var(--color-text-light)' }}>
+                                                        <span>Certification (IGI)</span>
+                                                        <span style={{ fontWeight: 500, color: 'var(--color-text)' }}>₹{priceBreakdown.certification.toLocaleString('en-IN')}</span>
+                                                    </div>
+                                                )}
+                                                {priceBreakdown.shipping > 0 && (
+                                                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', padding: '6px 0', color: 'var(--color-text-light)' }}>
+                                                        <span>Insured Shipping</span>
+                                                        <span style={{ fontWeight: 500, color: 'var(--color-text)' }}>₹{priceBreakdown.shipping.toLocaleString('en-IN')}</span>
+                                                    </div>
+                                                )}
+                                                {priceBreakdown.gst > 0 && (
+                                                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', padding: '6px 0', color: 'var(--color-text-light)' }}>
+                                                        <span>GST ({priceBreakdown.gstPercent}%)</span>
+                                                        <span style={{ fontWeight: 500, color: 'var(--color-text)' }}>₹{priceBreakdown.gst.toLocaleString('en-IN')}</span>
+                                                    </div>
+                                                )}
+                                                <div style={{
+                                                    display: 'flex', justifyContent: 'space-between',
+                                                    fontSize: '0.92rem', padding: '10px 0 4px',
+                                                    borderTop: '1px solid rgba(197,164,103,0.2)',
+                                                    marginTop: '8px',
+                                                    fontWeight: 600,
+                                                    color: 'var(--color-text)',
+                                                }}>
+                                                    <span>Total</span>
+                                                    <span style={{ color: '#C5A467' }}>₹{priceBreakdown.total.toLocaleString('en-IN')}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
+                            {/* ── RING SIZE PICKER (customer selects) ── */}
+                            {product.category && (product.category.toLowerCase().includes('ring') || product.category.toLowerCase().includes('solitaire')) && (
+                                <div style={{
+                                    marginBottom: '20px',
+                                    padding: '16px 20px',
+                                    border: '1px solid rgba(197,164,103,0.2)',
+                                    borderRadius: '10px',
+                                    background: 'var(--color-bg-alt, #FAF8F5)',
+                                }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                                        <label style={{
+                                            fontSize: '0.78rem', fontWeight: 600,
+                                            letterSpacing: '0.1em', textTransform: 'uppercase',
+                                            color: 'var(--color-text)',
+                                        }}>💍 Select Ring Size</label>
+                                    </div>
+                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                                        {Array.from({ length: 18 }, (_, i) => i + 5).map(size => (
+                                            <button
+                                                key={size}
+                                                type="button"
+                                                onClick={() => setSelectedRingSize(size.toString())}
+                                                style={{
+                                                    width: '40px', height: '40px',
+                                                    borderRadius: '50%',
+                                                    border: selectedRingSize === size.toString()
+                                                        ? '2px solid #C5A467'
+                                                        : '1px solid rgba(197,164,103,0.2)',
+                                                    background: selectedRingSize === size.toString()
+                                                        ? 'linear-gradient(135deg, rgba(197,164,103,0.12), rgba(240,214,144,0.08))'
+                                                        : '#fff',
+                                                    color: selectedRingSize === size.toString() ? '#C5A467' : '#666',
+                                                    fontSize: '0.8rem',
+                                                    fontWeight: selectedRingSize === size.toString() ? 600 : 400,
+                                                    cursor: 'pointer',
+                                                    transition: 'all 0.2s ease',
+                                                    fontFamily: 'inherit',
+                                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                    padding: 0,
+                                                }}
+                                            >
+                                                {size}
+                                            </button>
+                                        ))}
+                                    </div>
+                                    <p style={{
+                                        fontSize: '0.72rem', color: 'var(--color-text-muted)',
+                                        marginTop: '10px', lineHeight: 1.5,
+                                    }}>
+                                        💡 Wrap a thread around your finger, measure the length and divide by 3.14 for diameter in mm.
+                                    </p>
+                                </div>
+                            )}
 
                             {/* Quantity */}
                             {product.stock && (

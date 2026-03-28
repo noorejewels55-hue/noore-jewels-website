@@ -8,40 +8,38 @@ export const maxDuration = 60;
 // ─── Jewelry Keywords to Track ──────────────────────────────
 const CATEGORIES = {
     necklace: [
-        'lab grown diamond necklace', 'solitaire pendant necklace', 'diamond necklace gold',
-        'tennis necklace diamond', 'diamond mangalsutra design', 'bridal diamond necklace',
-        'IGI certified diamond necklace', 'diamond choker necklace', 'diamond pendant 14kt gold',
+        'Lab Grown Diamond necklace', 'LGD necklace set', 'lab diamond necklace design',
+        'choker necklace trending', 'layered necklace fashion', 'bridal necklace fine jewellery',
+        'kundan necklace design', 'mangalsutra design trending', 'pearl necklace trendy',
     ],
     earrings: [
-        'lab grown diamond earrings', 'diamond stud earrings', 'solitaire earrings gold',
-        'diamond drop earrings', 'diamond hoop earrings', 'diamond jhumka',
-        'IGI certified diamond studs', 'diamond earrings 18kt gold', 'diamond chandbali',
+        'Lab Grown Diamond earrings', 'LGD earrings design', 'jhumka design trending',
+        'lab created diamond drop earrings', 'hoop earrings trendy', 'chandbali earrings',
+        'stud earrings fashion', 'oxidised earrings', 'ear cuff trending',
     ],
     bracelet: [
-        'lab grown diamond bracelet', 'diamond tennis bracelet', 'diamond bangle gold',
-        'solitaire bracelet trending', 'diamond bracelet 14kt', 'diamond cuff bracelet',
+        'Lab Grown Diamond bracelet', 'charm bracelet trendy', 'tennis bracelet fashion',
+        'bangle design trending', 'evil eye bracelet trending', 'cuff bracelet design',
     ],
     ring: [
-        'lab grown diamond ring', 'solitaire engagement ring', 'diamond ring 14kt gold',
-        'diamond eternity ring', 'diamond cocktail ring', 'couple diamond ring',
+        'Lab Grown Diamond ring', 'lab diamond solitaire ring', 'cocktail ring fashion',
+        'stackable rings trending', 'adjustable ring trendy', 'couple ring trending',
     ],
 };
 
 const REEL_IDEAS = [
-    '✨ "One piece, 5 outfits" → Style same diamond jewelry with different looks',
-    '📦 "Order Packing ASMR" → Film yourself packing diamond orders in luxury boxes',
-    '💎 "Lab Grown vs Mined" → Show they look identical, but lab grown is 60% less!',
-    '🔬 "Under the loupe" → Show IGI certificate + diamond under magnification',
-    '💰 "₹30,000 vs ₹90,000" → Compare lab grown vs mined — same brilliance!',
-    '🎬 "Get Ready With Me" → Put on diamond jewelry as the final outfit touch',
-    '🎯 "Which one would you pick?" → Show 2-3 diamond pieces, poll audience',
-    '📊 "Best seller this week" → Show your most popular diamond piece',
-    '💬 "Reading customer reviews" → Show real happy messages + unboxing videos',
-    '🔥 "Before & After" → Plain outfit vs with real diamond jewelry',
-    '📸 "New Arrival Alert" → Dramatic diamond product reveal with sparkle close-ups',
-    '💡 "Diamond care tips" → How to clean and maintain your lab grown diamonds',
-    '📜 "What is IGI certification?" → Educate about diamond grading and certificates',
-    '🏭 "How lab diamonds are made" → Show the CVD/HPHT process (educational)',
+    '✨ "One piece, 5 outfits" → Style same jewelry with different looks',
+    '📦 "Order Packing ASMR" → Film yourself packing orders beautifully',
+    '💎 "LGD vs Mined" → Compare mined diamond with your LGD piece — exactly the same!',
+    '💧 "Enduring Shine" → Dip jewelry in water, show it still shines',
+    '💰 "Under ₹1500 looks ₹15,000" → Price reveal reel',
+    '🎬 "Get Ready With Me" → Put on jewelry as the final outfit touch',
+    '🎯 "Which one would you pick?" → Show 2-3 products, poll audience',
+    '📊 "Best seller this week" → Show your most popular product',
+    '💬 "Reading customer reviews" → Show real happy messages',
+    '🔥 "Before & After" → Plain outfit vs with your LGD jewelry',
+    '📸 "New Arrival Alert" → Dramatic product reveal',
+    '💡 "Jewelry care tips" → How to maintain fine jewelry',
 ];
 
 // ─── Fetch Trends ───────────────────────────────────────────
@@ -187,10 +185,10 @@ function buildEmail(allResults) {
                 <div style="margin-top:24px;border-top:2px solid #eee;padding-top:24px;">
                     <h2 style="font-size:18px;color:#1a1a1a;margin-bottom:12px;"># Copy-Paste Hashtags</h2>
                     <div style="background:#fafafa;padding:14px;border-radius:6px;font-size:12px;color:#555;line-height:1.8;word-break:break-word;">
-                        #LabGrownDiamonds #RealDiamonds #IGICertified #DiamondJewellery #LabDiamond 
-                        #SolitaireRing #DiamondNecklace #DiamondEarrings #DiamondBracelet #EthicalDiamonds 
-                        #SustainableLuxury #LabGrownDiamondIndia #14ktGold #18ktGold #925Silver 
-                        #NJjewels #NooreJewels #DiamondRing #TennisBracelet #AffordableDiamonds
+                        #LabGrownDiamond #LGDjewellery #labdiamondjewelry #exquisitejewellery2026 #finejewelleryIndia 
+                        #ethicalluxury #sustainablefashion #finejewelry #jewellerytrends #smallbusinessindia 
+                        #indianfashion #jewelleryonline #NJjewels #NJfamily #noorejeweIs #LGDnecklace 
+                        #LGDearrings #LGDring #LGDbracelet #trendyjewellery #finejewellery
                     </div>
                 </div>
 
@@ -198,9 +196,9 @@ function buildEmail(allResults) {
                 <div style="margin-top:24px;background:#1a1a1a;color:#fff;border-radius:8px;padding:20px;text-align:center;">
                     <h3 style="color:#C5A467;font-size:16px;margin:0 0 12px;">📋 This Week's Action Plan</h3>
                     <p style="font-size:13px;color:rgba(255,255,255,0.7);margin:0;line-height:1.8;">
-                        1. Check 🔥 trending diamond styles<br/>
-                        2. Photograph new pieces → Add to Google Sheet<br/>
-                        3. Film 2 diamond reels → Post with hashtags<br/>
+                        1. Source 🔥 trending products from Meesho<br/>
+                        2. Take photos → Add to Google Sheet<br/>
+                        3. Film 2 reels → Post with hashtags<br/>
                         4. Share on WhatsApp status + stories
                     </p>
                 </div>
