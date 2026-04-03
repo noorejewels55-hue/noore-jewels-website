@@ -67,15 +67,11 @@ export default function Footer() {
                             <span style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.6)', display: 'flex', alignItems: 'center', gap: '8px' }}>💎 IGI Certified Diamonds</span>
                             <span style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.6)', display: 'flex', alignItems: 'center', gap: '8px' }}>🛡️ Lifetime Warranty</span>
                             <span style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.6)', display: 'flex', alignItems: 'center', gap: '8px' }}>📦 Insured Shipping</span>
-                            <span style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.6)', display: 'flex', alignItems: 'center', gap: '8px' }}>🔄 7-Day Easy Returns</span>
+                            <span style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.6)', display: 'flex', alignItems: 'center', gap: '8px' }}>🔄 7-Day Returns (with deduction)</span>
                             <span style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.6)', display: 'flex', alignItems: 'center', gap: '8px' }}>🔒 Secure Payments</span>
                             <span style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.6)', display: 'flex', alignItems: 'center', gap: '8px' }}>🇮🇳 Pan India Delivery</span>
                         </div>
-                        <div className="footer-social" style={{ marginTop: '16px' }}>
-                            <a href="https://www.instagram.com/noore.jewels/" target="_blank" rel="noopener noreferrer">Instagram</a>
-                            <a href="https://wa.me/919217945235" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-                            <a href="mailto:noore.jewels55@gmail.com">Email Us</a>
-                        </div>
+
                     </div>
                 </div>
 

@@ -537,7 +537,7 @@ function ProductDetail({ params }) {
                                                 <div style={{ marginBottom: '10px' }}>
                                                     <div style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)', marginBottom: '8px', fontWeight: 500 }}>PURITY</div>
                                                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                                                        {['9K Gold', '14K Gold', '18K Gold', '22K Gold', '925 Silver'].map(metal => (
+                                                        {['9K Gold', '14K Gold', '18K Gold', '925 Silver'].map(metal => (
                                                             <button
                                                                 key={metal}
                                                                 type="button"
@@ -886,7 +886,7 @@ function ProductDetail({ params }) {
                                 {[
                                     { icon: '💎', label: 'IGI Certified', sub: 'Authentic diamonds' },
                                     { icon: '🚚', label: 'Free Shipping', sub: 'Insured delivery' },
-                                    { icon: '↩️', label: '15-Day Returns', sub: 'Hassle-free policy' },
+                                    { icon: '↩️', label: '7-Day Returns', sub: 'With quality deduction' },
                                     { icon: '🔒', label: 'Secure Checkout', sub: 'Razorpay protected' },
                                 ].map((badge) => (
                                     <div key={badge.label} style={{

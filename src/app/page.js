@@ -160,7 +160,7 @@ function HomePage() {
             <div className="trust-item">
               <div className="trust-icon">🔄</div>
               <div className="trust-title">7-Day Returns</div>
-              <div className="trust-text">Hassle-free return within 7 days</div>
+              <div className="trust-text">Returns accepted with quality deduction</div>
             </div>
           </div>
         </div>
@@ -244,7 +244,7 @@ function HomePage() {
                   'Choose from 8+ diamond shapes',
                   '9kt, 14kt, 18kt Gold & 925 Silver',
                   'IGI Certified Lab Grown Diamonds',
-                  'Delivered in 7-10 working days',
+                  'Delivered in 3 weeks (made-to-order)',
                 ].map((item, i) => (
                   <li key={i} style={{
                     fontSize: '0.85rem',

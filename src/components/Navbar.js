@@ -35,7 +35,7 @@ export default function Navbar() {
         <>
             {/* Announcement Bar */}
             <div className="announcement-bar">
-                IGI Certified <span>&nbsp;Lab Grown Diamonds&nbsp;</span> ✦ BIS Hallmarked <span>&nbsp;Gold Jewellery</span> ✦ <span>&nbsp;7-Day Returns</span>
+                IGI Certified <span>&nbsp;Lab Grown Diamonds&nbsp;</span> ✦ BIS Hallmarked <span>&nbsp;Gold Jewellery</span> ✦ <span>&nbsp;Fully Insured Shipping</span>
             </div>
 
             {/* Navigation */}

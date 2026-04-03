@@ -165,8 +165,8 @@ function TermsContent() {
                         <ul style={listStyle}>
                             <li><strong>Free insured shipping</strong> on all orders — pan India</li>
                             <li>All shipments are <strong>fully insured</strong> against loss, theft, and transit damage</li>
-                            <li>Orders are typically dispatched within <strong>1-3 business days</strong> (custom orders: 7-10 days)</li>
-                            <li>Delivery takes approximately <strong>5-7 business days</strong> depending on your location</li>
+                            <li>Orders are typically dispatched within <strong>3-5 business days</strong> (custom orders: 10-15 days)</li>
+                            <li>Delivery takes approximately <strong>3 weeks (15–21 business days)</strong> depending on your location</li>
                             <li>We ship across India through trusted insured courier partners</li>
                             <li>You will receive a tracking ID via email and WhatsApp once your order is shipped</li>
                             <li>Every package includes tamper-proof security seal</li>
@@ -187,7 +187,7 @@ function TermsContent() {
                             page. Key points:
                         </p>
                         <ul style={listStyle}>
-                            <li>We offer a <strong>7-day return policy</strong> from the date of delivery</li>
+                            <li>We offer a <strong>7-day return policy</strong> from the date of delivery. A <strong>15% quality & handling deduction</strong> applies on standard returns</li>
                             <li>Items must be in original, unworn condition with all packaging and certification</li>
                             <li>Custom / bespoke jewellery and loose diamonds are <strong>non-returnable</strong></li>
                             <li>Refunds are processed within <strong>5-7 business days</strong> to the original payment method</li>

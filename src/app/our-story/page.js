@@ -258,9 +258,9 @@ function StoryContent() {
                                 lineHeight: 1.8,
                                 marginBottom: '16px',
                             }}>
-                                Not happy? Return within 7 days, no questions asked. Plus, every piece comes with 
+                                Not happy? Return within 7 days. A 15% quality inspection &amp; handling deduction applies to standard returns. Defective or wrong items are refunded in full. Plus, every piece comes with
                                 <strong> lifetime warranty</strong> — free resizing, maintenance polishing, prong repair,
-                                and manufacturing defect coverage. We stand behind our craft forever.
+                                and manufacturing defect coverage.
                             </p>
                             <div style={{
                                 display: 'inline-flex',
@@ -293,7 +293,7 @@ function StoryContent() {
                     }}>
                         {[
                             { icon: '📱', text: 'WhatsApp Support Available' },
-                            { icon: '🔄', text: '7-Day Easy Returns' },
+                            { icon: '🔄', text: '7-Day Returns (15% deduction)' },
                             { icon: '🛡️', text: 'Lifetime Warranty' },
                             { icon: '📦', text: 'Free Insured Shipping' },
                             { icon: '💎', text: 'IGI Certified Diamonds' },

@@ -63,7 +63,7 @@ function ReturnPolicyContent() {
         { step: '01', title: 'Initiate Return', desc: 'Contact us via WhatsApp or email within 7 days of delivery with your order number.' },
         { step: '02', title: 'Share Evidence', desc: 'Send clear photos/video of the product and the reason for return.' },
         { step: '03', title: 'We Arrange Pickup', desc: 'Once approved, we arrange insured reverse pickup from your doorstep at no cost.' },
-        { step: '04', title: 'Refund / Exchange', desc: 'After quality inspection, we process your refund within 5-7 business days or send a replacement.' },
+        { step: '04', title: 'Refund Processed', desc: 'After quality inspection, refund is processed within 5-7 business days. A 15% quality & handling deduction applies.' },
     ];
 
     return (
@@ -104,7 +104,7 @@ function ReturnPolicyContent() {
                         <h2 style={headingStyle}>7-Day Return Policy</h2>
                         <div style={highlightBoxStyle}>
                             <p style={{ ...textStyle, marginBottom: 0, fontWeight: 400, color: 'var(--color-text)' }}>
-                                We offer a <strong>7-day return window</strong> from the date of delivery. If you&apos;re not completely satisfied with your purchase, you may return it for a full refund or exchange — no questions asked.
+                                We offer a <strong>7-day return window</strong> from the date of delivery. Returns are subject to a <strong>15% quality inspection & handling deduction</strong> on the refund amount. This covers the cost of reverse shipping, quality re-check, and restocking. Defective items or wrong products delivered will be refunded in full — no deduction applied.
                             </p>
                         </div>
                         <p style={textStyle}>
@@ -189,6 +189,11 @@ function ReturnPolicyContent() {
                         <p style={textStyle}>
                             Once we receive and inspect your return, we will process your refund within <strong>5-7 business days</strong>. Refunds are credited to the original payment method used during checkout.
                         </p>
+                        <div style={{ ...highlightBoxStyle, background: 'linear-gradient(135deg, rgba(255,200,100,0.08), rgba(255,200,100,0.12))' }}>
+                            <p style={{ ...textStyle, marginBottom: 0, fontWeight: 400, color: 'var(--color-text)' }}>
+                                <strong>⚠️ Refund Deduction Policy:</strong> A <strong>15% quality inspection & handling charge</strong> will be deducted from the refund amount for all standard returns. This covers reverse shipping insurance, quality re-inspection, and restocking costs. <em>No deduction applies for defective/wrong items.</em>
+                            </p>
+                        </div>
                         <ul style={listStyle}>
                             <li>UPI / Wallet refunds: 1-3 business days</li>
                             <li>Credit / Debit card refunds: 5-7 business days</li>
@@ -241,8 +246,8 @@ function ReturnPolicyContent() {
                         </div>
                         <ul style={listStyle}>
                             <li><strong>Free insured shipping</strong> on all orders — pan India</li>
-                            <li>Orders are dispatched within <strong>1-3 business days</strong> (custom orders: 7-10 days)</li>
-                            <li>Delivery takes approximately <strong>5-7 business days</strong> depending on location</li>
+                            <li>Orders are dispatched within <strong>3-5 business days</strong> (custom orders: 10-15 days)</li>
+                            <li>Delivery takes approximately <strong>3 weeks (15–21 business days)</strong> depending on location</li>
                             <li>Every package is tamper-proof with security seal</li>
                             <li>Real-time tracking provided via email and WhatsApp</li>
                             <li>In case of transit damage, we provide a <strong>full replacement at no cost</strong></li>

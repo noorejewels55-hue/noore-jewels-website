@@ -78,8 +78,7 @@ function ShopContent() {
 
     const getPageTitle = () => {
         if (activeCollection === 'wedding') return '💍 Wedding Collection';
-        if (activeCollection === 'daily') return '✨ Daily Wear';
-        if (activeCollection === 'gift') return '🎁 Gift Collection';
+
         if (tagParam === 'new') return 'New Arrivals';
         if (tagParam === 'bestseller') return 'Best Sellers';
         if (activeCategory !== 'all') {
@@ -182,8 +181,6 @@ function ShopContent() {
                     <div className="shop-filters-scroll">
                         {[
                             { key: 'wedding', label: '💍 Wedding', emoji: '' },
-                            { key: 'daily', label: '✨ Daily Wear', emoji: '' },
-                            { key: 'gift', label: '🎁 Gifting', emoji: '' },
                             { key: 'bestseller', label: '🏆 Best Sellers', emoji: '' },
                             { key: 'new', label: '🆕 New Arrivals', emoji: '' },
                         ].map(col => (
