@@ -33,6 +33,18 @@ export default async function sitemap() {
             url: `${baseUrl}/return-policy`,
             lastModified: new Date(),
             changeFrequency: 'monthly',
+            priority: 0.5,
+        },
+        {
+            url: `${baseUrl}/privacy-policy`,
+            lastModified: new Date(),
+            changeFrequency: 'monthly',
+            priority: 0.4,
+        },
+        {
+            url: `${baseUrl}/terms`,
+            lastModified: new Date(),
+            changeFrequency: 'monthly',
             priority: 0.4,
         },
         {
@@ -55,6 +67,34 @@ export default async function sitemap() {
         },
     ];
 
+    // New niche category pages for SEO
+    const nichePages = [
+        {
+            url: `${baseUrl}/shop?category=engagement-rings`,
+            lastModified: new Date(),
+            changeFrequency: 'weekly',
+            priority: 0.9,
+        },
+        {
+            url: `${baseUrl}/shop?category=stack-rings`,
+            lastModified: new Date(),
+            changeFrequency: 'weekly',
+            priority: 0.9,
+        },
+        {
+            url: `${baseUrl}/shop?category=fine-jewellery`,
+            lastModified: new Date(),
+            changeFrequency: 'weekly',
+            priority: 0.85,
+        },
+        {
+            url: `${baseUrl}/shop?category=polished-diamonds`,
+            lastModified: new Date(),
+            changeFrequency: 'weekly',
+            priority: 0.85,
+        },
+    ];
+
     // Dynamic product pages
     let productPages = [];
     try {
@@ -69,7 +109,7 @@ export default async function sitemap() {
         console.error('Sitemap: Error fetching products', e);
     }
 
-    // Category pages
+    // Category pages from data
     let categoryPages = [];
     try {
         const categories = await getCategories();
@@ -83,5 +123,5 @@ export default async function sitemap() {
         console.error('Sitemap: Error fetching categories', e);
     }
 
-    return [...staticPages, ...productPages, ...categoryPages];
+    return [...staticPages, ...nichePages, ...productPages, ...categoryPages];
 }

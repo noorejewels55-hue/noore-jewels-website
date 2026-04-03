@@ -81,7 +81,7 @@ function PrivacyPolicyContent() {
                         uses, and protects your personal information.
                     </p>
                     <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '16px' }}>
-                        Last updated: March 24, 2026
+                        Last updated: April 3, 2026
                     </p>
                 </div>
             </section>

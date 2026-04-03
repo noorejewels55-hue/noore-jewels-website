@@ -9,7 +9,7 @@ export default function Footer() {
                     <div>
                         <div className="footer-brand">Noore Jewels</div>
                         <p className="footer-desc">
-                            Certified lab grown diamond jewellery in 9kt, 14kt, 18kt gold &amp; 925 silver. Real diamonds, ethically crafted.
+                            Certified Lab Grown Diamond jewellery in 9kt, 14kt, 18kt gold &amp; 925 silver. IGI certified diamonds, ethically crafted with lifetime warranty.
                         </p>
                         <div className="footer-social">
                             <a href="https://www.instagram.com/noore.jewels/" target="_blank" rel="noopener noreferrer" title="Instagram">
@@ -36,37 +36,42 @@ export default function Footer() {
                         <h4 className="footer-heading">Shop</h4>
                         <div className="footer-links">
                             <Link href="/shop">All Jewellery</Link>
-                            <Link href="/shop?category=rings">Rings</Link>
-                            <Link href="/shop?category=necklaces">Necklaces</Link>
-                            <Link href="/shop?category=earrings">Earrings</Link>
-                            <Link href="/shop?category=bracelets">Bracelets</Link>
-                            <Link href="/shop?tag=wedding">Wedding Collection</Link>
-                            <Link href="/shop?tag=daily">Daily Wear</Link>
-                            <Link href="/shop?tag=gift">Gifting</Link>
-                            <Link href="/shop?tag=bestseller">Best Sellers</Link>
+                            <Link href="/shop?category=engagement-rings">Engagement Rings</Link>
+                            <Link href="/shop?category=stack-rings">Stackable Rings</Link>
+                            <Link href="/shop?category=fine-jewellery">Fine Jewellery</Link>
+                            <Link href="/shop?category=polished-diamonds">Polished Diamonds</Link>
+                            <Link href="/customize">Custom Jewellery</Link>
                             <Link href="/shop?tag=new">New Arrivals</Link>
                         </div>
                     </div>
 
                     {/* Help */}
                     <div>
-                        <h4 className="footer-heading">Help</h4>
+                        <h4 className="footer-heading">Help & Trust</h4>
                         <div className="footer-links">
                             <Link href="/our-story">Our Story</Link>
                             <Link href="/contact">Contact Us</Link>
                             <Link href="/my-orders">My Orders</Link>
-                            <a href="https://wa.me/919217945235?text=Hi! I need help with my or                                                     der" target="_blank" rel="noopener noreferrer">WhatsApp Support</a>
+                            <a href="https://wa.me/919217945235?text=Hi! I need help with my order" target="_blank" rel="noopener noreferrer">WhatsApp Support</a>
                             <Link href="/track-order">Track Order</Link>
-                            <Link href="/return-policy">Return Policy</Link>
+                            <Link href="/return-policy">Return & Warranty Policy</Link>
                             <Link href="/privacy-policy">Privacy Policy</Link>
                             <Link href="/terms">Terms & Conditions</Link>
                         </div>
                     </div>
 
-                    {/* Connect */}
+                    {/* Why Noore Jewels */}
                     <div>
-                        <h4 className="footer-heading">Connect</h4>
-                        <div className="footer-links">
+                        <h4 className="footer-heading">Why Noore Jewels</h4>
+                        <div className="footer-links" style={{ gap: '8px' }}>
+                            <span style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.6)', display: 'flex', alignItems: 'center', gap: '8px' }}>💎 IGI Certified Diamonds</span>
+                            <span style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.6)', display: 'flex', alignItems: 'center', gap: '8px' }}>🛡️ Lifetime Warranty</span>
+                            <span style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.6)', display: 'flex', alignItems: 'center', gap: '8px' }}>📦 Insured Shipping</span>
+                            <span style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.6)', display: 'flex', alignItems: 'center', gap: '8px' }}>🔄 7-Day Easy Returns</span>
+                            <span style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.6)', display: 'flex', alignItems: 'center', gap: '8px' }}>🔒 Secure Payments</span>
+                            <span style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.6)', display: 'flex', alignItems: 'center', gap: '8px' }}>🇮🇳 Pan India Delivery</span>
+                        </div>
+                        <div className="footer-social" style={{ marginTop: '16px' }}>
                             <a href="https://www.instagram.com/noore.jewels/" target="_blank" rel="noopener noreferrer">Instagram</a>
                             <a href="https://wa.me/919217945235" target="_blank" rel="noopener noreferrer">WhatsApp</a>
                             <a href="mailto:noore.jewels55@gmail.com">Email Us</a>
@@ -75,7 +80,7 @@ export default function Footer() {
                 </div>
 
                 <div className="footer-bottom">
-                    © {new Date().getFullYear()} Noore Jewels. All rights reserved. Crafted with love in India.
+                    © {new Date().getFullYear()} Noore Jewels. All rights reserved. Lab Grown Diamond Jewellery — Crafted with love in India.
                 </div>
             </div>
         </footer>

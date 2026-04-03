@@ -81,7 +81,7 @@ function TermsContent() {
                         or making a purchase.
                     </p>
                     <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '16px' }}>
-                        Last updated: March 4, 2026
+                        Last updated: April 3, 2026
                     </p>
                 </div>
             </section>
@@ -112,14 +112,14 @@ function TermsContent() {
                         <div style={iconBadgeStyle}>💎</div>
                         <h2 style={headingStyle}>About Noore Jewels</h2>
                         <p style={textStyle}>
-                            Noore Jewels is an online fine jewellery brand specialising in premium Lab 
-                            Grown Diamond jewellery. Our products feature <strong>authentic Lab Grown
-                            Diamonds</strong>, thoughtfully sourced and expertly crafted.
+                            Noore Jewels is an online fine jewellery brand specialising in IGI certified Lab 
+                            Grown Diamond engagement rings, solitaire rings, and fine jewellery. Our products feature <strong>authentic IGI certified Lab Grown
+                            Diamonds</strong> set in 9kt, 14kt, 18kt gold and 925 silver. We also sell polished loose Lab Grown Diamonds.
                         </p>
                         <p style={textStyle}>
                             All product descriptions, images, and materials mentioned on the website represent
                             our Lab Grown Diamond fine jewellery. By purchasing from us, you acknowledge that you are
-                            buying ethically created Lab Grown Diamond jewellery.
+                            buying ethically created Lab Grown Diamond jewellery with IGI certification.
                         </p>
                     </div>
 
@@ -163,13 +163,15 @@ function TermsContent() {
                         <div style={iconBadgeStyle}>🚚</div>
                         <h2 style={headingStyle}>Shipping &amp; Delivery</h2>
                         <ul style={listStyle}>
-                            <li><strong>Free shipping</strong> on orders above ₹999</li>
-                            <li>Orders are typically dispatched within <strong>1-3 business days</strong></li>
-                            <li>Delivery takes approximately <strong>5-10 business days</strong> depending on your location</li>
-                            <li>We ship across India through our courier partner <strong>NimbusPost</strong></li>
-                            <li>You will receive a tracking ID via email once your order is shipped</li>
-                            <li>Delivery timelines may vary during festivals, sales, or unforeseen circumstances</li>
-                            <li>We are not responsible for delays caused by courier partners or natural events</li>
+                            <li><strong>Free insured shipping</strong> on all orders — pan India</li>
+                            <li>All shipments are <strong>fully insured</strong> against loss, theft, and transit damage</li>
+                            <li>Orders are typically dispatched within <strong>1-3 business days</strong> (custom orders: 7-10 days)</li>
+                            <li>Delivery takes approximately <strong>5-7 business days</strong> depending on your location</li>
+                            <li>We ship across India through trusted insured courier partners</li>
+                            <li>You will receive a tracking ID via email and WhatsApp once your order is shipped</li>
+                            <li>Every package includes tamper-proof security seal</li>
+                            <li>In case of transit damage, we provide a full replacement at no cost</li>
+                            <li>Delivery timelines may vary during festivals or unforeseen circumstances</li>
                         </ul>
                     </div>
 
@@ -185,10 +187,13 @@ function TermsContent() {
                             page. Key points:
                         </p>
                         <ul style={listStyle}>
-                            <li>All sales are generally considered <strong>final</strong></li>
-                            <li>Exchanges may be considered on a <strong>case-by-case basis</strong> for defective, damaged, or wrong products</li>
-                            <li>An <strong>unboxing video</strong> is mandatory for any exchange request</li>
-                            <li>Exchange requests must be raised within <strong>48 hours</strong> of delivery</li>
+                            <li>We offer a <strong>7-day return policy</strong> from the date of delivery</li>
+                            <li>Items must be in original, unworn condition with all packaging and certification</li>
+                            <li>Custom / bespoke jewellery and loose diamonds are <strong>non-returnable</strong></li>
+                            <li>Refunds are processed within <strong>5-7 business days</strong> to the original payment method</li>
+                            <li>All jewellery comes with a <strong>lifetime warranty</strong> covering manufacturing defects, resizing, and maintenance</li>
+                            <li>Full details available on our{' '}
+                                <Link href="/return-policy" style={{ color: 'var(--color-gold)', textDecoration: 'underline' }}>Returns, Warranty & Shipping Policy</Link>{' '}page</li>
                         </ul>
                     </div>
 

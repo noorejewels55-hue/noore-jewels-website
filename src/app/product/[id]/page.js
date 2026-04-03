@@ -33,7 +33,7 @@ function ProductDetail({ params }) {
     const [isZooming, setIsZooming] = useState(false);
     const [priceBreakdown, setPriceBreakdown] = useState(null);
     const [pricingInfo, setPricingInfo] = useState(null);
-    const [selectedMetal, setSelectedMetal] = useState('18K Gold');
+    const [selectedMetal, setSelectedMetal] = useState('9K Gold');
     const [selectedColor, setSelectedColor] = useState('Yellow Gold');
     const [selectedRingSize, setSelectedRingSize] = useState('');
     const { addItem } = useCart();

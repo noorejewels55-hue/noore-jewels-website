@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
@@ -9,6 +9,8 @@ export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
     const [userMenuOpen, setUserMenuOpen] = useState(false);
+    const [shopDropdown, setShopDropdown] = useState(false);
+    const dropdownRef = useRef(null);
     const { totalItems, setIsCartOpen } = useCart();
     const { user, openAuth, logout } = useAuth();
 
@@ -18,11 +20,22 @@ export default function Navbar() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+                setShopDropdown(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
     return (
         <>
             {/* Announcement Bar */}
             <div className="announcement-bar">
-                Certified <span>&nbsp;Lab Grown Diamonds&nbsp;</span> ✦ BIS Hallmarked <span>&nbsp;Gold Jewellery</span>
+                IGI Certified <span>&nbsp;Lab Grown Diamonds&nbsp;</span> ✦ BIS Hallmarked <span>&nbsp;Gold Jewellery</span> ✦ <span>&nbsp;7-Day Returns</span>
             </div>
 
             {/* Navigation */}
@@ -35,11 +48,40 @@ export default function Navbar() {
 
                     {/* Desktop Links */}
                     <div className="nav-links">
-                        <Link href="/shop" className="nav-link">Shop All</Link>
-                        <Link href="/shop?category=rings" className="nav-link">Rings</Link>
-                        <Link href="/shop?category=necklaces" className="nav-link">Necklaces</Link>
-                        <Link href="/shop?category=earrings" className="nav-link">Earrings</Link>
-                        <Link href="/shop?category=bracelets" className="nav-link">Bracelets</Link>
+                        <div
+                            ref={dropdownRef}
+                            style={{ position: 'relative' }}
+                            onMouseEnter={() => setShopDropdown(true)}
+                            onMouseLeave={() => setShopDropdown(false)}
+                        >
+                            <Link href="/shop" className="nav-link">Shop All</Link>
+                            {shopDropdown && (
+                                <div style={{
+                                    position: 'absolute',
+                                    top: '100%',
+                                    left: '50%',
+                                    transform: 'translateX(-50%)',
+                                    background: '#fff',
+                                    border: '1px solid rgba(0,0,0,0.06)',
+                                    boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
+                                    padding: '16px 20px',
+                                    minWidth: '200px',
+                                    zIndex: 200,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '4px',
+                                }}>
+                                    <Link href="/shop?category=engagement-rings" className="nav-link" onClick={() => setShopDropdown(false)} style={{ padding: '8px 0', fontSize: '0.78rem' }}>Engagement Rings</Link>
+                                    <Link href="/shop?category=stack-rings" className="nav-link" onClick={() => setShopDropdown(false)} style={{ padding: '8px 0', fontSize: '0.78rem' }}>Stackable Rings</Link>
+                                    <Link href="/shop?category=fine-jewellery" className="nav-link" onClick={() => setShopDropdown(false)} style={{ padding: '8px 0', fontSize: '0.78rem' }}>Fine Jewellery</Link>
+                                    <div style={{ height: '1px', background: 'rgba(0,0,0,0.06)', margin: '4px 0' }} />
+                                    <Link href="/shop?category=polished-diamonds" className="nav-link" onClick={() => setShopDropdown(false)} style={{ padding: '8px 0', fontSize: '0.78rem', color: 'var(--color-gold, #C5A467)' }}>💎 Loose Diamonds</Link>
+                                </div>
+                            )}
+                        </div>
+                        <Link href="/shop?category=engagement-rings" className="nav-link">Engagement Rings</Link>
+                        <Link href="/shop?category=stack-rings" className="nav-link">Stackable Rings</Link>
+                        <Link href="/shop?category=fine-jewellery" className="nav-link">Fine Jewellery</Link>
                         <Link href="/customize" className="nav-link" style={{ color: 'var(--color-gold, #C5A467)' }}>Customize</Link>
                         <Link href="/our-story" className="nav-link">Our Story</Link>
                     </div>
@@ -137,11 +179,11 @@ export default function Navbar() {
                 <div className="mobile-menu open">
                     <button className="mobile-menu-close" onClick={() => setMobileOpen(false)}>✕</button>
                     <Link href="/shop" className="nav-link" onClick={() => setMobileOpen(false)}>Shop All</Link>
-                    <Link href="/shop?category=rings" className="nav-link" onClick={() => setMobileOpen(false)}>Rings</Link>
-                    <Link href="/shop?category=necklaces" className="nav-link" onClick={() => setMobileOpen(false)}>Necklaces</Link>
-                    <Link href="/shop?category=earrings" className="nav-link" onClick={() => setMobileOpen(false)}>Earrings</Link>
-                    <Link href="/shop?category=bracelets" className="nav-link" onClick={() => setMobileOpen(false)}>Bracelets</Link>
-                    <Link href="/customize" className="nav-link" onClick={() => setMobileOpen(false)} style={{ color: 'var(--color-gold, #C5A467)' }}>💎 Customize</Link>
+                    <Link href="/shop?category=engagement-rings" className="nav-link" onClick={() => setMobileOpen(false)}>Engagement Rings</Link>
+                    <Link href="/shop?category=stack-rings" className="nav-link" onClick={() => setMobileOpen(false)}>Stackable Rings</Link>
+                    <Link href="/shop?category=fine-jewellery" className="nav-link" onClick={() => setMobileOpen(false)}>Fine Jewellery</Link>
+                    <Link href="/shop?category=polished-diamonds" className="nav-link" onClick={() => setMobileOpen(false)} style={{ color: 'var(--color-gold, #C5A467)' }}>💎 Loose Diamonds</Link>
+                    <Link href="/customize" className="nav-link" onClick={() => setMobileOpen(false)} style={{ color: 'var(--color-gold, #C5A467)' }}>✨ Customize</Link>
                     <Link href="/our-story" className="nav-link" onClick={() => setMobileOpen(false)}>Our Story</Link>
                     <div style={{ marginTop: '24px' }}>
                         {user ? (

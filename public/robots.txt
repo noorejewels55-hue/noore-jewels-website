@@ -1,10 +1,9 @@
-# Noore Jewels - robots.txt
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /checkout/
 
-# Sitemap
 Sitemap: https://noorejewels.in/sitemap.xml
 
-# Block API and internal routes
-Disallow: /api/
-Disallow: /_next/
+# Noore Jewels — Lab Grown Diamond Engagement Rings & Fine Jewellery
+# https://noorejewels.in

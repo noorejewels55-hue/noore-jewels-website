@@ -74,13 +74,11 @@ export default function CartDrawer() {
                             </div>
                             <div className="cart-total">
                                 <span>Shipping</span>
-                                <span>{shipping === 0 ? 'Free' : `₹${shipping}`}</span>
+                                <span style={{ color: 'var(--color-gold)' }}>Free & Insured</span>
                             </div>
-                            {shipping > 0 && (
-                                <p style={{ fontSize: '0.7rem', color: 'var(--color-gold)', textAlign: 'center', marginTop: '4px' }}>
-                                    Add ₹{Math.ceil(999 - subtotal).toLocaleString('en-IN')} more for free shipping!
-                                </p>
-                            )}
+                            <p style={{ fontSize: '0.7rem', color: 'var(--color-text-light)', textAlign: 'center', marginTop: '4px' }}>
+                                ✦ Free insured shipping on all orders
+                            </p>
                             <div className="cart-total grand">
                                 <span>Total</span>
                                 <span>₹{Math.round(total).toLocaleString('en-IN')}</span>
