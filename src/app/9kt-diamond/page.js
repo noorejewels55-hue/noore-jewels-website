@@ -143,7 +143,7 @@ function DiamondPageContent() {
                             WebkitBackgroundClip: 'text',
                             WebkitTextFillColor: 'transparent',
                         }}>
-                            Original Diamonds
+                            Lab Grown Diamonds
                         </em>
                     </h1>
 
@@ -155,8 +155,8 @@ function DiamondPageContent() {
                         maxWidth: '600px',
                         margin: '0 auto 36px',
                     }}>
-                        Discover our exclusive collection of 9KT solid gold jewellery adorned with genuine
-                        natural diamonds — where real luxury meets affordable elegance.
+                        Discover our exclusive collection of 9KT solid gold jewellery adorned with
+                        <strong style={{ color: '#C5A467' }}> IGI Certified Lab Grown Diamonds</strong> — where real luxury meets affordable elegance.
                     </p>
 
                     {/* Gold divider line */}
@@ -175,7 +175,7 @@ function DiamondPageContent() {
                         flexWrap: 'wrap',
                     }}>
                         {[
-                            { icon: '💎', label: 'Real Diamonds' },
+                            { icon: '💎', label: 'IGI Certified LGD' },
                             { icon: '🏅', label: '9KT Solid Gold' },
                             { icon: '📜', label: 'Certificate Included' },
                         ].map((item, i) => (
@@ -205,7 +205,7 @@ function DiamondPageContent() {
             {/* ── WHY 9KT GOLD + DIAMOND ── */}
             <section style={{ padding: '80px 0', background: 'var(--color-bg-alt)' }}>
                 <div className="container">
-                    <h2 className="section-title">Why 9KT Gold with Original Diamonds?</h2>
+                    <h2 className="section-title">Why 9KT Gold with Lab Grown Diamonds?</h2>
                     <div className="section-divider"></div>
                     <p className="section-subtitle" style={{ maxWidth: '600px', margin: '0 auto 48px' }}>
                         The perfect balance of luxury, durability, and value
@@ -229,8 +229,8 @@ function DiamondPageContent() {
                             },
                             {
                                 icon: '💎',
-                                title: 'Genuine Natural Diamonds',
-                                text: 'Each piece is set with original, natural diamonds — not cubic zirconia or lab-grown alternatives. Real sparkle, real fire, real brilliance that lasts forever.',
+                                title: 'IGI Certified Lab Grown Diamonds',
+                                text: 'Each piece is set with IGI certified Lab Grown Diamonds — identical in chemical, optical and physical properties to mined diamonds. Same brilliance, same fire, ethically created.',
                             },
                             {
                                 icon: '📜',
@@ -272,9 +272,9 @@ function DiamondPageContent() {
             {/* ── PRODUCTS SECTION ── */}
             <section style={{ padding: '80px 0' }}>
                 <div className="container">
-                    <h2 className="section-title">9KT Diamond Collection</h2>
+                    <h2 className="section-title">9KT Lab Grown Diamond Collection</h2>
                     <div className="section-divider"></div>
-                    <p className="section-subtitle">Handpicked Pieces with Genuine Diamonds</p>
+                    <p className="section-subtitle">IGI Certified Lab Grown Diamonds in 9KT Gold</p>
 
                     {/* Category filters */}
                     {categories.length > 1 && (
@@ -414,7 +414,7 @@ function DiamondPageContent() {
                     <h2 className="section-title">Diamond Care Guide</h2>
                     <div className="section-divider"></div>
                     <p className="section-subtitle" style={{ maxWidth: '550px', margin: '0 auto 48px' }}>
-                        Keep your 9KT diamond jewellery sparkling for years
+                        Keep your 9KT Lab Grown Diamond jewellery sparkling for years
                     </p>
 
                     <div style={{
@@ -483,7 +483,7 @@ function DiamondPageContent() {
                         letterSpacing: '0.04em',
                     }}>
                         Ready to Own{' '}
-                        <em style={{ fontStyle: 'italic', color: '#F0D690' }}>Real Diamonds</em>?
+                        <em style={{ fontStyle: 'italic', color: '#F0D690' }}>Lab Grown Diamonds</em>?
                     </h2>
                     <p style={{
                         fontSize: '0.88rem',

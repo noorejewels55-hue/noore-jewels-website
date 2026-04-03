@@ -23,10 +23,10 @@ export const metadata = {
     locale: "en_IN",
     images: [
       {
-        url: '/hero-solitaire.png',
+        url: '/og-banner.png',
         width: 1200,
         height: 630,
-        alt: 'Noore Jewels - Lab Grown Diamond Engagement Rings & Solitaire Jewellery',
+        alt: 'Noore Jewels - IGI Certified Lab Grown Diamond Engagement Rings',
       }
     ],
   },
@@ -34,7 +34,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "Noore Jewels — Lab Grown Diamond Engagement Rings Online India",
     description: "IGI certified Lab Grown Diamond engagement rings & fine jewellery. Solitaire rings in 9kt–18kt gold. Lifetime warranty, 7-day returns.",
-    images: ['/hero-solitaire.png'],
+    images: ['/og-banner.png'],
   },
   robots: {
     index: true,
@@ -138,8 +138,8 @@ const jsonLd = {
           },
           "transitTime": {
             "@type": "QuantitativeValue",
-            "minValue": 5,
-            "maxValue": 10,
+            "minValue": 15,
+            "maxValue": 21,
             "unitCode": "DAY"
           }
         }
