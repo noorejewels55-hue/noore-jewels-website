@@ -551,10 +551,10 @@ export async function getProductPricingInfo(product) {
                 '9K Gold': pricing['Gold 9K per gram']?.rate || 0,
                 '925 Silver': pricing['Silver 925 per gram']?.rate || 0,
             },
-            makingRatePerGram: pricing['Making Charges %']?.rate || 0,
+            makingRatePerGram: pricing['Making Charges (%)']?.rate || 0,
             shipping: pricing['Insured Shipping']?.rate || 0,
             certification: pricing['Certification Fee']?.rate || 0,
-            gstPercent: pricing['GST %']?.rate || 3,
+            gstPercent: pricing['GST (%)']?.rate || 3,
             // Diamond quality options
             diamondOptions: diamondPricing,
         };
@@ -580,10 +580,10 @@ function calc9ktPrice(product, pricing, diamondPricing) {
     const diamondDiscountAmount = Math.round(diamondBasePrice * diamondDiscount / 100);
     const diamondFinalPrice = diamondBasePrice - diamondDiscountAmount;
 
-    const makingRatePerGram = pricing['Making Charges %']?.rate || 0;
+    const makingRatePerGram = pricing['Making Charges (%)']?.rate || 0;
     const makingCharges = Math.round((product.goldWeight || 0) * makingRatePerGram);
     const certFee = pricing['Certification Fee']?.rate || 0;
-    const gstPercent = pricing['GST %']?.rate || 3;
+    const gstPercent = pricing['GST (%)']?.rate || 3;
 
     // GST applies on gold + diamond + making charges only (not certification)
     const gstBase = goldPrice + diamondFinalPrice + makingCharges;
