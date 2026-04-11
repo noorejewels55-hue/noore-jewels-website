@@ -35,7 +35,12 @@ export default function Navbar() {
         <>
             {/* Announcement Bar */}
             <div className="announcement-bar">
-                IGI Certified <span>&nbsp;Lab Grown Diamonds&nbsp;</span> ✦ BIS Hallmarked <span>&nbsp;Gold Jewellery</span> ✦ <span>&nbsp;Fully Insured Shipping</span>
+                <div className="announcement-bar-inner">
+                    IGI Certified <span>&nbsp;Lab Grown Diamonds&nbsp;</span> ✦ BIS Hallmarked <span>&nbsp;Gold Jewellery</span> ✦ <span>&nbsp;Fully Insured Shipping</span>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    IGI Certified <span>&nbsp;Lab Grown Diamonds&nbsp;</span> ✦ BIS Hallmarked <span>&nbsp;Gold Jewellery</span> ✦ <span>&nbsp;Fully Insured Shipping</span>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
             </div>
 
             {/* Navigation */}

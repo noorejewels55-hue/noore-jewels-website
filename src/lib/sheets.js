@@ -170,7 +170,7 @@ export async function saveOrder(orderData) {
 
         await sheets.spreadsheets.values.append({
             spreadsheetId: process.env.GOOGLE_SHEET_ID,
-            range: 'Order-Website!A:P',
+            range: 'Order-Website!A:R',
             valueInputOption: 'RAW', // Use RAW instead of USER_ENTERED for safety
             resource: {
                 values: [[
@@ -190,6 +190,8 @@ export async function saveOrder(orderData) {
                     sanitizeForSheets(orderData.state || ''),
                     sanitizeForSheets(orderData.pincode || ''),
                     new Date().toISOString(),
+                    sanitizeForSheets(orderData.customization || ''),
+                    sanitizeForSheets(orderData.couponCode || ''),
                 ]]
             }
         });
@@ -549,7 +551,7 @@ export async function getProductPricingInfo(product) {
                 '9K Gold': pricing['Gold 9K per gram']?.rate || 0,
                 '925 Silver': pricing['Silver 925 per gram']?.rate || 0,
             },
-            makingPercent: pricing['Making Charges %']?.rate || 0,
+            makingRatePerGram: pricing['Making Charges %']?.rate || 0,
             shipping: pricing['Insured Shipping']?.rate || 0,
             certification: pricing['Certification Fee']?.rate || 0,
             gstPercent: pricing['GST %']?.rate || 3,
@@ -559,6 +561,64 @@ export async function getProductPricingInfo(product) {
     } catch (error) {
         console.error('Error fetching pricing info:', error);
         return null;
+    }
+}
+
+// Calculate the default 9kt gold price for a product (server-side)
+// Uses same formula as the client-side price breakdown
+function calc9ktPrice(product, pricing, diamondPricing) {
+    if (!product.goldWeight && !product.diamondCarat) return null;
+
+    const goldRate = pricing['Gold 9K per gram']?.rate || 0;
+    const goldPrice = Math.round(goldRate * (product.goldWeight || 0));
+
+    // Diamond price
+    const diamondInfo = diamondPricing?.find(d => d.qualityGrade === product.diamondQuality);
+    const diamondPricePerCarat = diamondInfo?.pricePerCarat || 0;
+    const diamondDiscount = diamondInfo?.discount || 0;
+    const diamondBasePrice = Math.round(diamondPricePerCarat * (product.diamondCarat || 0));
+    const diamondDiscountAmount = Math.round(diamondBasePrice * diamondDiscount / 100);
+    const diamondFinalPrice = diamondBasePrice - diamondDiscountAmount;
+
+    const makingRatePerGram = pricing['Making Charges %']?.rate || 0;
+    const makingCharges = Math.round((product.goldWeight || 0) * makingRatePerGram);
+    const certFee = pricing['Certification Fee']?.rate || 0;
+    const gstPercent = pricing['GST %']?.rate || 3;
+
+    // GST applies on gold + diamond + making charges only (not certification)
+    const gstBase = goldPrice + diamondFinalPrice + makingCharges;
+    const gst = Math.round(gstBase * gstPercent / 100);
+    const total = gstBase + gst + certFee;
+
+    return total;
+}
+
+// Enrich all products with their default 9kt price
+// Called from the products API so shop/cards show the 9kt price by default
+export async function enrichProductsWithDefaultPricing(products) {
+    try {
+        const [pricing, diamondPricing] = await Promise.all([
+            getPricingData(),
+            getDiamondPricing(),
+        ]);
+
+        return products.map(p => {
+            const default9ktPrice = calc9ktPrice(p, pricing, diamondPricing);
+            return {
+                ...p,
+                // If we can calculate a 9kt price, use it; otherwise keep the sheet price
+                defaultPrice: default9ktPrice || (p.discount > 0 ? Math.round(p.price * (1 - p.discount / 100)) : p.price),
+                hasLivePrice: !!default9ktPrice,
+            };
+        });
+    } catch (error) {
+        console.error('Error enriching products with pricing:', error);
+        // Fallback: return products with effectivePrice as defaultPrice
+        return products.map(p => ({
+            ...p,
+            defaultPrice: p.discount > 0 ? Math.round(p.price * (1 - p.discount / 100)) : p.price,
+            hasLivePrice: false,
+        }));
     }
 }
 

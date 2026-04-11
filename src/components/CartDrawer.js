@@ -48,6 +48,12 @@ export default function CartDrawer() {
                                         </div>
                                         <div className="cart-item-info">
                                             <div className="cart-item-name">{item.name}</div>
+                                            {item.customization && (
+                                                <div style={{ fontSize: '0.68rem', color: 'var(--color-text-muted)', marginTop: '2px' }}>
+                                                    {item.customization.metal} • {item.customization.color}
+                                                    {item.customization.ringSize && ` • Size ${item.customization.ringSize}`}
+                                                </div>
+                                            )}
                                             <div className="cart-item-price">₹{Math.round(effectivePrice).toLocaleString('en-IN')}</div>
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px' }}>
                                                 <button

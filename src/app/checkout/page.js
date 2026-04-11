@@ -117,9 +117,10 @@ function CheckoutContent() {
                                 razorpay_order_id: response.razorpay_order_id,
                                 razorpay_payment_id: response.razorpay_payment_id,
                                 razorpay_signature: response.razorpay_signature,
-                                items: items.map(i => ({ id: i.id, name: i.name, quantity: i.quantity, price: i.price, discount: i.discount || 0, availableQty: i.availableQty })),
+                                items: items.map(i => ({ id: i.id, name: i.name, quantity: i.quantity, price: i.price, discount: i.discount || 0, availableQty: i.availableQty, customization: i.customization || null })),
                                 customer: formData,
                                 couponDiscount: discount || 0,
+                                couponCode: couponApplied ? coupon.trim().toUpperCase() : '',
                             }),
                         });
                         const verifyData = await verifyRes.json();
@@ -330,7 +331,13 @@ function CheckoutContent() {
                                             <img src={item.image} alt={item.name} />
                                         </div>
                                         <div style={{ flex: 1 }}>
-                                            <div style={{ fontFamily: 'var(--font-heading)', fontSize: '0.9rem', fontWeight: 500, marginBottom: '6px' }}>{item.name}</div>
+                                            <div style={{ fontFamily: 'var(--font-heading)', fontSize: '0.9rem', fontWeight: 500, marginBottom: '4px' }}>{item.name}</div>
+                                            {item.customization && (
+                                                <div style={{ fontSize: '0.68rem', color: 'var(--color-text-muted)', marginBottom: '6px' }}>
+                                                    {item.customization.metal} • {item.customization.color}
+                                                    {item.customization.ringSize && ` • Size ${item.customization.ringSize}`}
+                                                </div>
+                                            )}
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '0' }}>
                                                 <button
                                                     onClick={() => updateQuantity(item.id, item.quantity - 1)}

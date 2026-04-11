@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getProducts, getCategories } from '@/lib/sheets';
+import { getProducts, getCategories, enrichProductsWithDefaultPricing } from '@/lib/sheets';
 
 // Tell Vercel to cache this API response and revalidate every 5 minutes
 // This means Vercel serves a cached response to ALL users instantly,
@@ -15,6 +15,9 @@ export async function GET(request) {
         const tag = searchParams.get('tag');
 
         let products = await getProducts();
+
+        // Enrich with default 9kt gold pricing (calculated server-side)
+        products = await enrichProductsWithDefaultPricing(products);
 
         // Filter by category (handles singular/plural mismatch: navbar uses "necklaces", sheet uses "Necklace")
         if (category && category !== 'all') {
@@ -55,10 +58,10 @@ export async function GET(request) {
         // Sort
         switch (sort) {
             case 'price-asc':
-                products.sort((a, b) => a.price - b.price);
+                products.sort((a, b) => (a.defaultPrice || a.price) - (b.defaultPrice || b.price));
                 break;
             case 'price-desc':
-                products.sort((a, b) => b.price - a.price);
+                products.sort((a, b) => (b.defaultPrice || b.price) - (a.defaultPrice || a.price));
                 break;
             case 'name-asc':
                 products.sort((a, b) => a.name.localeCompare(b.name));

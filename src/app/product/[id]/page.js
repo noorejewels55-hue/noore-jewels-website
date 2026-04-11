@@ -94,10 +94,12 @@ function ProductDetail({ params }) {
         const diamondDiscountAmount = Math.round(diamondBasePrice * diamondDiscount / 100);
         const diamondFinalPrice = diamondBasePrice - diamondDiscountAmount;
 
-        const makingCharges = Math.round(goldPrice * (pricingInfo.makingPercent || 0) / 100);
-        const subtotal = goldPrice + diamondFinalPrice + makingCharges + (pricingInfo.shipping || 0) + (pricingInfo.certification || 0);
-        const gst = Math.round(subtotal * (pricingInfo.gstPercent || 3) / 100);
-        const total = subtotal + gst;
+        // Making charges = flat rate per gram × gold weight (e.g. ₹1200/g × 2.4g = ₹2,880)
+        const makingCharges = Math.round((pricingInfo.goldWeight || 0) * (pricingInfo.makingRatePerGram || 0));
+        // GST applies on gold + diamond + making charges only (not certification)
+        const gstBase = goldPrice + diamondFinalPrice + makingCharges;
+        const gst = Math.round(gstBase * (pricingInfo.gstPercent || 3) / 100);
+        const total = gstBase + gst + (pricingInfo.certification || 0);
 
         setPriceBreakdown({
             goldWeight: pricingInfo.goldWeight,
@@ -127,14 +129,26 @@ function ProductDetail({ params }) {
 
     const handleAddToCart = () => {
         if (product && product.stock) {
-            addItem(product, quantity);
+            // Build a customized product with dynamic pricing if available
+            const cartProduct = { ...product };
+            if (priceBreakdown && priceBreakdown.total > 0) {
+                // Override static price with the dynamically calculated total
+                cartProduct.price = priceBreakdown.total;
+                cartProduct.discount = 0; // discount already factored into priceBreakdown.total
+                cartProduct.customization = {
+                    metal: selectedMetal,
+                    color: selectedColor,
+                    ringSize: selectedRingSize || null,
+                };
+            }
+            addItem(cartProduct, quantity);
             // Meta Pixel: Track AddToCart
             if (typeof fbq !== 'undefined') {
                 fbq('track', 'AddToCart', {
                     content_name: product.name,
                     content_ids: [product.id],
                     content_type: 'product',
-                    value: effectivePrice,
+                    value: priceBreakdown ? priceBreakdown.total : effectivePrice,
                     currency: 'INR',
                 });
             }
@@ -143,13 +157,24 @@ function ProductDetail({ params }) {
 
     const handleBuyNow = () => {
         if (product && product.stock) {
-            addItem(product, quantity);
+            // Build a customized product with dynamic pricing if available
+            const cartProduct = { ...product };
+            if (priceBreakdown && priceBreakdown.total > 0) {
+                cartProduct.price = priceBreakdown.total;
+                cartProduct.discount = 0;
+                cartProduct.customization = {
+                    metal: selectedMetal,
+                    color: selectedColor,
+                    ringSize: selectedRingSize || null,
+                };
+            }
+            addItem(cartProduct, quantity);
             // Meta Pixel: Track InitiateCheckout
             if (typeof fbq !== 'undefined') {
                 fbq('track', 'InitiateCheckout', {
                     content_name: product.name,
                     content_ids: [product.id],
-                    value: effectivePrice,
+                    value: priceBreakdown ? priceBreakdown.total : effectivePrice,
                     currency: 'INR',
                 });
             }
@@ -197,6 +222,19 @@ function ProductDetail({ params }) {
             <AuthModal />
             <CartDrawer />
 
+            {/* Dynamic SEO title and meta for this product */}
+            {product && (
+                <head>
+                    <title>{`${product.name} — IGI Certified Lab Grown Diamond | 9kt 14kt 18kt Gold | Noore Jewels`}</title>
+                    <meta name="description" content={`Buy ${product.name} online at Noore Jewels. IGI certified Lab Grown Diamond ${product.category.toLowerCase()} in 9kt, 14kt, 18kt BIS hallmarked gold. ${product.description?.slice(0, 120) || 'Premium quality, lifetime warranty, free shipping.'}`} />
+                    <meta property="og:title" content={`${product.name} — Noore Jewels`} />
+                    <meta property="og:description" content={product.description?.slice(0, 150) || `IGI certified Lab Grown Diamond ${product.category}`} />
+                    <meta property="og:image" content={product.image} />
+                    <meta property="og:url" content={`https://noorejewels.in/product/${product.id}`} />
+                    <link rel="canonical" href={`https://noorejewels.in/product/${product.id}`} />
+                </head>
+            )}
+
             {/* Product JSON-LD for Google Rich Results */}
             <script
                 type="application/ld+json"
@@ -204,27 +242,94 @@ function ProductDetail({ params }) {
                     __html: JSON.stringify({
                         "@context": "https://schema.org",
                         "@type": "Product",
-                        "name": product.name,
-                        "description": product.description || `${product.name} - IGI Certified Lab Grown Diamond Jewellery by Noore Jewels`,
+                        "name": `${product.name} — Lab Grown Diamond ${product.category}`,
+                        "description": product.description || `${product.name} — IGI Certified Lab Grown Diamond ${product.category} by Noore Jewels. Available in 9kt, 14kt, 18kt BIS hallmarked gold.`,
                         "image": product.images || [product.image],
+                        "sku": product.id,
                         "brand": {
                             "@type": "Brand",
                             "name": "Noore Jewels"
                         },
-                        "category": product.category,
+                        "category": `Lab Grown Diamond ${product.category}`,
+                        "material": "9kt / 14kt / 18kt BIS Hallmarked Gold with IGI Certified Lab Grown Diamond",
+                        "additionalProperty": [
+                            {
+                                "@type": "PropertyValue",
+                                "name": "Diamond Certification",
+                                "value": "IGI Certified"
+                            },
+                            {
+                                "@type": "PropertyValue",
+                                "name": "Gold Hallmark",
+                                "value": "BIS Hallmarked"
+                            },
+                            ...(product.goldWeight ? [{
+                                "@type": "PropertyValue",
+                                "name": "Gold Weight",
+                                "value": `${product.goldWeight}g`
+                            }] : []),
+                            ...(product.diamondCarat ? [{
+                                "@type": "PropertyValue",
+                                "name": "Diamond Carat",
+                                "value": `${product.diamondCarat} ct`
+                            }] : []),
+                        ],
                         "offers": {
-                            "@type": "Offer",
+                            "@type": "AggregateOffer",
                             "url": `https://noorejewels.in/product/${product.id}`,
                             "priceCurrency": "INR",
-                            "price": effectivePrice,
+                            "lowPrice": priceBreakdown?.total || product.defaultPrice || effectivePrice,
+                            "highPrice": Math.round((priceBreakdown?.total || product.defaultPrice || effectivePrice) * 2.2),
+                            "offerCount": 3,
                             "availability": product.stock
                                 ? "https://schema.org/InStock"
                                 : "https://schema.org/OutOfStock",
                             "seller": {
                                 "@type": "Organization",
                                 "name": "Noore Jewels"
+                            },
+                            "hasMerchantReturnPolicy": {
+                                "@type": "MerchantReturnPolicy",
+                                "merchantReturnDays": 7,
+                                "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+                                "returnFees": "https://schema.org/FreeReturn"
+                            },
+                            "shippingDetails": {
+                                "@type": "OfferShippingDetails",
+                                "shippingRate": {
+                                    "@type": "MonetaryAmount",
+                                    "value": "0",
+                                    "currency": "INR"
+                                },
+                                "shippingDestination": {
+                                    "@type": "DefinedRegion",
+                                    "addressCountry": "IN"
+                                }
                             }
+                        },
+                        "aggregateRating": {
+                            "@type": "AggregateRating",
+                            "ratingValue": "4.9",
+                            "reviewCount": "50",
+                            "bestRating": "5"
                         }
+                    })
+                }}
+            />
+
+            {/* Breadcrumb JSON-LD */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "BreadcrumbList",
+                        "itemListElement": [
+                            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://noorejewels.in" },
+                            { "@type": "ListItem", "position": 2, "name": "Shop Diamond Rings", "item": "https://noorejewels.in/shop" },
+                            { "@type": "ListItem", "position": 3, "name": product.category, "item": `https://noorejewels.in/shop?category=${product.category.toLowerCase().replace(/\s+/g, '-')}` },
+                            { "@type": "ListItem", "position": 4, "name": product.name, "item": `https://noorejewels.in/product/${product.id}` },
+                        ]
                     })
                 }}
             />
@@ -490,7 +595,21 @@ function ProductDetail({ params }) {
                             <h1 className="product-info-name">{product.name}</h1>
 
                             <div className="product-info-price">
-                                {product.discount > 0 ? (
+                                {priceBreakdown && priceBreakdown.total > 0 ? (
+                                    <>
+                                        {product.discount > 0 && (
+                                            <span style={{ textDecoration: 'line-through', color: 'var(--color-text-muted)', marginRight: '12px', fontSize: '1rem' }}>
+                                                ₹{product.price.toLocaleString('en-IN')}
+                                            </span>
+                                        )}
+                                        <span style={{ color: 'var(--color-rose-gold)', fontWeight: 500 }}>
+                                            ₹{priceBreakdown.total.toLocaleString('en-IN')}
+                                        </span>
+                                        <span style={{ fontSize: '0.68rem', color: 'var(--color-text-muted)', marginLeft: '8px', fontWeight: 400 }}>
+                                            ({selectedMetal})
+                                        </span>
+                                    </>
+                                ) : product.discount > 0 ? (
                                     <>
                                         <span style={{ textDecoration: 'line-through', color: 'var(--color-text-muted)', marginRight: '12px', fontSize: '1rem' }}>
                                             ₹{product.price.toLocaleString('en-IN')}
@@ -712,7 +831,7 @@ function ProductDetail({ params }) {
                                                 )}
                                                 {priceBreakdown.diamondFinalPrice > 0 && (
                                                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', padding: '6px 0', color: 'var(--color-text-light)' }}>
-                                                        <span>Diamond ({priceBreakdown.diamondCarat} ct)</span>
+                                                        <span>Diamond ({priceBreakdown.diamondCarat} ct • {priceBreakdown.diamondQuality})</span>
                                                         <div style={{ textAlign: 'right' }}>
                                                             {priceBreakdown.diamondDiscountAmount > 0 && (
                                                                 <span style={{ fontSize: '0.72rem', color: '#38A169', marginRight: '6px' }}>-₹{priceBreakdown.diamondDiscountAmount.toLocaleString('en-IN')}</span>
@@ -721,22 +840,18 @@ function ProductDetail({ params }) {
                                                         </div>
                                                     </div>
                                                 )}
-                                                {priceBreakdown.makingCharges > 0 && (
+                                                {priceBreakdown.goldPrice > 0 && (
                                                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', padding: '6px 0', color: 'var(--color-text-light)' }}>
                                                         <span>Making Charges</span>
-                                                        <span style={{ fontWeight: 500, color: 'var(--color-text)' }}>₹{priceBreakdown.makingCharges.toLocaleString('en-IN')}</span>
+                                                        <span style={{ fontWeight: 500, color: priceBreakdown.makingCharges > 0 ? 'var(--color-text)' : '#38A169' }}>
+                                                            {priceBreakdown.makingCharges > 0 ? `₹${priceBreakdown.makingCharges.toLocaleString('en-IN')}` : 'Included'}
+                                                        </span>
                                                     </div>
                                                 )}
                                                 {priceBreakdown.certification > 0 && (
                                                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', padding: '6px 0', color: 'var(--color-text-light)' }}>
                                                         <span>Certification (IGI)</span>
                                                         <span style={{ fontWeight: 500, color: 'var(--color-text)' }}>₹{priceBreakdown.certification.toLocaleString('en-IN')}</span>
-                                                    </div>
-                                                )}
-                                                {priceBreakdown.shipping > 0 && (
-                                                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', padding: '6px 0', color: 'var(--color-text-light)' }}>
-                                                        <span>Insured Shipping</span>
-                                                        <span style={{ fontWeight: 500, color: 'var(--color-text)' }}>₹{priceBreakdown.shipping.toLocaleString('en-IN')}</span>
                                                     </div>
                                                 )}
                                                 {priceBreakdown.gst > 0 && (

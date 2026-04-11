@@ -2,8 +2,12 @@ User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /checkout/
+Disallow: /my-orders/
+Allow: /api/products
+Allow: /api/pricing
 
 Sitemap: https://noorejewels.in/sitemap.xml
 
-# Noore Jewels — Lab Grown Diamond Engagement Rings & Fine Jewellery
+# Noore Jewels — IGI Certified Lab Grown Diamond Rings
+# Buy diamond engagement rings, solitaire rings, stackable rings in 9kt, 14kt, 18kt gold
 # https://noorejewels.in

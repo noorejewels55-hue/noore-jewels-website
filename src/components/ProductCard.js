@@ -67,9 +67,10 @@ export default function ProductCard({ product, reviewSummary }) {
         return () => window.removeEventListener('wishlistChange', handler);
     }, [product.id]);
 
-    const effectivePrice = product.discount > 0
-        ? product.price * (1 - product.discount / 100)
-        : product.price;
+    // Use defaultPrice (9kt calculated price) if available, otherwise fallback
+    const displayPrice = product.defaultPrice || (product.discount > 0
+        ? Math.round(product.price * (1 - product.discount / 100))
+        : product.price);
 
     const review = reviewSummary?.[product.id];
 
@@ -107,7 +108,6 @@ export default function ProductCard({ product, reviewSummary }) {
                     {/* Badges */}
                     <div className="product-card-badges">
                         {product.tags?.includes('new') && <span className="badge badge-new">New</span>}
-                        {product.discount > 0 && <span className="badge badge-sale">{product.discount}% Off</span>}
                         {!product.stock && <span className="badge badge-out-of-stock">Sold Out</span>}
                     </div>
                 </div>
@@ -136,10 +136,15 @@ export default function ProductCard({ product, reviewSummary }) {
                 <div className="product-card-info">
                     <div className="product-card-name">{product.name}</div>
                     <div className="product-card-price">
-                        {product.discount > 0 ? (
+                        {product.hasLivePrice ? (
+                            <>
+                                <span className="sale-price">₹{displayPrice.toLocaleString('en-IN')}</span>
+                                <span style={{ fontSize: '0.65rem', color: 'var(--color-text-muted)', marginLeft: '4px' }}>(9kt)</span>
+                            </>
+                        ) : product.discount > 0 ? (
                             <>
                                 <span className="original-price">₹{product.price.toLocaleString('en-IN')}</span>
-                                <span className="sale-price">₹{Math.round(effectivePrice).toLocaleString('en-IN')}</span>
+                                <span className="sale-price">₹{displayPrice.toLocaleString('en-IN')}</span>
                             </>
                         ) : (
                             <>₹{product.price.toLocaleString('en-IN')}</>

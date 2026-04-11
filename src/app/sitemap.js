@@ -70,6 +70,18 @@ export default async function sitemap() {
     // New niche category pages for SEO
     const nichePages = [
         {
+            url: `${baseUrl}/9kt-diamond`,
+            lastModified: new Date(),
+            changeFrequency: 'weekly',
+            priority: 0.95,
+        },
+        {
+            url: `${baseUrl}/customize`,
+            lastModified: new Date(),
+            changeFrequency: 'weekly',
+            priority: 0.9,
+        },
+        {
             url: `${baseUrl}/shop?category=engagement-rings`,
             lastModified: new Date(),
             changeFrequency: 'weekly',
@@ -77,6 +89,12 @@ export default async function sitemap() {
         },
         {
             url: `${baseUrl}/shop?category=stack-rings`,
+            lastModified: new Date(),
+            changeFrequency: 'weekly',
+            priority: 0.9,
+        },
+        {
+            url: `${baseUrl}/shop?category=ring`,
             lastModified: new Date(),
             changeFrequency: 'weekly',
             priority: 0.9,

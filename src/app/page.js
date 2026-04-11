@@ -41,6 +41,7 @@ function HomePage() {
   const newCategories = [
     { name: 'Engagement Rings', slug: 'engagement-rings', image: '/category-engagement-rings.png' },
     { name: 'Stackable Rings', slug: 'stack-rings', image: '/category-stackable-rings.png' },
+    { name: 'Rings', slug: 'ring', image: '/category-rings.png' },
     { name: 'Fine Jewellery', slug: 'fine-jewellery', image: '/category-fine-jewellery.png' },
   ];
 

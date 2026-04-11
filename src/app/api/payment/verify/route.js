@@ -12,7 +12,8 @@ export async function POST(request) {
             razorpay_signature,
             items,
             customer,
-            couponDiscount
+            couponDiscount,
+            couponCode
         } = await request.json();
 
         // Verify signature
@@ -53,6 +54,16 @@ export async function POST(request) {
             const finalAmount = Math.round(itemTotal - itemCouponShare);
 
             try {
+                // Build customization string for sheet (e.g. "9K Gold / Yellow / Size 14")
+                let customDetails = '';
+                if (item.customization) {
+                    const parts = [];
+                    if (item.customization.metal) parts.push(item.customization.metal);
+                    if (item.customization.color) parts.push(item.customization.color);
+                    if (item.customization.ringSize) parts.push(`Size ${item.customization.ringSize}`);
+                    customDetails = parts.join(' / ');
+                }
+
                 await saveOrder({
                     orderId,
                     phone: customer.phone,
@@ -69,6 +80,8 @@ export async function POST(request) {
                     city: customer.city || '',
                     state: customer.state || '',
                     pincode: customer.pincode || '',
+                    customization: customDetails,
+                    couponCode: couponCode || '',
                 });
 
                 // Decrease product stock in Google Sheets
