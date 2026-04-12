@@ -593,16 +593,31 @@ function calc9ktPrice(product, pricing, diamondPricing) {
     return total;
 }
 
+// ── ENRICHED PRODUCTS CACHE ──
+// Caches the result of enrichProductsWithDefaultPricing so we don't
+// recalculate 150+ product prices on every single API request.
+let cachedEnrichedProducts = null;
+let enrichedCacheTimestamp = 0;
+const ENRICHED_CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
 // Enrich all products with their default 9kt price
 // Called from the products API so shop/cards show the 9kt price by default
 export async function enrichProductsWithDefaultPricing(products) {
+    const now = Date.now();
+
+    // Return cached enriched products if still fresh AND same product count
+    if (cachedEnrichedProducts && now - enrichedCacheTimestamp < ENRICHED_CACHE_DURATION
+        && cachedEnrichedProducts.length === products.length) {
+        return cachedEnrichedProducts;
+    }
+
     try {
         const [pricing, diamondPricing] = await Promise.all([
             getPricingData(),
             getDiamondPricing(),
         ]);
 
-        return products.map(p => {
+        const enriched = products.map(p => {
             const default9ktPrice = calc9ktPrice(p, pricing, diamondPricing);
             return {
                 ...p,
@@ -611,8 +626,13 @@ export async function enrichProductsWithDefaultPricing(products) {
                 hasLivePrice: !!default9ktPrice,
             };
         });
+
+        cachedEnrichedProducts = enriched;
+        enrichedCacheTimestamp = now;
+        return enriched;
     } catch (error) {
         console.error('Error enriching products with pricing:', error);
+        if (cachedEnrichedProducts) return cachedEnrichedProducts;
         // Fallback: return products with effectivePrice as defaultPrice
         return products.map(p => ({
             ...p,

@@ -47,8 +47,9 @@ export default function Navbar() {
             <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
                 <div className="nav-container">
                     {/* Logo */}
-                    <Link href="/" className="nav-logo">
-                        Noore<span className="logo-accent">&nbsp;Jewels</span>
+                    <Link href="/" className="nav-logo" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0' }}>
+                        <div>Noore<span className="logo-accent">&nbsp;Jewels</span></div>
+                        <span style={{ fontSize: '0.35em', letterSpacing: '0.25em', fontWeight: '400', color: 'var(--color-text-muted)', marginTop: '-2px', fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap' }}>Modern Rings. Timeless Glow.</span>
                     </Link>
 
                     {/* Desktop Links */}

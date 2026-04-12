@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getProducts, getCategories, enrichProductsWithDefaultPricing } from '@/lib/sheets';
+import { getProducts, getCategories, enrichProductsWithDefaultPricing, getProductById } from '@/lib/sheets';
 
 // Tell Vercel to cache this API response and revalidate every 5 minutes
 // This means Vercel serves a cached response to ALL users instantly,
@@ -13,10 +13,38 @@ export async function GET(request) {
         const sort = searchParams.get('sort') || 'default';
         const search = searchParams.get('search');
         const tag = searchParams.get('tag');
+        const singleId = searchParams.get('id');
+        const page = parseInt(searchParams.get('page') || '1', 10);
+        const limit = parseInt(searchParams.get('limit') || '0', 10); // 0 = no limit (backwards compatible)
 
+        // ── SINGLE PRODUCT LOOKUP (fast path for product detail page) ──
+        if (singleId) {
+            const product = await getProductById(singleId);
+            if (!product) {
+                return NextResponse.json({ success: false, message: 'Product not found' }, { status: 404 });
+            }
+            // Enrich just this one product
+            const enriched = await enrichProductsWithDefaultPricing([product]);
+            const allProducts = await getProducts();
+            const enrichedAll = await enrichProductsWithDefaultPricing(allProducts);
+            // Get related products (same category, max 4)
+            const related = enrichedAll
+                .filter(p => p.category === product.category && p.id !== product.id)
+                .slice(0, 4);
+
+            const response = NextResponse.json({
+                success: true,
+                product: enriched[0],
+                related,
+            });
+            response.headers.set('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600');
+            return response;
+        }
+
+        // ── FULL PRODUCT LIST ──
         let products = await getProducts();
 
-        // Enrich with default 9kt gold pricing (calculated server-side)
+        // Enrich with default 9kt gold pricing (calculated server-side, cached)
         products = await enrichProductsWithDefaultPricing(products);
 
         // Filter by category (handles singular/plural mismatch: navbar uses "necklaces", sheet uses "Necklace")
@@ -75,6 +103,15 @@ export async function GET(request) {
                 break;
         }
 
+        // Get total before pagination
+        const total = products.length;
+
+        // Server-side pagination (if limit > 0)
+        if (limit > 0) {
+            const startIndex = (page - 1) * limit;
+            products = products.slice(startIndex, startIndex + limit);
+        }
+
         // Get categories
         const categories = await getCategories();
 
@@ -82,7 +119,9 @@ export async function GET(request) {
             success: true,
             products,
             categories,
-            total: products.length,
+            total,
+            page,
+            totalPages: limit > 0 ? Math.ceil(total / limit) : 1,
         });
 
         // Add cache headers for CDN/browser caching
@@ -103,3 +142,4 @@ export async function GET(request) {
         );
     }
 }
+

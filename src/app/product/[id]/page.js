@@ -44,20 +44,13 @@ function ProductDetail({ params }) {
 
     const fetchProduct = async () => {
         try {
-            const res = await fetch('/api/products');
+            // Fetch only this specific product (not all products)
+            const res = await fetch(`/api/products?id=${id}`);
             const data = await res.json();
             if (data.success) {
-                const found = data.products.find(p => p.id === id);
-                setProduct(found || null);
+                setProduct(data.product || null);
                 setSelectedImage(0);
-
-                // Get related products in same category
-                if (found) {
-                    const relatedProducts = data.products
-                        .filter(p => p.category === found.category && p.id !== found.id)
-                        .slice(0, 4);
-                    setRelated(relatedProducts);
-                }
+                setRelated(data.related || []);
             }
         } catch (err) {
             console.error('Error:', err);
