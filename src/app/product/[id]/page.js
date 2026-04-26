@@ -953,16 +953,16 @@ function ProductDetail({ params }) {
                                             </span>
                                         </div>
                                     )}
-                                    {/* Dispatch countdown */}
+                                    {/* Pricing transparency note */}
                                     <div style={{
-                                        display: 'flex', alignItems: 'center', gap: '8px',
+                                        display: 'flex', alignItems: 'flex-start', gap: '8px',
                                         padding: '10px 14px', borderRadius: '8px',
-                                        background: 'linear-gradient(90deg, #F0FFF4, #E8FFF0)',
-                                        border: '1px solid #C6F6D5',
+                                        background: 'linear-gradient(90deg, #FFFBF0, #FFF8E8)',
+                                        border: '1px solid #F0DCA0',
                                     }}>
-                                        <span style={{ fontSize: '1.1rem' }}>🚚</span>
-                                        <span style={{ fontSize: '0.82rem', fontWeight: '500', color: '#276749' }}>
-                                            {getDispatchText()}
+                                        <span style={{ fontSize: '1.1rem', marginTop: '1px' }}>ℹ️</span>
+                                        <span style={{ fontSize: '0.75rem', fontWeight: '400', color: '#8B6914', lineHeight: '1.6' }}>
+                                            Price shown is based on current gold rate &amp; diamond carat. Final price may vary slightly based on the gold rate at the time of order confirmation. Any difference will be adjusted accordingly.
                                         </span>
                                     </div>
                                 </div>
