@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -32,8 +32,46 @@ function CheckoutContent() {
     const [couponMsg, setCouponMsg] = useState('');
     const [couponLoading, setCouponLoading] = useState(false);
 
+    // Abandoned cart save — fires when user has phone + items
+    const abandonSaveTimeout = useRef(null);
+    const lastSavedCart = useRef('');
+
+    const saveAbandonedCart = useCallback(async (data) => {
+        if (!data.phone || data.phone.replace(/\D/g, '').length < 10) return;
+        if (items.length === 0) return;
+
+        // Avoid saving the same data repeatedly
+        const cartKey = `${data.phone}-${items.map(i => i.id).join(',')}`;
+        if (lastSavedCart.current === cartKey) return;
+        lastSavedCart.current = cartKey;
+
+        try {
+            await fetch('/api/cart/abandon', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    phone: data.phone,
+                    name: data.name,
+                    email: data.email,
+                    items: items.map(i => ({ id: i.id, name: i.name, price: i.price, quantity: i.quantity })),
+                    cartValue: total,
+                }),
+                keepalive: true,
+            });
+        } catch { /* silently ignore */ }
+    }, [items, total]);
+
     const handleChange = (field, value) => {
-        setFormData(prev => ({ ...prev, [field]: value }));
+        const newData = { ...formData, [field]: value };
+        setFormData(newData);
+
+        // Auto-save abandoned cart 3 seconds after user stops typing (debounced)
+        if (field === 'phone' || field === 'email') {
+            clearTimeout(abandonSaveTimeout.current);
+            abandonSaveTimeout.current = setTimeout(() => {
+                saveAbandonedCart(newData);
+            }, 3000);
+        }
     };
 
     const handleApplyCoupon = async () => {
@@ -415,8 +453,35 @@ function CheckoutContent() {
                                 {processing ? 'Processing...' : `Pay ₹${Math.round(total - discount).toLocaleString('en-IN')}`}
                             </button>
 
-                            <p style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', textAlign: 'center', marginTop: '12px', lineHeight: 1.6 }}>
-                                🔒 Secured by Razorpay. UPI, Cards, Net Banking & Wallets accepted.
+                            {/* Trust Badges */}
+                            <div className="checkout-trust-badges">
+                                <div className="trust-badge">
+                                    <span className="trust-badge-icon">🔒</span>
+                                    <span className="trust-badge-text">SSL Encrypted</span>
+                                </div>
+                                <div className="trust-badge">
+                                    <span className="trust-badge-icon">💳</span>
+                                    <span className="trust-badge-text">Razorpay Secure</span>
+                                </div>
+                                <div className="trust-badge">
+                                    <span className="trust-badge-icon">📜</span>
+                                    <span className="trust-badge-text">IGI Certified</span>
+                                </div>
+                                <div className="trust-badge">
+                                    <span className="trust-badge-icon">🏅</span>
+                                    <span className="trust-badge-text">BIS Hallmarked</span>
+                                </div>
+                                <div className="trust-badge">
+                                    <span className="trust-badge-icon">🚚</span>
+                                    <span className="trust-badge-text">Free Insured Shipping</span>
+                                </div>
+                                <div className="trust-badge">
+                                    <span className="trust-badge-icon">↩️</span>
+                                    <span className="trust-badge-text">7-Day Returns</span>
+                                </div>
+                            </div>
+                            <p style={{ fontSize: '0.68rem', color: 'var(--color-text-muted)', textAlign: 'center', marginTop: '8px', lineHeight: 1.5 }}>
+                                UPI, Cards, Net Banking &amp; Wallets accepted.
                             </p>
                         </div>
                     </div>

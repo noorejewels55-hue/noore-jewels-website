@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
 
 // Maps pathname to a readable page name
 function getPageName(pathname) {
@@ -11,6 +12,7 @@ function getPageName(pathname) {
         return `Product: ${parts[2] || 'Unknown'}`;
     }
     if (pathname.startsWith('/checkout')) return 'Checkout';
+    if (pathname.startsWith('/customize')) return 'Customize';
     if (pathname.startsWith('/our-story')) return 'Our Story';
     if (pathname.startsWith('/contact')) return 'Contact';
     if (pathname.startsWith('/my-orders')) return 'My Orders';
@@ -18,6 +20,8 @@ function getPageName(pathname) {
     if (pathname.startsWith('/return-policy')) return 'Return Policy';
     if (pathname.startsWith('/privacy-policy')) return 'Privacy Policy';
     if (pathname.startsWith('/terms')) return 'Terms';
+    if (pathname.startsWith('/9kt-diamond')) return '9KT Diamond';
+    if (pathname.startsWith('/admin')) return null; // Don't track admin
     return pathname;
 }
 
@@ -53,13 +57,20 @@ function getOS(ua) {
 }
 
 export default function VisitorTracker() {
+    const pathname = usePathname();
+    const lastTrackedPage = useRef('');
+    const sessionTracked = useRef(false);
+    const pageLoadTime = useRef(Date.now());
 
+    // Track page views — fires on every route change (not just the first)
     useEffect(() => {
-        // Only track ONCE per browser session — not on every page navigation
-        const alreadyTracked = sessionStorage.getItem('nj_tracked');
-        if (alreadyTracked) return;
+        const pageName = getPageName(pathname);
+        if (!pageName) return; // Skip admin pages
+        if (lastTrackedPage.current === pathname) return; // Skip duplicate
 
-        // Fire-and-forget — never block the page
+        lastTrackedPage.current = pathname;
+        pageLoadTime.current = Date.now();
+
         const track = async () => {
             try {
                 const ua = navigator.userAgent;
@@ -79,28 +90,54 @@ export default function VisitorTracker() {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        page: document.title.split('—')[0].trim() || window.location.pathname,
+                        page: pageName,
                         device: getDevice(),
                         browser: getBrowser(ua),
                         os: getOS(ua),
-                        referrer: document.referrer || '',
+                        referrer: !sessionTracked.current ? (document.referrer || '') : '',
                         screenSize: `${window.screen.width}x${window.screen.height}`,
                         visitorName,
                     }),
                     keepalive: true,
                 });
 
-                // Mark as tracked for this browser session
-                sessionStorage.setItem('nj_tracked', '1');
+                sessionTracked.current = true;
             } catch {
                 // Silently ignore all errors
             }
         };
 
         // Small delay so it runs after the page is painted (non-blocking)
-        const timer = setTimeout(track, 2000);
+        const timer = setTimeout(track, 1500);
         return () => clearTimeout(timer);
-    }, []); // Empty deps — only runs ONCE on first load
+    }, [pathname]);
+
+    // Track time spent when leaving page
+    useEffect(() => {
+        const handleBeforeUnload = () => {
+            const timeSpent = Math.round((Date.now() - pageLoadTime.current) / 1000);
+            const pageName = getPageName(pathname);
+            if (!pageName || timeSpent < 2) return;
+
+            // Use sendBeacon for reliable tracking during page unload
+            try {
+                navigator.sendBeacon('/api/track', JSON.stringify({
+                    page: `${pageName} (${timeSpent}s)`,
+                    device: getDevice(),
+                    browser: getBrowser(navigator.userAgent),
+                    os: getOS(navigator.userAgent),
+                    referrer: '',
+                    screenSize: `${window.screen.width}x${window.screen.height}`,
+                    visitorName: '',
+                    timeSpent,
+                    eventType: 'page_exit',
+                }));
+            } catch { /* ignore */ }
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+    }, [pathname]);
 
     // Renders nothing — purely functional component
     return null;

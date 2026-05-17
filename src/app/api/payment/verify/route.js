@@ -184,6 +184,39 @@ export async function POST(request) {
             console.error('Error with NimbusPost:', error);
         }
 
+        // Mark abandoned cart as recovered (if any exists for this phone)
+        try {
+            const { google } = await import('googleapis');
+            const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
+            const auth = new google.auth.GoogleAuth({
+                credentials: { client_email: process.env.GOOGLE_CLIENT_EMAIL, private_key: privateKey },
+                scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+            });
+            const sheets = google.sheets({ version: 'v4', auth });
+            const abandonedRes = await sheets.spreadsheets.values.get({
+                spreadsheetId: process.env.GOOGLE_SHEET_ID,
+                range: 'Abandoned-Carts!A:H',
+            }).catch(() => null);
+
+            if (abandonedRes) {
+                const rows = abandonedRes.data.values || [];
+                const normalizePhone = (p) => (p || '').replace(/\D/g, '').slice(-10);
+                const searchPhone = normalizePhone(customer.phone);
+
+                for (let i = 0; i < rows.length; i++) {
+                    if (normalizePhone(rows[i][0]) === searchPhone && rows[i][4] === 'pending') {
+                        await sheets.spreadsheets.values.update({
+                            spreadsheetId: process.env.GOOGLE_SHEET_ID,
+                            range: `Abandoned-Carts!E${i + 1}`,
+                            valueInputOption: 'RAW',
+                            resource: { values: [['recovered']] },
+                        });
+                        break;
+                    }
+                }
+            }
+        } catch (e) { console.error('Abandoned cart recovery mark error:', e); }
+
         return NextResponse.json({
             success: true,
             orderId,
