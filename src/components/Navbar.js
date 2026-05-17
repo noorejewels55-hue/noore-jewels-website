@@ -78,7 +78,7 @@ export default function Navbar() {
                                     gap: '4px',
                                 }}>
                                     <Link href="/shop?category=engagement-rings" className="nav-link" onClick={() => setShopDropdown(false)} style={{ padding: '8px 0', fontSize: '0.78rem' }}>Engagement Rings</Link>
-                                    <Link href="/shop?category=stack-rings" className="nav-link" onClick={() => setShopDropdown(false)} style={{ padding: '8px 0', fontSize: '0.78rem' }}>Stackable Rings</Link>
+                                    <Link href="/shop?category=stackable-rings" className="nav-link" onClick={() => setShopDropdown(false)} style={{ padding: '8px 0', fontSize: '0.78rem' }}>Stackable Rings</Link>
                                     <Link href="/shop?category=fine-jewellery" className="nav-link" onClick={() => setShopDropdown(false)} style={{ padding: '8px 0', fontSize: '0.78rem' }}>Fine Jewellery</Link>
                                     <div style={{ height: '1px', background: 'rgba(0,0,0,0.06)', margin: '4px 0' }} />
                                     <Link href="/shop?category=polished-diamonds" className="nav-link" onClick={() => setShopDropdown(false)} style={{ padding: '8px 0', fontSize: '0.78rem', color: 'var(--color-gold, #C5A467)' }}>💎 Loose Diamonds</Link>
@@ -86,7 +86,7 @@ export default function Navbar() {
                             )}
                         </div>
                         <Link href="/shop?category=engagement-rings" className="nav-link">Engagement Rings</Link>
-                        <Link href="/shop?category=stack-rings" className="nav-link">Stackable Rings</Link>
+                        <Link href="/shop?category=stackable-rings" className="nav-link">Stackable Rings</Link>
                         <Link href="/shop?category=fine-jewellery" className="nav-link">Fine Jewellery</Link>
                         <Link href="/customize" className="nav-link" style={{ color: 'var(--color-gold, #C5A467)' }}>Customize</Link>
                         <Link href="/our-story" className="nav-link">Our Story</Link>
@@ -186,7 +186,7 @@ export default function Navbar() {
                     <button className="mobile-menu-close" onClick={() => setMobileOpen(false)}>✕</button>
                     <Link href="/shop" className="nav-link" onClick={() => setMobileOpen(false)}>Shop All</Link>
                     <Link href="/shop?category=engagement-rings" className="nav-link" onClick={() => setMobileOpen(false)}>Engagement Rings</Link>
-                    <Link href="/shop?category=stack-rings" className="nav-link" onClick={() => setMobileOpen(false)}>Stackable Rings</Link>
+                    <Link href="/shop?category=stackable-rings" className="nav-link" onClick={() => setMobileOpen(false)}>Stackable Rings</Link>
                     <Link href="/shop?category=fine-jewellery" className="nav-link" onClick={() => setMobileOpen(false)}>Fine Jewellery</Link>
                     <Link href="/shop?category=polished-diamonds" className="nav-link" onClick={() => setMobileOpen(false)} style={{ color: 'var(--color-gold, #C5A467)' }}>💎 Loose Diamonds</Link>
                     <Link href="/customize" className="nav-link" onClick={() => setMobileOpen(false)} style={{ color: 'var(--color-gold, #C5A467)' }}>✨ Customize</Link>

@@ -37,7 +37,7 @@ export default function Footer() {
                         <div className="footer-links">
                             <Link href="/shop">All Jewellery</Link>
                             <Link href="/shop?category=engagement-rings">Engagement Rings</Link>
-                            <Link href="/shop?category=stack-rings">Stackable Rings</Link>
+                            <Link href="/shop?category=stackable-rings">Stackable Rings</Link>
                             <Link href="/shop?category=fine-jewellery">Fine Jewellery</Link>
                             <Link href="/shop?category=polished-diamonds">Polished Diamonds</Link>
                             <Link href="/customize">Custom Jewellery</Link>
