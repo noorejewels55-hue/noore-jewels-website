@@ -1,354 +1,358 @@
 'use client';
-
 import { useState, useEffect } from 'react';
+import { StatCard, MiniLineChart, BarList, DonutChart, formatINR, pctChange } from './components';
+import './admin.css';
+
+const TABS = [
+    { id: 'overview', icon: '📊', label: 'Overview' },
+    { id: 'orders', icon: '📦', label: 'Orders' },
+    { id: 'analytics', icon: '📈', label: 'Analytics' },
+    { id: 'visitors', icon: '👥', label: 'Live Visitors' },
+    { id: 'abandoned', icon: '🛒', label: 'Recovery' },
+    { id: 'products', icon: '💎', label: 'Products' },
+];
 
 export default function AdminDashboard() {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [password, setPassword] = useState('');
+    const [loggedIn, setLoggedIn] = useState(false);
+    const [pw, setPw] = useState('');
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
+    const [err, setErr] = useState('');
     const [data, setData] = useState(null);
-    const [activeTab, setActiveTab] = useState('overview');
-    const [fetchingData, setFetchingData] = useState(false);
+    const [tab, setTab] = useState('overview');
+    const [fetching, setFetching] = useState(false);
+    const [sideOpen, setSideOpen] = useState(false);
 
-    // Check for existing token on mount
     useEffect(() => {
-        const token = localStorage.getItem('nj_admin_token');
-        if (token) {
-            verifyAndLoad(token);
-        } else {
-            setLoading(false);
-        }
+        const t = localStorage.getItem('nj_admin_token');
+        if (t) { verify(t); } else { setLoading(false); }
     }, []);
 
-    async function verifyAndLoad(token) {
+    async function verify(token) {
         try {
-            const res = await fetch('/api/admin/auth', {
-                headers: { 'Authorization': `Bearer ${token}` },
-            });
-            const result = await res.json();
-            if (result.valid) {
-                setIsLoggedIn(true);
-                await loadData(token);
-            } else {
-                localStorage.removeItem('nj_admin_token');
-            }
-        } catch {
-            localStorage.removeItem('nj_admin_token');
-        }
+            const r = await fetch('/api/admin/auth', { headers: { Authorization: `Bearer ${token}` } });
+            const d = await r.json();
+            if (d.valid) { setLoggedIn(true); await load(token); }
+            else localStorage.removeItem('nj_admin_token');
+        } catch { localStorage.removeItem('nj_admin_token'); }
         setLoading(false);
     }
 
-    async function handleLogin(e) {
-        e.preventDefault();
-        setError('');
+    async function login(e) {
+        e.preventDefault(); setErr('');
         try {
-            const res = await fetch('/api/admin/auth', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ password }),
-            });
-            const result = await res.json();
-            if (result.success) {
-                localStorage.setItem('nj_admin_token', result.token);
-                setIsLoggedIn(true);
-                await loadData(result.token);
-            } else {
-                setError('Invalid password');
-            }
-        } catch {
-            setError('Login failed');
-        }
+            const r = await fetch('/api/admin/auth', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: pw }) });
+            const d = await r.json();
+            if (d.success) { localStorage.setItem('nj_admin_token', d.token); setLoggedIn(true); await load(d.token); }
+            else setErr('Invalid password');
+        } catch { setErr('Login failed'); }
     }
 
-    async function loadData(token) {
-        setFetchingData(true);
+    async function load(token) {
+        setFetching(true);
         try {
-            const res = await fetch('/api/admin/stats', {
-                headers: { 'Authorization': `Bearer ${token || localStorage.getItem('nj_admin_token')}` },
-            });
-            const result = await res.json();
-            if (result.success) {
-                setData(result);
-            }
-        } catch (err) {
-            console.error('Failed to load data:', err);
-        }
-        setFetchingData(false);
+            const r = await fetch('/api/admin/stats', { headers: { Authorization: `Bearer ${token || localStorage.getItem('nj_admin_token')}` } });
+            const d = await r.json();
+            if (d.success) setData(d);
+        } catch (e) { console.error(e); }
+        setFetching(false);
     }
 
-    function handleLogout() {
-        localStorage.removeItem('nj_admin_token');
-        setIsLoggedIn(false);
-        setData(null);
-    }
+    if (loading) return <div className="admin-loading"><div className="admin-spinner" /><p style={{ color: '#71717a', marginTop: 16, fontSize: '0.8rem' }}>Loading dashboard...</p></div>;
 
-    if (loading) {
-        return (
-            <div style={styles.loadingScreen}>
-                <div style={styles.spinner}></div>
-                <p style={{ color: '#9B9B9B', marginTop: 16 }}>Loading admin...</p>
+    if (!loggedIn) return (
+        <div className="admin-login-wrap">
+            <div className="admin-login-card">
+                <div className="admin-login-logo">NOORÉ</div>
+                <p className="admin-login-sub">Admin Dashboard</p>
+                <form onSubmit={login}>
+                    <input className="admin-login-input" type="password" value={pw} onChange={e => setPw(e.target.value)} placeholder="Enter password" autoFocus />
+                    {err && <p className="admin-login-err">{err}</p>}
+                    <button className="admin-login-btn" type="submit">Sign In</button>
+                </form>
             </div>
-        );
-    }
+        </div>
+    );
 
-    // Login Screen
-    if (!isLoggedIn) {
-        return (
-            <div style={styles.loginContainer}>
-                <div style={styles.loginCard}>
-                    <div style={styles.loginLogo}>NOORÉ</div>
-                    <p style={styles.loginSubtitle}>Admin Dashboard</p>
-                    <form onSubmit={handleLogin} style={styles.loginForm}>
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={e => setPassword(e.target.value)}
-                            placeholder="Enter admin password"
-                            style={styles.loginInput}
-                            autoFocus
-                        />
-                        {error && <p style={styles.loginError}>{error}</p>}
-                        <button type="submit" style={styles.loginBtn}>Login</button>
-                    </form>
-                </div>
-            </div>
-        );
-    }
-
-    // Dashboard
-    const stats = data?.stats || {};
+    const s = data?.stats || {};
     const orders = data?.orders || [];
     const visitors = data?.visitors || [];
-    const abandonedCarts = data?.abandonedCarts || [];
-    const analytics = data?.analytics || {};
+    const carts = data?.abandonedCarts || [];
+    const a = data?.analytics || {};
+    const trends = data?.trends || {};
 
     return (
-        <div style={styles.dashboard}>
-            {/* Header */}
-            <header style={styles.header}>
-                <div style={styles.headerLeft}>
-                    <h1 style={styles.headerTitle}>NOORÉ JEWELS</h1>
-                    <span style={styles.headerBadge}>Admin</span>
+        <div className="admin-root">
+            <div className="admin-layout">
+                {/* Sidebar */}
+                <aside className={`admin-sidebar ${sideOpen ? 'open' : ''}`}>
+                    <div className="admin-sidebar-logo">
+                        <h1>NOORÉ JEWELS</h1>
+                        <span>Admin Panel</span>
+                    </div>
+                    <nav className="admin-sidebar-nav">
+                        {TABS.map(t => (
+                            <button key={t.id} className={`admin-nav-item ${tab === t.id ? 'active' : ''}`}
+                                onClick={() => { setTab(t.id); setSideOpen(false); }}>
+                                <span className="admin-nav-icon">{t.icon}</span>{t.label}
+                            </button>
+                        ))}
+                    </nav>
+                    <div className="admin-sidebar-footer">
+                        <button className="admin-logout-btn" onClick={() => { localStorage.removeItem('nj_admin_token'); setLoggedIn(false); setData(null); }}>
+                            Sign Out
+                        </button>
+                    </div>
+                </aside>
+
+                {/* Main */}
+                <div className="admin-main">
+                    <div className="admin-topbar">
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                            <button className="admin-mobile-toggle" onClick={() => setSideOpen(!sideOpen)}>☰</button>
+                            <span className="admin-topbar-title">{TABS.find(t => t.id === tab)?.icon} {TABS.find(t => t.id === tab)?.label}</span>
+                        </div>
+                        <div className="admin-topbar-actions">
+                            <span style={{ fontSize: '0.68rem', color: '#52525b' }}>{new Date().toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                            <button className="admin-refresh-btn" onClick={() => load()} disabled={fetching}>{fetching ? '⏳' : '🔄'} Refresh</button>
+                        </div>
+                    </div>
+
+                    <div className="admin-content">
+                        {tab === 'overview' && <OverviewTab s={s} trends={trends} a={a} />}
+                        {tab === 'orders' && <OrdersTab orders={orders} s={s} />}
+                        {tab === 'analytics' && <AnalyticsTab a={a} s={s} trends={trends} />}
+                        {tab === 'visitors' && <VisitorsTab visitors={visitors} s={s} />}
+                        {tab === 'abandoned' && <AbandonedTab carts={carts} s={s} />}
+                        {tab === 'products' && <ProductsTab a={a} />}
+                    </div>
                 </div>
-                <div style={styles.headerRight}>
-                    <button onClick={() => loadData()} style={styles.refreshBtn} disabled={fetchingData}>
-                        {fetchingData ? '⏳' : '🔄'} Refresh
-                    </button>
-                    <button onClick={handleLogout} style={styles.logoutBtn}>Logout</button>
-                </div>
-            </header>
-
-            {/* Navigation Tabs */}
-            <nav style={styles.tabs}>
-                {['overview', 'orders', 'visitors', 'abandoned', 'analytics'].map(tab => (
-                    <button
-                        key={tab}
-                        onClick={() => setActiveTab(tab)}
-                        style={activeTab === tab ? { ...styles.tab, ...styles.tabActive } : styles.tab}
-                    >
-                        {tab === 'overview' && '📊 '}
-                        {tab === 'orders' && '📋 '}
-                        {tab === 'visitors' && '👥 '}
-                        {tab === 'abandoned' && '🛒 '}
-                        {tab === 'analytics' && '📈 '}
-                        {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                    </button>
-                ))}
-            </nav>
-
-            {/* Content */}
-            <main style={styles.content}>
-                {activeTab === 'overview' && <OverviewTab stats={stats} />}
-                {activeTab === 'orders' && <OrdersTab orders={orders} />}
-                {activeTab === 'visitors' && <VisitorsTab visitors={visitors} />}
-                {activeTab === 'abandoned' && <AbandonedTab carts={abandonedCarts} stats={stats} />}
-                {activeTab === 'analytics' && <AnalyticsTab analytics={analytics} stats={stats} />}
-            </main>
-        </div>
-    );
-}
-
-// ── OVERVIEW TAB ──
-function OverviewTab({ stats }) {
-    return (
-        <div>
-            <div style={styles.statsGrid}>
-                <StatCard icon="👥" label="Today's Visitors" value={stats.todayVisitors || 0} />
-                <StatCard icon="🛍️" label="Today's Orders" value={stats.todayOrders || 0} />
-                <StatCard icon="💰" label="Today's Revenue" value={`₹${(stats.todayRevenue || 0).toLocaleString('en-IN')}`} />
-                <StatCard icon="📦" label="Total Orders" value={stats.totalOrders || 0} />
-                <StatCard icon="💎" label="Total Revenue" value={`₹${(stats.totalRevenue || 0).toLocaleString('en-IN')}`} />
-                <StatCard icon="📅" label="This Month Revenue" value={`₹${(stats.monthRevenue || 0).toLocaleString('en-IN')}`} />
-                <StatCard icon="🛒" label="Abandoned Carts" value={stats.pendingAbandonedCarts || 0} color="#C0392B" />
-                <StatCard icon="💸" label="Lost Cart Value" value={`₹${(stats.abandonedCartValue || 0).toLocaleString('en-IN')}`} color="#C0392B" />
-                <StatCard icon="👤" label="Total Customers" value={stats.totalCustomers || 0} />
-                <StatCard icon="📝" label="Total Leads" value={stats.totalLeads || 0} />
             </div>
         </div>
     );
 }
 
-function StatCard({ icon, label, value, color }) {
-    return (
-        <div style={styles.statCard}>
-            <div style={styles.statIcon}>{icon}</div>
-            <div style={{ ...styles.statValue, color: color || '#1A1A1A' }}>{value}</div>
-            <div style={styles.statLabel}>{label}</div>
+// ── OVERVIEW ──
+function OverviewTab({ s, trends, a }) {
+    return (<>
+        <div className="admin-stats-row">
+            <StatCard icon="💰" label="Today's Revenue" value={formatINR(s.todayRevenue)} change={pctChange(s.todayRevenue, s.yesterdayRevenue)} accent="#22c55e" />
+            <StatCard icon="🛍️" label="Today's Orders" value={s.todayOrders || 0} change={pctChange(s.todayOrders, s.yesterdayOrders)} accent="#3b82f6" />
+            <StatCard icon="👥" label="Today's Visitors" value={s.todayVisitors || 0} accent="#a855f7" />
+            <StatCard icon="📈" label="Conversion Rate" value={`${s.conversionRate || 0}%`} accent="#eab308" />
         </div>
-    );
+        <div className="admin-stats-row">
+            <StatCard icon="📅" label="This Month" value={formatINR(s.monthRevenue)} change={pctChange(s.monthRevenue, s.lastMonthRevenue)} changeLabel="vs last month" accent="#C5A467" />
+            <StatCard icon="📊" label="Week Revenue" value={formatINR(s.weekRevenue)} accent="#3b82f6" />
+            <StatCard icon="🧾" label="Avg Order Value" value={formatINR(s.avgOrderValue)} accent="#22c55e" />
+            <StatCard icon="🛒" label="Abandoned Carts" value={s.pendingAbandonedCarts || 0} accent="#ef4444" />
+        </div>
+
+        {/* Revenue Chart */}
+        <div className="admin-charts-row">
+            <div className="admin-chart-card">
+                <div className="admin-chart-title">Revenue Trend</div>
+                <div className="admin-chart-subtitle">Last 30 days</div>
+                <MiniLineChart data={trends.dailyRevenue} color="#C5A467" height={180} />
+            </div>
+            <div className="admin-chart-card">
+                <div className="admin-chart-title">Devices</div>
+                <div className="admin-chart-subtitle">All-time breakdown</div>
+                <DonutChart items={a.devices || []} labelKey="device" valueKey="count" colors={['#C5A467', '#3b82f6', '#22c55e']} />
+            </div>
+        </div>
+
+        <div className="admin-charts-row">
+            <div className="admin-chart-card">
+                <div className="admin-chart-title">Daily Visitors</div>
+                <div className="admin-chart-subtitle">Last 30 days</div>
+                <MiniLineChart data={trends.dailyVisitors} color="#a855f7" height={140} />
+            </div>
+            <div className="admin-chart-card">
+                <div className="admin-chart-title">Top Cities</div>
+                <div className="admin-chart-subtitle">By visitor count</div>
+                <BarList items={a.topCities} labelKey="city" valueKey="count" color="#C5A467" maxItems={5} />
+            </div>
+        </div>
+
+        {/* Quick Stats */}
+        <div className="admin-stats-row">
+            <StatCard icon="💎" label="Total Revenue" value={formatINR(s.totalRevenue)} accent="#C5A467" />
+            <StatCard icon="📦" label="Total Orders" value={s.totalOrders || 0} accent="#3b82f6" />
+            <StatCard icon="👤" label="Customers" value={s.totalCustomers || 0} accent="#22c55e" />
+            <StatCard icon="📝" label="Leads" value={s.totalLeads || 0} accent="#a855f7" />
+            <StatCard icon="🔁" label="Recovered Carts" value={s.recoveredCarts || 0} accent="#22c55e" />
+        </div>
+    </>);
 }
 
-// ── ORDERS TAB ──
-function OrdersTab({ orders }) {
-    return (
-        <div>
-            <h2 style={styles.tabTitle}>Recent Orders ({orders.length})</h2>
-            <div style={styles.tableWrapper}>
-                <table style={styles.table}>
-                    <thead>
-                        <tr>
-                            <th style={styles.th}>Order ID</th>
-                            <th style={styles.th}>Customer</th>
-                            <th style={styles.th}>Items</th>
-                            <th style={styles.th}>Amount</th>
-                            <th style={styles.th}>City</th>
-                            <th style={styles.th}>Date</th>
-                            <th style={styles.th}>Status</th>
-                        </tr>
-                    </thead>
+// ── ORDERS ──
+function OrdersTab({ orders, s }) {
+    const [filter, setFilter] = useState('all');
+    const filtered = filter === 'all' ? orders : orders.filter(o => o.paymentStatus?.toLowerCase() === filter);
+    return (<>
+        <div className="admin-stats-row">
+            <StatCard icon="📦" label="Total Orders" value={s.totalOrders || 0} accent="#3b82f6" />
+            <StatCard icon="💰" label="Total Revenue" value={formatINR(s.totalRevenue)} accent="#22c55e" />
+            <StatCard icon="🧾" label="Avg Order" value={formatINR(s.avgOrderValue)} accent="#C5A467" />
+            <StatCard icon="📅" label="This Month" value={`${s.monthOrders || 0} orders`} accent="#a855f7" />
+        </div>
+        <div className="admin-table-card">
+            <div className="admin-table-header">
+                <span className="admin-table-title">All Orders</span>
+                <div style={{ display: 'flex', gap: 6 }}>
+                    {['all', 'paid', 'pending'].map(f => (
+                        <button key={f} onClick={() => setFilter(f)} style={{
+                            padding: '4px 12px', borderRadius: 6, border: '1px solid', fontSize: '0.68rem', cursor: 'pointer', fontFamily: 'inherit', textTransform: 'capitalize',
+                            background: filter === f ? 'rgba(197,164,103,0.15)' : 'transparent',
+                            borderColor: filter === f ? 'rgba(197,164,103,0.3)' : 'rgba(255,255,255,0.1)',
+                            color: filter === f ? '#C5A467' : '#71717a',
+                        }}>{f}</button>
+                    ))}
+                    <span className="admin-table-count">{filtered.length}</span>
+                </div>
+            </div>
+            <div className="admin-table-wrap">
+                <table className="admin-table">
+                    <thead><tr>
+                        <th>Order ID</th><th>Customer</th><th>Items</th><th>Amount</th><th>City</th><th>Date</th><th>Status</th>
+                    </tr></thead>
                     <tbody>
-                        {orders.map((o, i) => (
-                            <tr key={i} style={i % 2 === 0 ? styles.trEven : {}}>
-                                <td style={styles.td}><strong>{o.orderId}</strong></td>
-                                <td style={styles.td}>
-                                    <div>{o.name}</div>
-                                    <div style={{ fontSize: '0.7rem', color: '#9B9B9B' }}>{o.phone}</div>
-                                </td>
-                                <td style={styles.td}>
-                                    {o.items?.map((item, j) => (
-                                        <div key={j} style={{ fontSize: '0.75rem' }}>
-                                            {item.productName} ×{item.quantity}
-                                        </div>
-                                    ))}
-                                </td>
-                                <td style={styles.td}><strong>₹{o.totalAmount?.toLocaleString('en-IN')}</strong></td>
-                                <td style={styles.td}>{o.city}</td>
-                                <td style={styles.td}>{o.date ? new Date(o.date).toLocaleDateString('en-IN') : '-'}</td>
-                                <td style={styles.td}>
-                                    <span style={{
-                                        ...styles.statusBadge,
-                                        background: o.paymentStatus === 'Paid' ? '#D4EDDA' : '#FFF3CD',
-                                        color: o.paymentStatus === 'Paid' ? '#155724' : '#856404',
-                                    }}>{o.paymentStatus}</span>
-                                </td>
+                        {filtered.slice(0, 50).map((o, i) => (
+                            <tr key={i}>
+                                <td><strong style={{ color: '#C5A467' }}>{o.orderId}</strong></td>
+                                <td><div style={{ fontWeight: 500 }}>{o.name}</div><div style={{ fontSize: '0.7rem', color: '#52525b' }}>{o.phone}</div></td>
+                                <td>{o.items?.map((it, j) => <div key={j} style={{ fontSize: '0.75rem' }}>{it.productName} ×{it.quantity}</div>)}</td>
+                                <td><strong>{formatINR(o.totalAmount)}</strong></td>
+                                <td>{o.city || '–'}</td>
+                                <td style={{ whiteSpace: 'nowrap' }}>{o.date ? new Date(o.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }) : '–'}</td>
+                                <td><span className={`admin-badge ${o.paymentStatus === 'Paid' ? 'admin-badge-green' : 'admin-badge-yellow'}`}>{o.paymentStatus}</span></td>
+                            </tr>
+                        ))}
+                        {filtered.length === 0 && <tr><td colSpan={7} style={{ textAlign: 'center', color: '#52525b', padding: 40 }}>No orders found</td></tr>}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </>);
+}
+
+// ── ANALYTICS ──
+function AnalyticsTab({ a, s, trends }) {
+    return (<>
+        <div className="admin-charts-row">
+            <div className="admin-chart-card">
+                <div className="admin-chart-title">Daily Orders</div>
+                <div className="admin-chart-subtitle">Last 30 days</div>
+                <MiniLineChart data={trends.dailyOrders} color="#3b82f6" height={180} />
+            </div>
+            <div className="admin-chart-card">
+                <div className="admin-chart-title">Traffic Sources</div>
+                <div className="admin-chart-subtitle">Where visitors come from</div>
+                <DonutChart items={a.trafficSources || []} labelKey="source" valueKey="count" />
+            </div>
+        </div>
+        <div className="admin-grid-2">
+            <div className="admin-chart-card">
+                <div className="admin-chart-title">📍 Top Visitor Cities</div>
+                <BarList items={a.topCities} labelKey="city" valueKey="count" color="#C5A467" />
+            </div>
+            <div className="admin-chart-card">
+                <div className="admin-chart-title">📦 Top Order Cities</div>
+                <BarList items={a.orderCities} labelKey="city" valueKey="count" color="#22c55e" />
+            </div>
+        </div>
+        <div className="admin-grid-3">
+            <div className="admin-chart-card">
+                <div className="admin-chart-title">📄 Top Pages</div>
+                <BarList items={a.topPages} labelKey="page" valueKey="count" color="#a855f7" />
+            </div>
+            <div className="admin-chart-card">
+                <div className="admin-chart-title">🌐 Browsers</div>
+                <DonutChart items={a.browsers || []} labelKey="browser" valueKey="count" colors={['#3b82f6', '#22c55e', '#ef4444', '#eab308', '#a855f7']} />
+            </div>
+            <div className="admin-chart-card">
+                <div className="admin-chart-title">💻 Operating Systems</div>
+                <DonutChart items={a.osSplit || []} labelKey="os" valueKey="count" colors={['#C5A467', '#3b82f6', '#22c55e', '#ef4444', '#a855f7']} />
+            </div>
+        </div>
+        {a.couponUsage?.length > 0 && (
+            <div className="admin-chart-card" style={{ marginBottom: 24 }}>
+                <div className="admin-chart-title">🎫 Coupon Usage</div>
+                <BarList items={a.couponUsage} labelKey="code" valueKey="count" color="#eab308" />
+            </div>
+        )}
+    </>);
+}
+
+// ── VISITORS ──
+function VisitorsTab({ visitors, s }) {
+    return (<>
+        <div className="admin-stats-row">
+            <StatCard icon="👥" label="Total Visitors" value={s.totalVisitors || 0} accent="#a855f7" />
+            <StatCard icon="🌐" label="Unique Visitors" value={s.uniqueVisitors || 0} accent="#3b82f6" />
+            <StatCard icon="📱" label="Today" value={s.todayVisitors || 0} accent="#22c55e" />
+        </div>
+        <div className="admin-table-card">
+            <div className="admin-table-header">
+                <span className="admin-table-title">Recent Visitors</span>
+                <span className="admin-table-count">{visitors.length}</span>
+            </div>
+            <div className="admin-table-wrap">
+                <table className="admin-table">
+                    <thead><tr><th>Time</th><th>Name</th><th>Page</th><th>City</th><th>Device</th><th>Browser</th><th>Source</th></tr></thead>
+                    <tbody>
+                        {visitors.slice(0, 100).map((v, i) => (
+                            <tr key={i}>
+                                <td style={{ whiteSpace: 'nowrap', fontSize: '0.72rem', color: '#71717a' }}>{v.timestamp}</td>
+                                <td><span style={v.name === 'Guest' ? { color: '#52525b' } : { fontWeight: 500 }}>{v.name}</span></td>
+                                <td><span className="admin-badge admin-badge-blue">{v.page}</span></td>
+                                <td>{v.city || '–'}</td>
+                                <td>{v.device === 'Mobile' ? '📱' : '🖥️'} {v.device}</td>
+                                <td style={{ color: '#71717a' }}>{v.browser}</td>
+                                <td style={{ color: '#71717a', fontSize: '0.72rem' }}>{v.referrer || 'Direct'}</td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
         </div>
-    );
+    </>);
 }
 
-// ── VISITORS TAB ──
-function VisitorsTab({ visitors }) {
-    return (
-        <div>
-            <h2 style={styles.tabTitle}>Recent Visitors ({visitors.length})</h2>
-            <div style={styles.tableWrapper}>
-                <table style={styles.table}>
-                    <thead>
-                        <tr>
-                            <th style={styles.th}>Time</th>
-                            <th style={styles.th}>Name</th>
-                            <th style={styles.th}>Page</th>
-                            <th style={styles.th}>City</th>
-                            <th style={styles.th}>Device</th>
-                            <th style={styles.th}>Source</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {visitors.map((v, i) => (
-                            <tr key={i} style={i % 2 === 0 ? styles.trEven : {}}>
-                                <td style={styles.td}>{v.timestamp}</td>
-                                <td style={styles.td}>
-                                    <span style={v.name === 'Guest' ? { color: '#9B9B9B' } : { fontWeight: 500 }}>
-                                        {v.name}
-                                    </span>
-                                </td>
-                                <td style={styles.td}>{v.page}</td>
-                                <td style={styles.td}>{v.city}</td>
-                                <td style={styles.td}>
-                                    <span style={styles.deviceBadge}>
-                                        {v.device === 'Mobile' ? '📱' : v.device === 'Desktop' ? '🖥️' : '📱'} {v.device}
-                                    </span>
-                                </td>
-                                <td style={styles.td}>{v.referrer}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+// ── ABANDONED CARTS ──
+function AbandonedTab({ carts, s }) {
+    return (<>
+        <div className="admin-stats-row">
+            <StatCard icon="🛒" label="Pending Carts" value={s.pendingAbandonedCarts || 0} accent="#ef4444" />
+            <StatCard icon="💸" label="Lost Value" value={formatINR(s.abandonedCartValue)} accent="#ef4444" />
+            <StatCard icon="✅" label="Recovered" value={s.recoveredCarts || 0} accent="#22c55e" />
+            <StatCard icon="💰" label="Recovered Value" value={formatINR(s.recoveredCartValue)} accent="#22c55e" />
         </div>
-    );
-}
-
-// ── ABANDONED CARTS TAB ──
-function AbandonedTab({ carts, stats }) {
-    return (
-        <div>
-            <div style={{ display: 'flex', gap: 16, marginBottom: 24, flexWrap: 'wrap' }}>
-                <StatCard icon="🛒" label="Pending Carts" value={stats.pendingAbandonedCarts || 0} color="#C0392B" />
-                <StatCard icon="💸" label="Total Lost Value" value={`₹${(stats.abandonedCartValue || 0).toLocaleString('en-IN')}`} color="#C0392B" />
+        <div className="admin-table-card">
+            <div className="admin-table-header">
+                <span className="admin-table-title">Abandoned Carts</span>
+                <span className="admin-table-count">{carts.length} pending</span>
             </div>
-
-            <h2 style={styles.tabTitle}>Abandoned Carts</h2>
-            <div style={styles.tableWrapper}>
-                <table style={styles.table}>
-                    <thead>
-                        <tr>
-                            <th style={styles.th}>Customer</th>
-                            <th style={styles.th}>Items</th>
-                            <th style={styles.th}>Cart Value</th>
-                            <th style={styles.th}>When</th>
-                            <th style={styles.th}>Reminders</th>
-                            <th style={styles.th}>Action</th>
-                        </tr>
-                    </thead>
+            <div className="admin-table-wrap">
+                <table className="admin-table">
+                    <thead><tr><th>Customer</th><th>Items</th><th>Value</th><th>When</th><th>Reminders</th><th>Action</th></tr></thead>
                     <tbody>
                         {carts.length === 0 ? (
-                            <tr>
-                                <td colSpan={6} style={{ ...styles.td, textAlign: 'center', color: '#9B9B9B', padding: 40 }}>
-                                    No abandoned carts yet 🎉
-                                </td>
-                            </tr>
+                            <tr><td colSpan={6} style={{ textAlign: 'center', color: '#52525b', padding: 40 }}>No abandoned carts 🎉</td></tr>
                         ) : carts.map((c, i) => {
                             let items = [];
                             try { items = JSON.parse(c.items); } catch {}
                             return (
-                                <tr key={i} style={i % 2 === 0 ? styles.trEven : {}}>
-                                    <td style={styles.td}>
-                                        <div style={{ fontWeight: 500 }}>{c.name || 'Unknown'}</div>
-                                        <div style={{ fontSize: '0.7rem', color: '#9B9B9B' }}>{c.phone}</div>
-                                        {c.email && <div style={{ fontSize: '0.7rem', color: '#9B9B9B' }}>{c.email}</div>}
-                                    </td>
-                                    <td style={styles.td}>
-                                        {items.map((item, j) => (
-                                            <div key={j} style={{ fontSize: '0.75rem' }}>{item.name}</div>
-                                        ))}
-                                    </td>
-                                    <td style={styles.td}><strong>₹{c.cartValue?.toLocaleString('en-IN')}</strong></td>
-                                    <td style={styles.td}>{c.createdAt}</td>
-                                    <td style={styles.td}>{c.remindersSent}</td>
-                                    <td style={styles.td}>
-                                        <a
-                                            href={`https://wa.me/91${c.phone?.replace(/\D/g, '').slice(-10)}?text=Hi ${c.name || ''}! 💎 You left a beautiful ring in your cart at Noore Jewels. Complete your purchase now → noorejewels.in/shop`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            style={styles.waBtn}
-                                        >
-                                            💬 Send WhatsApp
+                                <tr key={i}>
+                                    <td><div style={{ fontWeight: 500 }}>{c.name || 'Unknown'}</div><div style={{ fontSize: '0.7rem', color: '#52525b' }}>{c.phone}</div>{c.email && <div style={{ fontSize: '0.7rem', color: '#52525b' }}>{c.email}</div>}</td>
+                                    <td>{items.map((it, j) => <div key={j} style={{ fontSize: '0.75rem' }}>{it.name}</div>)}</td>
+                                    <td><strong style={{ color: '#ef4444' }}>{formatINR(c.cartValue)}</strong></td>
+                                    <td style={{ fontSize: '0.75rem', color: '#71717a' }}>{c.createdAt}</td>
+                                    <td><span className="admin-badge admin-badge-yellow">{c.remindersSent}</span></td>
+                                    <td>
+                                        <a className="admin-wa-btn" target="_blank" rel="noopener noreferrer"
+                                            href={`https://wa.me/91${c.phone?.replace(/\D/g, '').slice(-10)}?text=Hi ${c.name || ''}! 💎 You left something beautiful in your cart at Noore Jewels. Complete your purchase → noorejewels.in/shop`}>
+                                            💬 WhatsApp
                                         </a>
                                     </td>
                                 </tr>
@@ -358,145 +362,39 @@ function AbandonedTab({ carts, stats }) {
                 </table>
             </div>
         </div>
-    );
+    </>);
 }
 
-// ── ANALYTICS TAB ──
-function AnalyticsTab({ analytics, stats }) {
-    return (
-        <div>
-            <div style={styles.analyticsGrid}>
-                {/* Traffic Sources */}
-                <div style={styles.analyticsCard}>
-                    <h3 style={styles.analyticsTitle}>🌐 Traffic Sources</h3>
-                    {analytics.trafficSources?.map((s, i) => (
-                        <div key={i} style={styles.barRow}>
-                            <span style={styles.barLabel}>{s.source}</span>
-                            <div style={styles.barTrack}>
-                                <div style={{
-                                    ...styles.barFill,
-                                    width: `${Math.min(100, (s.count / (analytics.trafficSources[0]?.count || 1)) * 100)}%`
-                                }}></div>
-                            </div>
-                            <span style={styles.barValue}>{s.count}</span>
-                        </div>
-                    ))}
-                </div>
-
-                {/* Top Cities */}
-                <div style={styles.analyticsCard}>
-                    <h3 style={styles.analyticsTitle}>📍 Top Cities</h3>
-                    {analytics.topCities?.map((c, i) => (
-                        <div key={i} style={styles.barRow}>
-                            <span style={styles.barLabel}>{c.city}</span>
-                            <div style={styles.barTrack}>
-                                <div style={{
-                                    ...styles.barFill,
-                                    width: `${Math.min(100, (c.count / (analytics.topCities[0]?.count || 1)) * 100)}%`,
-                                    background: '#C5A467',
-                                }}></div>
-                            </div>
-                            <span style={styles.barValue}>{c.count}</span>
-                        </div>
-                    ))}
-                </div>
-
-                {/* Device Breakdown */}
-                <div style={styles.analyticsCard}>
-                    <h3 style={styles.analyticsTitle}>📱 Devices</h3>
-                    {analytics.devices?.map((d, i) => (
-                        <div key={i} style={styles.barRow}>
-                            <span style={styles.barLabel}>
-                                {d.device === 'Mobile' ? '📱' : d.device === 'Desktop' ? '🖥️' : '📱'} {d.device}
-                            </span>
-                            <div style={styles.barTrack}>
-                                <div style={{
-                                    ...styles.barFill,
-                                    width: `${Math.min(100, (d.count / (analytics.devices[0]?.count || 1)) * 100)}%`,
-                                    background: '#4A7C59',
-                                }}></div>
-                            </div>
-                            <span style={styles.barValue}>{d.count}</span>
-                        </div>
-                    ))}
-                </div>
-
-                {/* Top Pages */}
-                <div style={styles.analyticsCard}>
-                    <h3 style={styles.analyticsTitle}>📄 Top Pages</h3>
-                    {analytics.topPages?.map((p, i) => (
-                        <div key={i} style={styles.barRow}>
-                            <span style={styles.barLabel}>{p.page}</span>
-                            <div style={styles.barTrack}>
-                                <div style={{
-                                    ...styles.barFill,
-                                    width: `${Math.min(100, (p.count / (analytics.topPages[0]?.count || 1)) * 100)}%`,
-                                    background: '#B76E79',
-                                }}></div>
-                            </div>
-                            <span style={styles.barValue}>{p.count}</span>
-                        </div>
-                    ))}
-                </div>
+// ── TOP PRODUCTS ──
+function ProductsTab({ a }) {
+    const products = a.topProducts || [];
+    return (<>
+        <div className="admin-chart-card" style={{ marginBottom: 24 }}>
+            <div className="admin-chart-title">🏆 Top Products by Revenue</div>
+            <div className="admin-chart-subtitle">Best performing products</div>
+            <BarList items={products.map(p => ({ name: p.name, revenue: p.revenue }))} labelKey="name" valueKey="revenue" color="#C5A467" maxItems={10} />
+        </div>
+        <div className="admin-table-card">
+            <div className="admin-table-header">
+                <span className="admin-table-title">Product Performance</span>
+                <span className="admin-table-count">{products.length} products</span>
+            </div>
+            <div className="admin-table-wrap">
+                <table className="admin-table">
+                    <thead><tr><th>#</th><th>Product</th><th>Qty Sold</th><th>Revenue</th></tr></thead>
+                    <tbody>
+                        {products.map((p, i) => (
+                            <tr key={i}>
+                                <td style={{ color: '#52525b' }}>{i + 1}</td>
+                                <td style={{ fontWeight: 500 }}>{p.name}</td>
+                                <td>{p.qty}</td>
+                                <td><strong style={{ color: '#22c55e' }}>{formatINR(p.revenue)}</strong></td>
+                            </tr>
+                        ))}
+                        {products.length === 0 && <tr><td colSpan={4} style={{ textAlign: 'center', color: '#52525b', padding: 40 }}>No product data yet</td></tr>}
+                    </tbody>
+                </table>
             </div>
         </div>
-    );
+    </>);
 }
-
-// ── STYLES ──
-const styles = {
-    loadingScreen: { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', background: '#F7F3ED' },
-    spinner: { width: 32, height: 32, border: '3px solid #E8E2D8', borderTopColor: '#C5A467', borderRadius: '50%', animation: 'spin 0.8s linear infinite' },
-
-    loginContainer: { display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', background: 'linear-gradient(135deg, #1A1A1A 0%, #2D2D2D 100%)' },
-    loginCard: { background: '#fff', padding: '48px 40px', maxWidth: 380, width: '90%', textAlign: 'center' },
-    loginLogo: { fontFamily: 'Georgia, serif', fontSize: '2rem', fontWeight: 400, letterSpacing: '0.15em', color: '#1A1A1A', marginBottom: 4 },
-    loginSubtitle: { fontSize: '0.75rem', color: '#9B9B9B', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 32 },
-    loginForm: { display: 'flex', flexDirection: 'column', gap: 12 },
-    loginInput: { padding: '14px 16px', border: '1px solid #E8E2D8', fontSize: '0.85rem', fontFamily: 'inherit', outline: 'none', textAlign: 'center' },
-    loginError: { fontSize: '0.78rem', color: '#C0392B' },
-    loginBtn: { padding: '14px', background: '#C5A467', color: '#fff', border: 'none', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', cursor: 'pointer', fontFamily: 'inherit' },
-
-    dashboard: { minHeight: '100vh', background: '#F7F3ED', fontFamily: "'Helvetica Neue', Arial, sans-serif" },
-    header: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 24px', background: '#1A1A1A', color: '#fff', flexWrap: 'wrap', gap: 12 },
-    headerLeft: { display: 'flex', alignItems: 'center', gap: 12 },
-    headerTitle: { fontFamily: 'Georgia, serif', fontSize: '1.2rem', fontWeight: 400, letterSpacing: '0.12em' },
-    headerBadge: { fontSize: '0.6rem', background: '#C5A467', color: '#fff', padding: '3px 10px', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 600 },
-    headerRight: { display: 'flex', gap: 8 },
-    refreshBtn: { padding: '8px 16px', background: 'rgba(255,255,255,0.1)', color: '#fff', border: '1px solid rgba(255,255,255,0.2)', fontSize: '0.72rem', cursor: 'pointer', fontFamily: 'inherit' },
-    logoutBtn: { padding: '8px 16px', background: 'transparent', color: '#9B9B9B', border: '1px solid #555', fontSize: '0.72rem', cursor: 'pointer', fontFamily: 'inherit' },
-
-    tabs: { display: 'flex', gap: 0, borderBottom: '1px solid #E8E2D8', background: '#fff', overflowX: 'auto', padding: '0 16px' },
-    tab: { padding: '14px 20px', fontSize: '0.72rem', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6B6B6B', cursor: 'pointer', border: 'none', background: 'none', borderBottom: '2px solid transparent', whiteSpace: 'nowrap', fontFamily: 'inherit' },
-    tabActive: { color: '#C5A467', borderBottomColor: '#C5A467' },
-
-    content: { padding: '24px', maxWidth: 1400, margin: '0 auto' },
-
-    statsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 16, marginBottom: 24 },
-    statCard: { background: '#fff', padding: '20px 16px', textAlign: 'center', border: '1px solid #E8E2D8' },
-    statIcon: { fontSize: '1.5rem', marginBottom: 8 },
-    statValue: { fontSize: '1.5rem', fontWeight: 600, color: '#1A1A1A', marginBottom: 4 },
-    statLabel: { fontSize: '0.68rem', color: '#9B9B9B', letterSpacing: '0.05em', textTransform: 'uppercase' },
-
-    tabTitle: { fontFamily: 'Georgia, serif', fontSize: '1.2rem', fontWeight: 400, marginBottom: 16, color: '#1A1A1A' },
-
-    tableWrapper: { overflowX: 'auto', background: '#fff', border: '1px solid #E8E2D8' },
-    table: { width: '100%', borderCollapse: 'collapse', fontSize: '0.8rem' },
-    th: { textAlign: 'left', padding: '12px 16px', fontSize: '0.68rem', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6B6B6B', borderBottom: '2px solid #E8E2D8', whiteSpace: 'nowrap' },
-    td: { padding: '10px 16px', borderBottom: '1px solid #F0ECE4', verticalAlign: 'top' },
-    trEven: { background: '#FDFBF7' },
-
-    statusBadge: { display: 'inline-block', padding: '3px 10px', fontSize: '0.65rem', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' },
-    deviceBadge: { fontSize: '0.75rem' },
-
-    waBtn: { display: 'inline-block', padding: '6px 12px', background: '#25D366', color: '#fff', fontSize: '0.68rem', fontWeight: 600, textDecoration: 'none', whiteSpace: 'nowrap' },
-
-    analyticsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 20 },
-    analyticsCard: { background: '#fff', padding: '20px', border: '1px solid #E8E2D8' },
-    analyticsTitle: { fontFamily: 'Georgia, serif', fontSize: '1rem', fontWeight: 400, marginBottom: 16, color: '#1A1A1A' },
-    barRow: { display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 },
-    barLabel: { fontSize: '0.75rem', color: '#6B6B6B', minWidth: 80, flexShrink: 0 },
-    barTrack: { flex: 1, height: 8, background: '#F0ECE4', borderRadius: 4, overflow: 'hidden' },
-    barFill: { height: '100%', background: '#1A1A1A', borderRadius: 4, transition: 'width 0.5s ease' },
-    barValue: { fontSize: '0.75rem', fontWeight: 600, color: '#1A1A1A', minWidth: 30, textAlign: 'right' },
-};

@@ -1,0 +1,211 @@
+/* ── ADMIN DASHBOARD — PREMIUM DESIGN ── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+.admin-root {
+  min-height: 100vh;
+  background: #0f1117;
+  font-family: 'Inter', -apple-system, sans-serif;
+  color: #e4e4e7;
+}
+
+/* ── LOGIN ── */
+.admin-login-wrap {
+  display: flex; align-items: center; justify-content: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #0f1117 0%, #1a1b23 50%, #0f1117 100%);
+}
+.admin-login-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(20px);
+  padding: 48px 40px; width: 90%; max-width: 400px;
+  border-radius: 16px; text-align: center;
+}
+.admin-login-logo { font-size: 1.8rem; font-weight: 300; letter-spacing: 0.2em; color: #C5A467; margin-bottom: 4px; }
+.admin-login-sub { font-size: 0.7rem; color: #71717a; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 32px; }
+.admin-login-input {
+  width: 100%; padding: 14px 16px; background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;
+  color: #e4e4e7; font-size: 0.85rem; outline: none; text-align: center;
+  margin-bottom: 12px; font-family: inherit;
+}
+.admin-login-input:focus { border-color: #C5A467; }
+.admin-login-btn {
+  width: 100%; padding: 14px; background: linear-gradient(135deg, #C5A467, #A8884A);
+  color: #fff; border: none; border-radius: 8px; font-size: 0.75rem;
+  font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+  cursor: pointer; font-family: inherit; transition: all 0.3s;
+}
+.admin-login-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(197,164,103,0.3); }
+.admin-login-err { color: #ef4444; font-size: 0.78rem; margin-bottom: 8px; }
+
+/* ── SIDEBAR ── */
+.admin-layout { display: flex; min-height: 100vh; }
+.admin-sidebar {
+  width: 240px; background: #16171f; border-right: 1px solid rgba(255,255,255,0.06);
+  display: flex; flex-direction: column; position: fixed; top: 0; left: 0;
+  height: 100vh; z-index: 50; transition: transform 0.3s;
+}
+.admin-sidebar-logo {
+  padding: 24px 20px; border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.admin-sidebar-logo h1 { font-size: 1.1rem; font-weight: 300; letter-spacing: 0.15em; color: #C5A467; margin: 0; }
+.admin-sidebar-logo span { font-size: 0.6rem; color: #52525b; letter-spacing: 0.12em; text-transform: uppercase; }
+.admin-sidebar-nav { flex: 1; padding: 12px 8px; display: flex; flex-direction: column; gap: 2px; overflow-y: auto; }
+.admin-nav-item {
+  display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+  border-radius: 8px; font-size: 0.8rem; font-weight: 400; color: #a1a1aa;
+  cursor: pointer; border: none; background: none; width: 100%;
+  text-align: left; font-family: inherit; transition: all 0.2s;
+}
+.admin-nav-item:hover { background: rgba(255,255,255,0.04); color: #e4e4e7; }
+.admin-nav-item.active { background: rgba(197,164,103,0.12); color: #C5A467; font-weight: 500; }
+.admin-nav-icon { font-size: 1.1rem; width: 24px; text-align: center; }
+.admin-sidebar-footer { padding: 16px; border-top: 1px solid rgba(255,255,255,0.06); }
+.admin-logout-btn {
+  width: 100%; padding: 10px; background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.2); border-radius: 8px;
+  color: #ef4444; font-size: 0.72rem; font-weight: 500; cursor: pointer;
+  font-family: inherit; letter-spacing: 0.05em; transition: all 0.2s;
+}
+.admin-logout-btn:hover { background: rgba(239,68,68,0.2); }
+
+/* ── MAIN ── */
+.admin-main { flex: 1; margin-left: 240px; }
+.admin-topbar {
+  position: sticky; top: 0; z-index: 40;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 28px; background: rgba(15,17,23,0.85);
+  backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.admin-topbar-title { font-size: 1.15rem; font-weight: 600; color: #e4e4e7; }
+.admin-topbar-actions { display: flex; gap: 8px; align-items: center; }
+.admin-refresh-btn {
+  padding: 8px 16px; background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;
+  color: #a1a1aa; font-size: 0.72rem; cursor: pointer;
+  font-family: inherit; transition: all 0.2s;
+}
+.admin-refresh-btn:hover { background: rgba(255,255,255,0.1); color: #e4e4e7; }
+.admin-content { padding: 24px 28px; max-width: 1600px; }
+
+/* ── STAT CARDS ── */
+.admin-stats-row {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px; margin-bottom: 24px;
+}
+.admin-stat-card {
+  background: #16171f; border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px; padding: 20px; position: relative; overflow: hidden;
+}
+.admin-stat-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent, #C5A467), transparent);
+  opacity: 0.5;
+}
+.admin-stat-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.admin-stat-label { font-size: 0.72rem; color: #71717a; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500; }
+.admin-stat-icon { font-size: 1.3rem; opacity: 0.7; }
+.admin-stat-value { font-size: 1.8rem; font-weight: 700; color: #fafafa; margin-bottom: 4px; line-height: 1; }
+.admin-stat-change { font-size: 0.7rem; font-weight: 500; }
+.admin-stat-change.up { color: #22c55e; }
+.admin-stat-change.down { color: #ef4444; }
+.admin-stat-change.neutral { color: #71717a; }
+
+/* ── CHART CARDS ── */
+.admin-charts-row { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 24px; }
+.admin-chart-card {
+  background: #16171f; border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px; padding: 20px; overflow: hidden;
+}
+.admin-chart-title { font-size: 0.85rem; font-weight: 600; color: #e4e4e7; margin-bottom: 4px; }
+.admin-chart-subtitle { font-size: 0.7rem; color: #71717a; margin-bottom: 16px; }
+
+/* ── SVG CHART ── */
+.admin-svg-chart { width: 100%; overflow: visible; }
+
+/* ── BAR CHARTS ── */
+.admin-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.admin-bar-label { font-size: 0.75rem; color: #a1a1aa; min-width: 90px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.admin-bar-track { flex: 1; height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; }
+.admin-bar-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
+.admin-bar-val { font-size: 0.75rem; font-weight: 600; color: #e4e4e7; min-width: 35px; text-align: right; }
+
+/* ── DONUT CHART ── */
+.admin-donut-wrap { display: flex; align-items: center; gap: 20px; }
+.admin-donut-legend { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.admin-donut-legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: #a1a1aa; }
+.admin-donut-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+/* ── TABLES ── */
+.admin-table-card {
+  background: #16171f; border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px; overflow: hidden; margin-bottom: 24px;
+}
+.admin-table-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.admin-table-title { font-size: 0.9rem; font-weight: 600; color: #e4e4e7; }
+.admin-table-count { font-size: 0.7rem; color: #71717a; background: rgba(255,255,255,0.06); padding: 3px 10px; border-radius: 10px; }
+.admin-table-wrap { overflow-x: auto; }
+.admin-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+.admin-table th {
+  text-align: left; padding: 10px 16px; font-size: 0.68rem; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase; color: #52525b;
+  border-bottom: 1px solid rgba(255,255,255,0.06); white-space: nowrap;
+}
+.admin-table td { padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: top; }
+.admin-table tr:hover { background: rgba(255,255,255,0.02); }
+
+/* ── BADGES ── */
+.admin-badge {
+  display: inline-block; padding: 3px 10px; font-size: 0.65rem;
+  font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+  border-radius: 4px;
+}
+.admin-badge-green { background: rgba(34,197,94,0.15); color: #22c55e; }
+.admin-badge-yellow { background: rgba(234,179,8,0.15); color: #eab308; }
+.admin-badge-red { background: rgba(239,68,68,0.15); color: #ef4444; }
+.admin-badge-blue { background: rgba(59,130,246,0.15); color: #3b82f6; }
+
+.admin-wa-btn {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 6px 14px; background: rgba(37,211,102,0.15);
+  border: 1px solid rgba(37,211,102,0.3); border-radius: 6px;
+  color: #25D366; font-size: 0.7rem; font-weight: 600;
+  text-decoration: none; transition: all 0.2s; white-space: nowrap;
+}
+.admin-wa-btn:hover { background: rgba(37,211,102,0.25); }
+
+/* ── GRID LAYOUTS ── */
+.admin-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+.admin-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+.admin-grid-full { margin-bottom: 24px; }
+
+/* ── LOADING ── */
+.admin-loading { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: #0f1117; }
+.admin-spinner { width: 32px; height: 32px; border: 3px solid rgba(255,255,255,0.1); border-top-color: #C5A467; border-radius: 50%; animation: adminspin 0.7s linear infinite; }
+@keyframes adminspin { to { transform: rotate(360deg); } }
+
+/* ── MOBILE MENU ── */
+.admin-mobile-toggle {
+  display: none; padding: 8px; background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;
+  color: #a1a1aa; font-size: 1.2rem; cursor: pointer;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .admin-sidebar { transform: translateX(-100%); }
+  .admin-sidebar.open { transform: translateX(0); }
+  .admin-main { margin-left: 0; }
+  .admin-mobile-toggle { display: block; }
+  .admin-stats-row { grid-template-columns: repeat(2, 1fr); }
+  .admin-charts-row { grid-template-columns: 1fr; }
+  .admin-grid-2, .admin-grid-3 { grid-template-columns: 1fr; }
+  .admin-content { padding: 16px; }
+}
+@media (max-width: 500px) {
+  .admin-stats-row { grid-template-columns: 1fr; }
+}
