@@ -94,12 +94,12 @@ function ContactPage() {
                                     <span style={{ fontSize: '1.3rem', marginTop: '2px' }}>💬</span>
                                     <div>
                                         <div style={{ fontWeight: 500, color: 'var(--color-text)', marginBottom: '4px', fontSize: '0.9rem' }}>WhatsApp</div>
-                                        <a href="https://wa.me/919217945235" target="_blank" rel="noopener noreferrer" style={{
+                                        <a href="https://wa.me/918076735450" target="_blank" rel="noopener noreferrer" style={{
                                             color: 'var(--color-accent, #C5A467)',
                                             textDecoration: 'none',
                                             fontSize: '0.88rem',
                                             fontWeight: 400,
-                                        }}>+91 92179 45235</a>
+                                        }}>+91 80767 35450</a>
                                     </div>
                                 </div>
 
@@ -136,7 +136,7 @@ function ContactPage() {
                                         fontSize: '0.85rem',
                                         transition: 'color 0.3s',
                                     }}>Instagram</a>
-                                    <a href="https://wa.me/919217945235" target="_blank" rel="noopener noreferrer" style={{
+                                    <a href="https://wa.me/918076735450" target="_blank" rel="noopener noreferrer" style={{
                                         color: 'var(--color-text-light)',
                                         textDecoration: 'none',
                                         fontSize: '0.85rem',

@@ -266,7 +266,7 @@ function PrivacyPolicyContent() {
                                 Email Us
                             </a>
                             <a
-                                href="https://wa.me/919217945235?text=Hi! I have a question about my data privacy"
+                                href="https://wa.me/918076735450?text=Hi! I have a question about my data privacy"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="btn btn-outline"

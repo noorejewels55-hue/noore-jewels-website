@@ -233,7 +233,7 @@ function CheckoutContent() {
                     <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
                         <Link href="/shop" className="btn btn-primary">Continue Shopping</Link>
                         <a
-                            href={`https://wa.me/919217945235?text=Hi! I just placed order ${orderId}. Can you confirm?`}
+                            href={`https://wa.me/918076735450?text=Hi! I just placed order ${orderId}. Can you confirm?`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="btn btn-outline"

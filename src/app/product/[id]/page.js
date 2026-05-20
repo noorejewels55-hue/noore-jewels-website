@@ -1014,7 +1014,7 @@ function ProductDetail({ params }) {
 
                             {/* WhatsApp */}
                             <a
-                                href={`https://wa.me/919217945235?text=Hi! I'm interested in ${product.name} (${product.id})`}
+                                href={`https://wa.me/918076735450?text=Hi! I'm interested in ${product.name} (${product.id})`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 style={{

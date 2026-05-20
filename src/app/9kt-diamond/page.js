@@ -336,7 +336,7 @@ function DiamondPageContent() {
                             </p>
                             <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
                                 <a
-                                    href="https://wa.me/919217945235?text=Hi! I'm interested in the 9KT Gold Diamond jewellery collection"
+                                    href="https://wa.me/918076735450?text=Hi! I'm interested in the 9KT Gold Diamond jewellery collection"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="btn btn-primary"
@@ -497,7 +497,7 @@ function DiamondPageContent() {
                     </p>
                     <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
                         <a
-                            href="https://wa.me/919217945235?text=Hi! I'm interested in the 9KT Gold Diamond jewellery collection"
+                            href="https://wa.me/918076735450?text=Hi! I'm interested in the 9KT Gold Diamond jewellery collection"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="btn btn-gold btn-lg"
@@ -517,7 +517,7 @@ function DiamondPageContent() {
 
             {/* WhatsApp floating button */}
             <a
-                href="https://wa.me/919217945235"
+                href="https://wa.me/918076735450"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="whatsapp-float"

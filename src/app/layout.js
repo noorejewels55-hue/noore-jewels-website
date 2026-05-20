@@ -74,7 +74,7 @@ const jsonLd = {
       "contactPoint": {
         "@type": "ContactPoint",
         "contactType": "customer service",
-        "telephone": "+91-9217945235",
+        "telephone": "+91-8076735450",
         "email": "noore.jewels55@gmail.com",
         "availableLanguage": ["English", "Hindi"]
       },

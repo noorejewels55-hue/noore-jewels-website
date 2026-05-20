@@ -113,7 +113,7 @@ export async function POST(request) {
                         <h2 style="color: #2C2420; font-size: 18px;">Thank you, ${name.trim()}!</h2>
                         <p style="color: #555; line-height: 1.8;">We've received your message and will get back to you within 24 hours.</p>
                         <p style="color: #555; line-height: 1.8;">For faster support, feel free to chat with us on WhatsApp:</p>
-                        <a href="https://wa.me/919217945235" style="display: inline-block; padding: 12px 24px; background: #25D366; color: #fff; text-decoration: none; border-radius: 6px; font-weight: 600; margin-top: 12px;">💬 Chat on WhatsApp</a>
+                        <a href="https://wa.me/918076735450" style="display: inline-block; padding: 12px 24px; background: #25D366; color: #fff; text-decoration: none; border-radius: 6px; font-weight: 600; margin-top: 12px;">💬 Chat on WhatsApp</a>
                     </div>
                     
                     <div style="text-align: center; padding-top: 16px; border-top: 1px solid #E8E0D4;">

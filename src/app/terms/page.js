@@ -325,7 +325,7 @@ function TermsContent() {
                                 Email Us
                             </a>
                             <a
-                                href="https://wa.me/919217945235?text=Hi! I have a question about your terms"
+                                href="https://wa.me/918076735450?text=Hi! I have a question about your terms"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="btn btn-outline"

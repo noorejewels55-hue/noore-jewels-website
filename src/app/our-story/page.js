@@ -337,7 +337,7 @@ function StoryContent() {
                             Explore Collection
                         </Link>
                         <a
-                            href="https://wa.me/919217945235?text=Hi Kriti! I have a question about Noore Jewels"
+                            href="https://wa.me/918076735450?text=Hi Kriti! I have a question about Noore Jewels"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="btn btn-outline btn-lg"

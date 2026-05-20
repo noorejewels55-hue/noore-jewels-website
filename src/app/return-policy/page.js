@@ -287,7 +287,7 @@ function ReturnPolicyContent() {
                         </p>
                         <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
                             <a
-                                href="https://wa.me/919217945235?text=Hi! I have a query about returns/warranty"
+                                href="https://wa.me/918076735450?text=Hi! I have a query about returns/warranty"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="btn btn-gold"

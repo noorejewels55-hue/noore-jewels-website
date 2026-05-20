@@ -332,7 +332,7 @@ function CustomizePageContent() {
                             {result.success && (
                                 <div style={{ marginTop: '12px' }}>
                                     <a
-                                        href="https://wa.me/919217945235?text=Hi! I just submitted a customization request on your website"
+                                        href="https://wa.me/918076735450?text=Hi! I just submitted a customization request on your website"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="btn btn-primary btn-sm"
@@ -846,7 +846,7 @@ function CustomizePageContent() {
                     </p>
                     <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
                         <a
-                            href="https://wa.me/919217945235?text=Hi! I'd like to customize a jewellery piece"
+                            href="https://wa.me/918076735450?text=Hi! I'd like to customize a jewellery piece"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="btn btn-gold btn-lg"
@@ -866,7 +866,7 @@ function CustomizePageContent() {
 
             {/* WhatsApp floating button */}
             <a
-                href="https://wa.me/919217945235"
+                href="https://wa.me/918076735450"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="whatsapp-float"

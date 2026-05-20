@@ -265,7 +265,7 @@ function HomePage() {
                   Start Designing
                 </Link>
                 <a
-                  href="https://wa.me/919217945235?text=Hi! I want to customize a diamond ring"
+                  href="https://wa.me/918076735450?text=Hi! I want to customize a diamond ring"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn btn-outline btn-lg"
@@ -322,7 +322,7 @@ function HomePage() {
                   View Diamonds
                 </Link>
                 <a
-                  href="https://wa.me/919217945235?text=Hi! I want to buy a loose lab grown diamond"
+                  href="https://wa.me/918076735450?text=Hi! I want to buy a loose lab grown diamond"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn btn-outline"
@@ -398,7 +398,7 @@ function HomePage() {
             Chat with our WhatsApp assistant for personalised diamond jewellery recommendations, customization enquiries, and instant support.
           </p>
           <a
-            href="https://wa.me/919217945235?text=Hi! I'm looking for a lab grown diamond ring"
+            href="https://wa.me/918076735450?text=Hi! I'm looking for a lab grown diamond ring"
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-primary btn-lg"
@@ -411,7 +411,7 @@ function HomePage() {
 
       {/* ── WHATSAPP FLOATING BUTTON ── */}
       <a
-        href="https://wa.me/919217945235"
+        href="https://wa.me/918076735450"
         target="_blank"
         rel="noopener noreferrer"
         className="whatsapp-float"
