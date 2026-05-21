@@ -19,12 +19,14 @@ export function middleware(request) {
     // Content Security Policy
     response.headers.set('Content-Security-Policy',
         "default-src 'self'; " +
-        "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.razorpay.com https://api.razorpay.com; " +
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://checkout.razorpay.com https://api.razorpay.com; " +
         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
         "font-src 'self' https://fonts.gstatic.com; " +
         "img-src 'self' data: blob: https://lh3.googleusercontent.com https://*.googleusercontent.com https://res.cloudinary.com; " +
         "connect-src 'self' https://api.razorpay.com https://lumberjack-cx.razorpay.com; " +
         "frame-src https://api.razorpay.com https://checkout.razorpay.com; " +
+        "worker-src 'self' blob:; " +
+        "child-src blob:; " +
         "object-src 'none'; " +
         "base-uri 'self';"
     );
