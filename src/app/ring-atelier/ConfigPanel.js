@@ -8,7 +8,8 @@ const STYLES = [
     { id: 'Pavé Band', name: 'Pavé Band', icon: '💎', desc: 'Diamonds set along the band' },
     { id: 'Cathedral', name: 'Cathedral', icon: '⛪', desc: 'Arched band rising to stone' },
     { id: 'Three-Stone', name: 'Three-Stone', icon: '🌟', desc: 'Past, present, and future stones' },
-    { id: 'Twisted Band', name: 'Twisted Band', icon: '➰', desc: 'Intertwined dynamic bands' }
+    { id: 'Twisted Band', name: 'Twisted Band', icon: '➰', desc: 'Intertwined dynamic bands' },
+    { id: 'Two-Row Split', name: 'Split Shank', icon: '🔀', desc: 'Two elegant split shoulder bands' }
 ];
 
 const METALS = [
@@ -21,7 +22,21 @@ const METALS = [
     { id: '18KT Rose Gold', name: '18K Rose Gold', swatch: '#E8BFB5' },
     { id: '14KT Rose Gold', name: '14K Rose Gold', swatch: '#E2B2A7' },
     { id: '9KT Rose Gold', name: '9K Rose Gold', swatch: '#D99F94' },
+    { id: 'Platinum', name: 'Platinum (950)', swatch: '#E5E7EB' },
     { id: '925 Silver', name: '925 Silver', swatch: '#D5D5D5' }
+];
+
+const SIDE_SETTINGS = [
+    { id: 'Plain', name: 'Plain Band', icon: '➖', desc: 'Sleek solid precious metal band' },
+    { id: 'Prong', name: 'Pavé Prong', icon: '💎', desc: 'Diamonds set with premium micro-prongs' },
+    { id: 'Channel', name: 'Pavé Channel', icon: '🛑', desc: 'Diamonds enclosed between polished metal rails' }
+];
+
+const CROWN_SETTINGS = [
+    { id: 'Solitaire Prong', name: 'Prong Setting', icon: '📌', desc: 'Traditional 4-prong secure basket' },
+    { id: 'Single Halo', name: 'Single Halo', icon: '😇', desc: 'Brilliant circle of shimmering accents' },
+    { id: 'Double Halo', name: 'Double Halo', icon: '🌀', desc: 'Two rows of concentric diamond fire' },
+    { id: 'Bezel', name: 'Bezel Setting', icon: '🛡️', desc: 'Solid protective metal collar' }
 ];
 
 const SHAPES = [
@@ -47,6 +62,8 @@ export default function ConfigPanel({
     stoneSize, setStoneSize,
     ringSize, setRingSize,
     engraving, setEngraving,
+    sideSetting, setSideSetting,
+    crownSetting, setCrownSetting,
     pricingData,
     loadingPricing
 }) {
@@ -60,38 +77,66 @@ export default function ConfigPanel({
         const { pricing, diamondPricing } = pricingData;
         if (!pricing || !diamondPricing) return { total: 0 };
 
-        // 1. Calculate Estimated Gold Weight (g) based on style and ring size
+        // 1. Calculate Estimated Gold/Metal Weight (g) based on style, settings and ring size
         let baseWeight = 3.5; // Classic Solitaire weight
         if (style === 'Halo') baseWeight = 4.2;
         if (style === 'Pavé Band') baseWeight = 3.8;
         if (style === 'Twisted Band') baseWeight = 4.0;
         if (style === 'Cathedral') baseWeight = 3.9;
         if (style === 'Three-Stone') baseWeight = 4.1;
+        if (style === 'Two-Row Split') baseWeight = 4.4;
 
-        // Larger ring size = more gold weight
+        // Extra weight for premium settings
+        let crownWeightAdd = 0;
+        if (crownSetting === 'Single Halo') crownWeightAdd = 0.5;
+        if (crownSetting === 'Double Halo') crownWeightAdd = 0.95;
+        if (crownSetting === 'Bezel') crownWeightAdd = 0.6; // solid bezel collar takes extra weight
+
+        let sideWeightAdd = 0;
+        if (sideSetting === 'Channel') sideWeightAdd = 0.45; // rails take extra metal
+        else if (sideSetting === 'Prong') sideWeightAdd = 0.25;
+
+        // Larger ring size = more metal weight
         const sizeNum = parseFloat(ringSize) || 7;
-        const weight = baseWeight * (1 + (sizeNum - 7) * 0.025);
+        const weight = (baseWeight + crownWeightAdd + sideWeightAdd) * (1 + (sizeNum - 7) * 0.025);
 
         // 2. Look up Metal Rate
         let metalRate = 0;
-        const isSilver = metalType.toLowerCase().includes('silver');
-        if (isSilver) {
+        const metalLower = metalType.toLowerCase();
+        if (metalLower.includes('silver')) {
             metalRate = pricing['Silver 925 per gram']?.rate || 450;
-        } else if (metalType.toLowerCase().includes('9kt')) {
+        } else if (metalLower.includes('9kt')) {
             metalRate = pricing['Gold 9K per gram']?.rate || 2700;
-        } else if (metalType.toLowerCase().includes('14kt')) {
+        } else if (metalLower.includes('14kt')) {
             metalRate = pricing['Gold 14K per gram']?.rate || 4200;
-        } else if (metalType.toLowerCase().includes('18kt')) {
+        } else if (metalLower.includes('18kt')) {
             metalRate = pricing['Gold 18K per gram']?.rate || 5400;
+        } else if (metalLower.includes('platinum')) {
+            metalRate = pricing['Platinum per gram']?.rate || 6500;
         }
         
         const goldCost = Math.round(metalRate * weight);
 
         // 3. Side Stones Carat Weight
         let sideStonesCarat = 0;
-        if (style === 'Halo') sideStonesCarat = 0.42; // 14 x 0.03ct
-        if (style === 'Pavé Band') sideStonesCarat = 0.20; // 10 x 0.02ct
-        if (style === 'Three-Stone') sideStonesCarat = stoneSize * 0.65 * 2; // Two flanking stones
+        // From Crown Halo Settings
+        if (crownSetting === 'Single Halo') sideStonesCarat += 0.42;
+        else if (crownSetting === 'Double Halo') sideStonesCarat += 0.96;
+
+        // From Side Stones Settings
+        if (sideSetting === 'Prong') sideStonesCarat += 0.36;
+        else if (sideSetting === 'Channel') sideStonesCarat += 0.36;
+
+        // Fallback adjustments for classic configurations if not explicitly set
+        if (style === 'Halo' && crownSetting === 'Solitaire Prong') {
+            sideStonesCarat += 0.42;
+        }
+        if (style === 'Pavé Band' && sideSetting === 'Plain') {
+            sideStonesCarat += 0.20;
+        }
+        if (style === 'Three-Stone') {
+            sideStonesCarat += stoneSize * 0.55 * 2;
+        }
 
         const totalCarats = stoneSize + sideStonesCarat;
 
@@ -146,7 +191,7 @@ export default function ConfigPanel({
             gstCost,
             total: Math.round(total)
         };
-    }, [style, metalType, stoneSize, ringSize, selectedQuality, pricingData]);
+    }, [style, metalType, stoneSize, ringSize, selectedQuality, sideSetting, crownSetting, pricingData]);
 
     // Format Indian Rupees currency
     const formatCurrency = (val) => {
@@ -162,8 +207,10 @@ export default function ConfigPanel({
         const text = `Hi Noore Jewels! 💎
 I have configured my dream ring using the *Ring Atelier 3D Builder*! Here are my custom design selections:
 
-💍 *Style:* ${style}
-✨ *Metal:* ${metalType}
+💍 *Setting Style:* ${style}
+👑 *Crown Head Setting:* ${crownSetting}
+🌟 *Side Stones Setting:* ${sideSetting}
+✨ *Precious Metal:* ${metalType}
 💎 *Center Stone Shape:* ${stoneShape}
 📏 *Center Stone Size:* ${stoneSize} carat
 ⭐ *Diamond Quality:* ${selectedQuality} (Lab Grown)
@@ -270,10 +317,52 @@ I would love to book a consultation or finalize my custom order. Can we discuss 
                 </div>
             </div>
 
-            {/* 5. Diamond Quality Grade Section */}
+                    {/* 5. Crown Setting Section */}
             <div className="config-section">
                 <label className="config-label">
-                    5. Diamond Quality
+                    5. Crown Setting
+                    <span className="config-sublabel">{crownSetting}</span>
+                </label>
+                <div className="options-grid">
+                    {CROWN_SETTINGS.map((cs) => (
+                        <div
+                            key={cs.id}
+                            className={`option-card ${crownSetting === cs.id ? 'active' : ''}`}
+                            onClick={() => setCrownSetting(cs.id)}
+                            title={cs.desc}
+                        >
+                            <div className="option-card-icon">{cs.icon}</div>
+                            <div className="option-card-name">{cs.name}</div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* 6. Side Stone Setting Section */}
+            <div className="config-section">
+                <label className="config-label">
+                    6. Side Stone Setting
+                    <span className="config-sublabel">{sideSetting}</span>
+                </label>
+                <div className="options-grid">
+                    {SIDE_SETTINGS.map((ss) => (
+                        <div
+                            key={ss.id}
+                            className={`option-card ${sideSetting === ss.id ? 'active' : ''}`}
+                            onClick={() => setSideSetting(ss.id)}
+                            title={ss.desc}
+                        >
+                            <div className="option-card-icon">{ss.icon}</div>
+                            <div className="option-card-name">{ss.name}</div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* 7. Diamond Quality Grade Section */}
+            <div className="config-section">
+                <label className="config-label">
+                    7. Diamond Quality
                 </label>
                 <select
                     value={selectedQuality}
@@ -288,10 +377,10 @@ I would love to book a consultation or finalize my custom order. Can we discuss 
                 </select>
             </div>
 
-            {/* 6. Ring Size Section */}
+            {/* 8. Ring Size Section */}
             <div className="config-section">
                 <label className="config-label">
-                    6. Ring Size
+                    8. Ring Size
                 </label>
                 <select
                     value={ringSize}
@@ -309,10 +398,10 @@ I would love to book a consultation or finalize my custom order. Can we discuss 
                 </select>
             </div>
 
-            {/* 7. Engraving Section */}
+            {/* 9. Custom Engraving (Optional) */}
             <div className="config-section">
                 <label className="config-label">
-                    7. Custom Engraving (Optional)
+                    9. Custom Engraving (Optional)
                 </label>
                 <input
                     type="text"

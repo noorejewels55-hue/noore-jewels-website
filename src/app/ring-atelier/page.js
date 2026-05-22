@@ -14,6 +14,8 @@ export default function RingAtelierPage() {
     const [stoneSize, setStoneSize] = useState(1.0);
     const [ringSize, setRingSize] = useState('7');
     const [engraving, setEngraving] = useState('');
+    const [sideSetting, setSideSetting] = useState('Plain');
+    const [crownSetting, setCrownSetting] = useState('Solitaire Prong');
 
     // Pricing tables fetched from API
     const [pricingData, setPricingData] = useState(null);
@@ -27,6 +29,8 @@ export default function RingAtelierPage() {
         setStoneSize(1.0);
         setRingSize('7');
         setEngraving('');
+        setSideSetting('Plain');
+        setCrownSetting('Solitaire Prong');
     };
 
     // Load master pricing details from Google Sheets via the API on page mount
@@ -82,6 +86,8 @@ export default function RingAtelierPage() {
                         stoneShape={stoneShape}
                         stoneSize={stoneSize}
                         ringSize={ringSize}
+                        sideSetting={sideSetting}
+                        crownSetting={crownSetting}
                     />
                     
                     <div className="viewer-hint">
@@ -106,6 +112,10 @@ export default function RingAtelierPage() {
                     setRingSize={setRingSize}
                     engraving={engraving}
                     setEngraving={setEngraving}
+                    sideSetting={sideSetting}
+                    setSideSetting={setSideSetting}
+                    crownSetting={crownSetting}
+                    setCrownSetting={setCrownSetting}
                     pricingData={pricingData}
                     loadingPricing={loadingPricing}
                 />

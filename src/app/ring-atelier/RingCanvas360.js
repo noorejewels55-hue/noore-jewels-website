@@ -80,6 +80,7 @@ const METAL_MATERIALS = {
     '14kt rose gold':   { base: [226, 172, 162], hi: [250, 215, 208], sh: [155, 98, 88], specPow: 44 },
     '9kt rose gold':    { base: [217, 155, 142], hi: [245, 200, 192], sh: [145, 88, 78], specPow: 40 },
     '925 silver':       { base: [210, 210, 218], hi: [255, 255, 255], sh: [140, 140, 158], specPow: 65 },
+    'platinum':         { base: [222, 224, 230], hi: [255, 255, 255], sh: [150, 154, 162], specPow: 75 },
 };
 
 function getMetalMaterial(metalType) {
@@ -104,6 +105,7 @@ function getMetalMaterial(metalType) {
         return METAL_MATERIALS['9kt rose gold'];
     }
     if (key.includes('silver')) return METAL_MATERIALS['925 silver'];
+    if (key.includes('platinum')) return METAL_MATERIALS['platinum'];
     return METAL_MATERIALS['18kt yellow gold'];
 }
 
@@ -410,8 +412,72 @@ function buildPaveStones(R, r, numStones) {
     return faces;
 }
 
+// ─── Geometry: Split Shank (Two-Row split band) ───────────────────
+function buildSplitTorus(R, r, uSegs, vSegs) {
+    const faces = [];
+    const thinR = r * 0.72; // slightly more delicate rows
+    
+    for (let row = 0; row < 2; row++) {
+        const sign = row === 0 ? 1 : -1;
+        const verts = [];
+        for (let i = 0; i <= uSegs; i++) {
+            const u = (i / uSegs) * Math.PI * 2;
+            // Math.sin(u) is positive for u in [0, PI] (the upper half of the ring)
+            const split = Math.max(0, Math.sin(u)) * r * 2.2;
+            for (let j = 0; j <= vSegs; j++) {
+                const v = (j / vSegs) * Math.PI * 2;
+                const x = (R + thinR * Math.cos(v)) * Math.cos(u);
+                const y = thinR * Math.sin(v) + sign * split;
+                const z = (R + thinR * Math.cos(v)) * Math.sin(u);
+                verts.push({ x, y, z });
+            }
+        }
+        for (let i = 0; i < uSegs; i++) {
+            for (let j = 0; j < vSegs; j++) {
+                const a = i * (vSegs + 1) + j;
+                const b = a + 1;
+                const c = (i + 1) * (vSegs + 1) + j + 1;
+                const d = (i + 1) * (vSegs + 1) + j;
+                faces.push({ verts: [verts[a], verts[b], verts[c], verts[d]], type: 'metal' });
+            }
+        }
+    }
+    return faces;
+}
+
+// ─── Geometry: Bezel setting ──────────────────────────────────────
+function buildBezel(caratSize, offsetY, shape) {
+    const scale = Math.pow(caratSize, 1 / 3) * 0.28;
+    const girdleR = scale * 1.08;
+    const innerR = scale * 0.96;
+    const topY = offsetY + scale * 0.16;
+    const botY = offsetY - scale * 0.12;
+    const segments = 16;
+    const faces = [];
+    
+    const outerG = getGirdleOutline(shape, girdleR, segments);
+    const innerG = getGirdleOutline(shape, innerR, segments);
+    
+    for (let i = 0; i < segments; i++) {
+        const ni = (i + 1) % segments;
+        
+        // Outer wall (quad)
+        const v0 = { x: outerG[i].x, y: botY, z: outerG[i].z };
+        const v1 = { x: outerG[ni].x, y: botY, z: outerG[ni].z };
+        const v2 = { x: outerG[ni].x, y: topY, z: outerG[ni].z };
+        const v3 = { x: outerG[i].x, y: topY, z: outerG[i].z };
+        faces.push({ verts: [v0, v1, v2, v3], type: 'metal' });
+        
+        // Top flat lip (quad)
+        const t0 = { x: innerG[i].x, y: topY, z: innerG[i].z };
+        const t1 = { x: innerG[ni].x, y: topY, z: innerG[ni].z };
+        faces.push({ verts: [v3, v2, t1, t0], type: 'metal' });
+    }
+    return faces;
+}
+
 // ─── Scene Builder ────────────────────────────────────────────────
-function buildScene(style, stoneShape, stoneSize, ringSize) {
+function buildScene(style, stoneShape, stoneSize, ringSize, sideSetting = 'Plain', crownSetting = 'Solitaire Prong') {
     const sizeNum = parseFloat(ringSize) || 7;
     const innerR = 0.65 + (sizeNum - 5) * 0.018;
     const bandThickness = 0.085;
@@ -426,33 +492,91 @@ function buildScene(style, stoneShape, stoneSize, ringSize) {
 
     // Build band based on style
     const styleLower = (style || '').toLowerCase();
+    const sideLower = (sideSetting || '').toLowerCase();
+    const crownLower = (crownSetting || '').toLowerCase();
+
     if (styleLower === 'twisted band') {
         const band = buildTwistedBand(R, r, uSegs, vSegs);
         allFaces = allFaces.concat(band.faces);
+    } else if (styleLower === 'two-row split' || styleLower === 'two-row-split') {
+        const splitBand = buildSplitTorus(R, r, uSegs, vSegs);
+        allFaces = allFaces.concat(splitBand);
     } else {
         const band = buildTorus(R, r, uSegs, vSegs, style);
         allFaces = allFaces.concat(band.faces);
     }
 
-    // Prongs
-    const prongs = buildProngs(stoneSize, stoneY);
-    allFaces = allFaces.concat(prongs);
+    // Prongs (skip if modern bezel setting is selected)
+    if (crownLower !== 'bezel') {
+        const prongs = buildProngs(stoneSize, stoneY);
+        allFaces = allFaces.concat(prongs);
+    } else {
+        const bezel = buildBezel(stoneSize, stoneY, stoneShape);
+        allFaces = allFaces.concat(bezel);
+    }
 
     // Center diamond
     const diamond = buildDiamond(stoneShape, stoneSize, stoneY);
     allFaces = allFaces.concat(diamond);
 
-    // Style-specific additions
-    if (styleLower === 'halo') {
+    // Crown Settings: Halos
+    if (crownLower === 'single halo' || styleLower === 'halo') {
         const halo = buildHaloRing(stoneSize, stoneY);
         allFaces = allFaces.concat(halo);
+    } else if (crownLower === 'double halo') {
+        // Double halo: concentric inner and outer rings
+        const scale = Math.pow(stoneSize, 1 / 3) * 0.28;
+        const haloInner = buildHaloRing(stoneSize, stoneY + scale * 0.04);
+        
+        // Outer halo: slightly wider and shifted down slightly
+        const haloOuter = buildHaloRing(stoneSize * 1.35, stoneY - scale * 0.04);
+        
+        allFaces = allFaces.concat(haloInner);
+        allFaces = allFaces.concat(haloOuter);
     }
 
-    if (styleLower === 'pavé band' || styleLower === 'pave band') {
+    // Side settings (Pavé Prong vs Channel vs sleek plain band)
+    if (sideLower === 'prong' || styleLower === 'pavé band' || styleLower === 'pave band') {
         const pave = buildPaveStones(R, r, 20);
         allFaces = allFaces.concat(pave);
+    } else if (sideLower === 'channel') {
+        const pave = buildPaveStones(R, r, 20);
+        allFaces = allFaces.concat(pave);
+        
+        // Render two parallel metal rails running next to pave stones
+        const railFaces = [];
+        const numStones = 20;
+        const stoneR = 0.018;
+        for (let i = 0; i < numStones; i++) {
+            const u0 = (i / numStones) * Math.PI * 2;
+            const u1 = ((i + 1) / numStones) * Math.PI * 2;
+            
+            // Outer rail (+Y side offset) and Inner rail (-Y side offset)
+            for (const offset of [-stoneR * 1.3, stoneR * 1.3]) {
+                const cx0 = (R + r + stoneR * 0.3) * Math.cos(u0);
+                const cy0 = r + stoneR * 0.5 + offset;
+                const cz0 = (R + r + stoneR * 0.3) * Math.sin(u0);
+                
+                const cx1 = (R + r + stoneR * 0.3) * Math.cos(u1);
+                const cy1 = r + stoneR * 0.5 + offset;
+                const cz1 = (R + r + stoneR * 0.3) * Math.sin(u1);
+                
+                const w = 0.005;
+                railFaces.push({
+                    verts: [
+                        { x: cx0, y: cy0 - w, z: cz0 },
+                        { x: cx1, y: cy1 - w, z: cz1 },
+                        { x: cx1, y: cy1 + w, z: cz1 },
+                        { x: cx0, y: cy0 + w, z: cz0 }
+                    ],
+                    type: 'metal'
+                });
+            }
+        }
+        allFaces = allFaces.concat(railFaces);
     }
 
+    // Style-specific Cathedral or Three-stone supports
     if (styleLower === 'three-stone') {
         // Two side diamonds at ±35 degrees on the band
         const sideSize = stoneSize * 0.55;
@@ -780,7 +904,7 @@ function renderFrame(ctx, w, h, allFaces, rotX, rotY, lightX, lightY, metalMat, 
 // ═══════════════════════════════════════════════════════════════════
 // REACT COMPONENT
 // ═══════════════════════════════════════════════════════════════════
-export default function RingCanvas360({ style, metalType, stoneShape, stoneSize, ringSize }) {
+export default function RingCanvas360({ style, metalType, stoneShape, stoneSize, ringSize, sideSetting = 'Plain', crownSetting = 'Solitaire Prong' }) {
     const canvasRef = useRef(null);
     const containerRef = useRef(null);
     const stateRef = useRef({
@@ -801,8 +925,8 @@ export default function RingCanvas360({ style, metalType, stoneShape, stoneSize,
 
     // Rebuild geometry when props change
     useEffect(() => {
-        geometryRef.current = buildScene(style, stoneShape, stoneSize, ringSize);
-    }, [style, stoneShape, stoneSize, ringSize]);
+        geometryRef.current = buildScene(style, stoneShape, stoneSize, ringSize, sideSetting, crownSetting);
+    }, [style, stoneShape, stoneSize, ringSize, sideSetting, crownSetting]);
 
     // Gyroscope detection
     useEffect(() => {
