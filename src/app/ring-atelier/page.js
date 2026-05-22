@@ -1,22 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import ConfigPanel from './ConfigPanel';
+import RingCanvas360 from './RingCanvas360';
 import './atelier.css';
-
-// Dynamically import RingCanvas with SSR disabled so it loads entirely on the client,
-// preventing large Three.js packages from inflating the initial server bundle.
-const RingCanvas = dynamic(() => import('./RingCanvas'), {
-    ssr: false,
-    loading: () => (
-        <div className="canvas-loading-overlay">
-            <div className="spinner"></div>
-            <p className="loading-text">ENTERING THE ATELIER...</p>
-        </div>
-    )
-});
 
 export default function RingAtelierPage() {
     // Configurator state variables
@@ -88,7 +76,7 @@ export default function RingAtelierPage() {
             <div className="atelier-workspace">
                 {/* Left Panel - 3D Ring WebGL Scene */}
                 <section className="atelier-viewer">
-                    <RingCanvas
+                    <RingCanvas360
                         style={style}
                         metalType={metalType}
                         stoneShape={stoneShape}
@@ -100,7 +88,7 @@ export default function RingAtelierPage() {
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginRight: '4px' }}>
                             <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
                         </svg>
-                        Drag to rotate 360° • Pinch to zoom
+                        Drag to rotate • Move cursor for light • Works on all browsers
                     </div>
                 </section>
 

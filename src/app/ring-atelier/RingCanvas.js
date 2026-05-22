@@ -1,6 +1,6 @@
 'use client';
 
-import { Component } from 'react';
+import { Component, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Environment } from '@react-three/drei';
 import { useRef, useMemo } from 'react';
@@ -21,7 +21,7 @@ class CanvasErrorBoundary extends Component {
                 <div style={{
                     width: '100%', height: '100%', display: 'flex',
                     flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-                    background: '#0b0b0b', color: '#C5A467', fontFamily: 'sans-serif',
+                    background: '#000000', color: '#C5A467', fontFamily: 'sans-serif',
                     padding: '40px', textAlign: 'center'
                 }}>
                     <p style={{ fontSize: '1.2rem', marginBottom: '12px' }}>
@@ -31,6 +31,11 @@ class CanvasErrorBoundary extends Component {
                         Your browser may not support WebGL 3D rendering. 
                         Please try Chrome or Edge for the best experience.
                     </p>
+                    {this.state.errorMsg && (
+                        <p style={{ fontSize: '0.7rem', color: '#555', marginTop: '16px', maxWidth: '350px', wordBreak: 'break-all' }}>
+                            Detail: {this.state.errorMsg}
+                        </p>
+                    )}
                 </div>
             );
         }
@@ -183,7 +188,7 @@ export default function RingCanvas({ style, metalType, stoneShape, stoneSize, ri
                     <div style={{
                         width: '100%', height: '100%', display: 'flex',
                         alignItems: 'center', justifyContent: 'center',
-                        background: '#0b0b0b', color: '#C5A467'
+                        background: '#000000', color: '#C5A467'
                     }}>
                         <p>Your browser does not support WebGL. Please try Chrome or Edge.</p>
                     </div>
@@ -210,15 +215,16 @@ export default function RingCanvas({ style, metalType, stoneShape, stoneSize, ri
                     <directionalLight position={[-5, 5, -5]} intensity={0.6} />
                     <pointLight position={[0, 3, 2]} intensity={0.8} />
 
-                    <RingScene
-                        style={style}
-                        metalType={metalType}
-                        stoneShape={stoneShape}
-                        stoneSize={stoneSize}
-                        ringSize={ringSize}
-                    />
-
-                    <Environment preset="studio" />
+                    <Suspense fallback={null}>
+                        <RingScene
+                            style={style}
+                            metalType={metalType}
+                            stoneShape={stoneShape}
+                            stoneSize={stoneSize}
+                            ringSize={ringSize}
+                        />
+                        <Environment preset="studio" />
+                    </Suspense>
 
                     <OrbitControls
                         enableDamping

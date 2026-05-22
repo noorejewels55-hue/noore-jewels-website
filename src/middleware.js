@@ -23,7 +23,7 @@ export function middleware(request) {
         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
         "font-src 'self' https://fonts.gstatic.com; " +
         "img-src 'self' data: blob: https://lh3.googleusercontent.com https://*.googleusercontent.com https://res.cloudinary.com; " +
-        "connect-src 'self' https://api.razorpay.com https://lumberjack-cx.razorpay.com; " +
+        "connect-src 'self' https://api.razorpay.com https://lumberjack-cx.razorpay.com https://raw.githack.com https://*.githack.com https://cdn.jsdelivr.net https://*.jsdelivr.net https://dl.polyhaven.org https://*.polyhaven.org https://*.polyhaven.net https://*.githubusercontent.com; " +
         "frame-src https://api.razorpay.com https://checkout.razorpay.com; " +
         "worker-src 'self' blob:; " +
         "child-src blob:; " +
