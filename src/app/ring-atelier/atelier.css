@@ -543,53 +543,162 @@
 
 /* RESPONSIVE MEDIA QUERIES */
 @media (max-width: 1024px) {
+    .atelier-container {
+        height: auto;
+        min-height: 100vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
     .atelier-header {
         padding: 0 20px;
     }
     
     .atelier-workspace {
         flex-direction: column;
-        overflow-y: auto;
+        overflow: visible;
         height: auto;
     }
 
     .atelier-viewer {
         width: 100%;
-        height: 50vh;
-        min-height: 350px;
+        height: 48vh;
+        min-height: 320px;
+        max-height: 440px;
     }
 
     .atelier-sidebar {
         width: 100%;
         height: auto;
-        overflow-y: visible;
+        overflow: visible;
         border-left: none;
         border-top: 1px solid rgba(197, 164, 103, 0.15);
-        padding: 24px;
+        padding: 32px 24px;
+        background-color: #000000;
     }
 }
 
 @media (max-width: 480px) {
+    .atelier-container {
+        min-height: 100vh;
+    }
+
     .atelier-header {
-        height: 60px;
+        height: 64px;
+        padding: 0 12px;
     }
+
     .atelier-logo-title {
-        font-size: 1.3rem;
+        font-size: 1.25rem;
     }
+
+    .atelier-logo-subtitle {
+        font-size: 0.5rem;
+        letter-spacing: 0.25em;
+    }
+
     .btn-atelier-back {
-        padding: 6px 12px;
+        padding: 6px 10px;
+        font-size: 0.65rem;
+        gap: 4px;
+    }
+
+    .btn-atelier-reset {
         font-size: 0.65rem;
     }
+
+    .atelier-viewer {
+        height: 40vh;
+        min-height: 280px;
+    }
+
+    .viewer-hint {
+        bottom: 12px;
+        font-size: 0.62rem;
+        padding: 6px 12px;
+        letter-spacing: 0.1em;
+    }
+
+    .atelier-sidebar {
+        padding: 24px 12px;
+    }
+
+    .config-section {
+        margin-bottom: 28px;
+    }
+
+    .config-label {
+        font-size: 1.05rem;
+        margin-bottom: 12px;
+    }
+
     .options-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
     }
+
+    .option-card {
+        padding: 12px 8px;
+    }
+
+    .option-card-icon {
+        font-size: 1.25rem;
+        margin-bottom: 4px;
+    }
+
+    .option-card-name {
+        font-size: 0.68rem;
+    }
+
     .shapes-grid {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
     }
+
+    .shape-card {
+        min-height: 56px;
+        padding: 8px 4px;
+    }
+
+    .shape-icon {
+        font-size: 1.1rem;
+        margin-bottom: 4px;
+    }
+
+    .shape-name {
+        font-size: 0.58rem;
+    }
+
+    .metal-options {
+        gap: 6px;
+    }
+
+    .metal-pill {
+        padding: 6px 10px;
+        font-size: 0.68rem;
+        gap: 6px;
+    }
+
+    .metal-swatch {
+        width: 12px;
+        height: 12px;
+    }
+
     .price-amount {
-        font-size: 1.5rem;
+        font-size: 1.45rem;
+    }
+
+    .btn-whatsapp-order {
+        padding: 12px;
+        font-size: 0.78rem;
+    }
+
+    .btn-save-design {
+        padding: 10px;
+        font-size: 0.7rem;
     }
 }
+
 
 /* ═══════════════════════════════════════════════
    PHOTOREAL 360° CANVAS STYLES
