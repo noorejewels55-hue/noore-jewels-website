@@ -920,16 +920,8 @@ h1, h2, h3, h4, h5, h6 {
   transition: transform var(--transition-base);
 }
 
-/* Staggered vertical offsets for visual interest */
-.promise-card:nth-child(2) { transform: translateY(18px); }
-.promise-card:nth-child(4) { transform: translateY(18px); }
-
 .promise-card:hover {
   transform: translateY(-4px);
-}
-.promise-card:nth-child(2):hover,
-.promise-card:nth-child(4):hover {
-  transform: translateY(14px);
 }
 
 /* Circular Icon Container */
@@ -1008,22 +1000,7 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-/* Staggered offset after reveal */
-.promise-card.revealed:nth-child(2),
-.promise-card.revealed:nth-child(4) {
-  animation-name: promise-reveal-offset;
-}
 
-@keyframes promise-reveal-offset {
-  0% {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(18px);
-  }
-}
 
 /* ─── STORY / ABOUT SECTION ─── */
 .story-section {
