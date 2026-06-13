@@ -55,15 +55,15 @@
   --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.1);
   --shadow-gold: 0 4px 20px rgba(197, 164, 103, 0.15);
 
-  /* Promises Section — Rose-Gold Palette */
-  --promise-bg: #FFF9F5;
-  --promise-icon-bg: linear-gradient(145deg, #FFE8E0, #FFDDD2);
-  --promise-icon-bg-alt: linear-gradient(145deg, #FFE0D0, #FFD1C1);
-  --promise-accent: #E8725C;
-  --promise-accent-soft: #F4A89A;
-  --promise-sparkle: #E8725C;
-  --promise-card-shadow: 0 8px 32px rgba(232, 114, 92, 0.08);
-  --promise-card-hover-shadow: 0 12px 40px rgba(232, 114, 92, 0.15);
+  /* Promises Section — Luxury Gold & Cream Palette */
+  --promise-bg: transparent;
+  --promise-icon-bg: linear-gradient(145deg, #FDFBF7, #F5EFEB);
+  --promise-icon-bg-alt: linear-gradient(145deg, #FDFBF7, #EAE2DA);
+  --promise-accent: #C5A467;
+  --promise-accent-soft: #D4BA82;
+  --promise-sparkle: #C5A467;
+  --promise-card-shadow: 0 8px 24px rgba(197, 164, 103, 0.08);
+  --promise-card-hover-shadow: 0 12px 32px rgba(197, 164, 103, 0.16);
 }
 
 /* ─── RESET & BASE ─── */
@@ -835,10 +835,11 @@ h1, h2, h3, h4, h5, h6 {
   display: none;
 }
 
-/* ─── OUR PROMISES SECTION (Mia-Inspired) ─── */
 .promises-section {
   padding: 80px 0 90px;
-  background: var(--promise-bg);
+  background-image: linear-gradient(rgba(253, 251, 247, 0.82), rgba(253, 251, 247, 0.82)), url('/premium_jewelry_bg.png');
+  background-size: cover;
+  background-position: center;
   position: relative;
   overflow: hidden;
 }
@@ -850,7 +851,7 @@ h1, h2, h3, h4, h5, h6 {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(232,114,92,0.15), transparent);
+  background: linear-gradient(90deg, transparent, rgba(197, 164, 103, 0.25), transparent);
 }
 
 .promises-section::after {
@@ -860,7 +861,7 @@ h1, h2, h3, h4, h5, h6 {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(232,114,92,0.15), transparent);
+  background: linear-gradient(90deg, transparent, rgba(197, 164, 103, 0.25), transparent);
 }
 
 /* Section Header */
