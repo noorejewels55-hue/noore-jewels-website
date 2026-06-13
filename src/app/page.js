@@ -99,8 +99,8 @@ function PromisesSection() {
       ),
     },
     {
-      label: '1 Year Warranty',
-      desc: 'On all jewellery pieces',
+      label: 'Lifetime Warranty',
+      desc: 'Free resizing & maintenance',
       icon: (
         <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="40" cy="42" r="26" fill="#C5A467" opacity="0.15"/>
@@ -450,7 +450,7 @@ function HomePage() {
             <div className="story-image">
               <img
                 src="/founder-kriti.png"
-                alt="Kriti — Founder of Noore Jewels, India's premium Lab Grown Diamond brand"
+                alt="Asha — Founder of Noore Jewels, India's premium Lab Grown Diamond brand"
                 style={{
                   width: '100%',
                   height: '100%',
@@ -462,7 +462,7 @@ function HomePage() {
               <div className="story-label">Our Story</div>
               <h2 className="story-title">India&apos;s Finest Lab Grown Diamond Jewellery</h2>
               <p className="story-text">
-                Noore Jewels is founded by Kriti — a one-woman force with a passion for creating
+                Noore Jewels is founded by Asha — a one-woman force with a passion for creating
                 the most beautiful diamond jewellery for the modern Indian woman. Every design is
                 handpicked, every diamond is IGI certified, and every piece is crafted to perfection.
               </p>

@@ -166,7 +166,7 @@ function buildEmail(allResults) {
                 <!-- Summary -->
                 <div style="background:linear-gradient(135deg,rgba(212,186,130,0.08),rgba(212,186,130,0.18));border:1px solid rgba(212,186,130,0.3);border-radius:8px;padding:16px 20px;margin-bottom:24px;">
                     <p style="margin:0;font-size:14px;color:#333;line-height:1.6;">
-                        Hi Kriti! 👋 Here's your weekly jewelry trend report. 
+                        Hi Asha! 👋 Here's your weekly jewelry trend report. 
                         The 🔥 items are trending UP — consider sourcing these products and creating reels about them!
                     </p>
                 </div>

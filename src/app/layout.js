@@ -69,7 +69,7 @@ const jsonLd = {
       "foundingDate": "2024",
       "founder": {
         "@type": "Person",
-        "name": "Kriti"
+        "name": "Asha"
       },
       "contactPoint": {
         "@type": "ContactPoint",

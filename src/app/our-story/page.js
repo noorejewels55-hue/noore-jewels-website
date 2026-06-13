@@ -42,7 +42,7 @@ function StoryContent() {
                         <div className="story-image">
                             <img
                                 src="/founder-kriti.png"
-                                alt="Kriti — Founder of Noore Jewels, Lab Grown Diamond Jewellery Brand"
+                                alt="Asha — Founder of Noore Jewels, Lab Grown Diamond Jewellery Brand"
                                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                             />
                         </div>
@@ -50,8 +50,7 @@ function StoryContent() {
                             <div className="story-label">Meet the Founder</div>
                             <h2 className="story-title">The Face Behind Noore Jewels</h2>
                             <p className="story-text">
-                                Hi, I&apos;m <strong>Kriti</strong> — and my name &quot;Kala&quot; means <em>Kalakar</em> (कलाकार) — an artist.
-                                That&apos;s exactly what drives me every day — the inner passion to create the most
+                                Hi, I&apos;m <strong>Asha</strong> — and my passion is to design and craft the most
                                 beautiful, high-quality diamond jewellery for women across India.
                             </p>
                             <p className="story-text">
@@ -337,7 +336,7 @@ function StoryContent() {
                             Explore Collection
                         </Link>
                         <a
-                            href="https://wa.me/918076735450?text=Hi Kriti! I have a question about Noore Jewels"
+                            href="https://wa.me/918076735450?text=Hi Asha! I have a question about Noore Jewels"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="btn btn-outline btn-lg"
