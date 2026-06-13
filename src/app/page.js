@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -9,6 +9,139 @@ import CartDrawer from '@/components/CartDrawer';
 import ProductCard from '@/components/ProductCard';
 import { CartProvider } from '@/context/CartContext';
 import { AuthProvider } from '@/context/AuthContext';
+
+/* ── PROMISES SECTION COMPONENT ── */
+function PromisesSection() {
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const cards = entry.target.querySelectorAll('.promise-card');
+            cards.forEach((card) => card.classList.add('revealed'));
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  const promises = [
+    {
+      label: 'Premium Lab Diamonds',
+      desc: 'IGI-certified finest quality stones',
+      icon: (
+        <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M40 8L56 28L40 72L24 28L40 8Z" fill="#E8725C" opacity="0.85"/>
+          <path d="M40 8L56 28H24L40 8Z" fill="#F4A89A"/>
+          <path d="M40 8L48 28H40V8Z" fill="#D4604C" opacity="0.6"/>
+          <path d="M56 28L40 72V28H56Z" fill="#D4604C" opacity="0.5"/>
+          <path d="M24 28L40 72V28H24Z" fill="#E8725C" opacity="0.7"/>
+          <path d="M14 28L24 28L40 8L14 28Z" fill="#F4A89A" opacity="0.5"/>
+          <path d="M66 28L56 28L40 8L66 28Z" fill="#F4A89A" opacity="0.4"/>
+          <path d="M14 28L40 72L24 28H14Z" fill="#E8725C" opacity="0.4"/>
+          <path d="M66 28L40 72L56 28H66Z" fill="#D4604C" opacity="0.35"/>
+        </svg>
+      ),
+    },
+    {
+      label: 'Free Shipping',
+      desc: 'On all orders across India',
+      icon: (
+        <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="24" width="38" height="32" rx="3" fill="#E8725C" opacity="0.85"/>
+          <rect x="12" y="26" width="34" height="12" rx="2" fill="#F4A89A" opacity="0.6"/>
+          <path d="M48 34H60L68 44V56H48V34Z" fill="#D4604C" opacity="0.75"/>
+          <path d="M48 34H58L66 42H48V34Z" fill="#F4A89A" opacity="0.5"/>
+          <circle cx="24" cy="58" r="6" fill="#D4604C"/>
+          <circle cx="24" cy="58" r="3" fill="#FFF9F5"/>
+          <circle cx="58" cy="58" r="6" fill="#D4604C"/>
+          <circle cx="58" cy="58" r="3" fill="#FFF9F5"/>
+          <rect x="14" y="42" width="8" height="2" rx="1" fill="#FFF9F5" opacity="0.7"/>
+          <rect x="14" y="46" width="12" height="2" rx="1" fill="#FFF9F5" opacity="0.5"/>
+        </svg>
+      ),
+    },
+    {
+      label: '7-Day Easy Returns',
+      desc: 'Hassle-free return process',
+      icon: (
+        <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="16" y="22" width="48" height="38" rx="4" fill="#E8725C" opacity="0.8"/>
+          <rect x="20" y="18" width="40" height="8" rx="3" fill="#D4604C" opacity="0.9"/>
+          <path d="M20 22H60V34H20V22Z" fill="#F4A89A" opacity="0.5"/>
+          <circle cx="52" cy="14" r="10" fill="#F4A89A" opacity="0.7"/>
+          <text x="52" y="18" textAnchor="middle" fill="#D4604C" fontSize="10" fontWeight="700" fontFamily="sans-serif">7</text>
+          <path d="M32 40L38 46L50 34" stroke="#FFF9F5" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+          <ellipse cx="62" cy="12" rx="5" ry="2.5" transform="rotate(-30 62 12)" fill="#E8725C" opacity="0.5"/>
+          <ellipse cx="66" cy="8" rx="4" ry="2" transform="rotate(-50 66 8)" fill="#F4A89A" opacity="0.5"/>
+        </svg>
+      ),
+    },
+    {
+      label: 'Secure Payments',
+      desc: 'Protected by Razorpay',
+      icon: (
+        <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="14" y="30" width="52" height="36" rx="5" fill="#E8725C" opacity="0.85"/>
+          <rect x="14" y="30" width="52" height="12" rx="5" fill="#D4604C" opacity="0.7"/>
+          <rect x="14" y="30" width="52" height="6" rx="5" fill="#F4A89A" opacity="0.4"/>
+          <path d="M30 22C30 17.58 33.58 14 38 14H42C46.42 14 50 17.58 50 22V30H46V22C46 19.79 44.21 18 42 18H38C35.79 18 34 19.79 34 22V30H30V22Z" fill="#D4604C"/>
+          <circle cx="40" cy="50" r="6" fill="#FFF9F5" opacity="0.9"/>
+          <circle cx="40" cy="50" r="3" fill="#D4604C"/>
+          <rect x="39" y="52" width="2" height="6" rx="1" fill="#D4604C"/>
+        </svg>
+      ),
+    },
+    {
+      label: '1 Year Warranty',
+      desc: 'On all jewellery pieces',
+      icon: (
+        <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="42" r="26" fill="#E8725C" opacity="0.15"/>
+          <path d="M40 14C28 14 20 24 20 34C20 52 40 68 40 68C40 68 60 52 60 34C60 24 52 14 40 14Z" fill="#E8725C" opacity="0.8"/>
+          <path d="M40 14C34 14 28 18 24 24C28 20 34 18 40 18C46 18 52 20 56 24C52 18 46 14 40 14Z" fill="#F4A89A" opacity="0.6"/>
+          <path d="M32 36L38 42L50 30" stroke="#FFF9F5" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M58 56C58 56 62 50 66 52C70 54 66 60 62 58" stroke="#E8725C" strokeWidth="1.5" fill="none" opacity="0.5"/>
+          <circle cx="64" cy="54" r="2" fill="#F4A89A" opacity="0.6"/>
+          <path d="M16 30C16 30 12 26 14 22C16 22 18 26 16 30Z" fill="#E8725C" opacity="0.3"/>
+        </svg>
+      ),
+    },
+  ];
+
+  return (
+    <section className="promises-section" ref={sectionRef}>
+      <div className="container">
+        <div className="promises-header">
+          <div className="promises-sparkle">
+            <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 2L23.5 14.5L36 10L26 20L36 30L23.5 25.5L20 38L16.5 25.5L4 30L14 20L4 10L16.5 14.5L20 2Z" fill="#E8725C" opacity="0.85"/>
+              <path d="M20 8L22 15L28 12L23 20L28 28L22 25L20 32L18 25L12 28L17 20L12 12L18 15L20 8Z" fill="#F4A89A" opacity="0.7"/>
+            </svg>
+          </div>
+          <h2 className="promises-title">Our Promises</h2>
+        </div>
+        <div className="promises-grid">
+          {promises.map((p, i) => (
+            <div className="promise-card" key={i}>
+              <div className="promise-icon-circle">
+                {p.icon}
+              </div>
+              <div className="promise-label">{p.label}</div>
+              <div className="promise-desc">{p.desc}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 function HomePage() {
   const [products, setProducts] = useState([]);
@@ -139,33 +272,8 @@ function HomePage() {
         </div>
       </section>
 
-      {/* ── TRUST BAR ── */}
-      <section className="trust-section">
-        <div className="container">
-          <div className="trust-grid">
-            <div className="trust-item">
-              <div className="trust-icon">💎</div>
-              <div className="trust-title">IGI Certified Diamonds</div>
-              <div className="trust-text">Every stone comes with certification</div>
-            </div>
-            <div className="trust-item">
-              <div className="trust-icon">🛡️</div>
-              <div className="trust-title">Lifetime Warranty</div>
-              <div className="trust-text">Free maintenance & resizing forever</div>
-            </div>
-            <div className="trust-item">
-              <div className="trust-icon">📦</div>
-              <div className="trust-title">Insured Shipping</div>
-              <div className="trust-text">Fully insured, trackable delivery</div>
-            </div>
-            <div className="trust-item">
-              <div className="trust-icon">🔄</div>
-              <div className="trust-title">7-Day Returns</div>
-              <div className="trust-text">Returns accepted with quality deduction</div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* ── PROMISES BAR ── */}
+      <PromisesSection />
 
       {/* ── SHOP BY CATEGORY (NEW NICHE) ── */}
       <section className="categories-section">
