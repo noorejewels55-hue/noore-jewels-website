@@ -57,8 +57,16 @@ function BlogListing() {
             {filtered.map((post, i) => (
               <Link href={`/blog/${post.slug}`} key={post.slug} className="blog-card">
                 <div className="blog-card-image-wrap">
-                  <div className="blog-card-image" style={{ background: post.gradient }}>
-                    <span className="blog-card-emoji">{post.emoji}</span>
+                  <div 
+                    className="blog-card-image" 
+                    style={{ 
+                      backgroundImage: post.image ? `url(${post.image})` : 'none',
+                      background: post.image ? undefined : post.gradient,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center'
+                    }}
+                  >
+                    {!post.image && <span className="blog-card-emoji">{post.emoji}</span>}
                   </div>
                   <span className="blog-card-category">{post.category}</span>
                 </div>

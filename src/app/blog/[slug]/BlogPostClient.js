@@ -57,6 +57,11 @@ function BlogPostContent({ params }) {
         {/* Article Content */}
         <div className="blog-article-body">
           <div className="container blog-article-container">
+            {post.image && (
+              <div className="blog-article-featured-image-wrap">
+                <img src={post.image} alt={post.title} className="blog-article-featured-image" />
+              </div>
+            )}
             <div className="blog-article-content" dangerouslySetInnerHTML={{ __html: post.content }} />
 
             {/* Share & CTA */}
@@ -83,8 +88,16 @@ function BlogPostContent({ params }) {
               {relatedPosts.map(rp => (
                 <Link href={`/blog/${rp.slug}`} key={rp.slug} className="blog-card">
                   <div className="blog-card-image-wrap">
-                    <div className="blog-card-image" style={{ background: rp.gradient }}>
-                      <span className="blog-card-emoji">{rp.emoji}</span>
+                    <div 
+                      className="blog-card-image" 
+                      style={{ 
+                        backgroundImage: rp.image ? `url(${rp.image})` : 'none',
+                        background: rp.image ? undefined : rp.gradient,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center'
+                      }}
+                    >
+                      {!rp.image && <span className="blog-card-emoji">{rp.emoji}</span>}
                     </div>
                   </div>
                   <div className="blog-card-body">

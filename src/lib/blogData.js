@@ -8,6 +8,7 @@ export const blogPosts = [
     dateISO: '2026-06-14',
     readTime: '8 min read',
     emoji: '💎',
+    image: '/blog-lab-vs-mined.png',
     gradient: 'linear-gradient(135deg, #1a1510 0%, #2a2218 50%, #C5A467 100%)',
     keywords: ['lab grown diamonds vs mined diamonds', 'lab grown diamond truth', 'are lab diamonds real', 'lab diamond India', 'CVD diamond vs natural diamond'],
     content: `
@@ -45,6 +46,7 @@ export const blogPosts = [
     dateISO: '2026-06-12',
     readTime: '10 min read',
     emoji: '💍',
+    image: '/blog-engagement-guide.png',
     gradient: 'linear-gradient(135deg, #C5A467 0%, #D4BA82 50%, #F5EFE0 100%)',
     keywords: ['how to choose engagement ring', 'engagement ring buying guide India', 'first time engagement ring', 'diamond engagement ring guide', 'engagement ring for girlfriend'],
     content: `
@@ -102,6 +104,7 @@ export const blogPosts = [
     dateISO: '2026-06-10',
     readTime: '6 min read',
     emoji: '✨',
+    image: '/blog-stack-rings.png',
     gradient: 'linear-gradient(135deg, #D4BA82 0%, #F5EFE0 50%, #FFFFFF 100%)',
     keywords: ['stack rings', 'ring stacking guide', 'how to stack rings', 'stackable diamond rings India', 'diamond stack ring styling'],
     content: `
@@ -150,6 +153,7 @@ export const blogPosts = [
     dateISO: '2026-06-08',
     readTime: '7 min read',
     emoji: '🏅',
+    image: '/blog-gold-purity.png',
     gradient: 'linear-gradient(135deg, #A68B4B 0%, #C5A467 50%, #D4BA82 100%)',
     keywords: ['9kt vs 14kt vs 18kt gold', 'gold purity guide India', 'which gold karat best for ring', 'BIS hallmark HUID', 'gold jewellery karat comparison'],
     content: `
@@ -197,6 +201,7 @@ export const blogPosts = [
     dateISO: '2026-06-06',
     readTime: '7 min read',
     emoji: '📋',
+    image: '/blog-igi-certification.png',
     gradient: 'linear-gradient(135deg, #0f0d0a 0%, #1a1510 50%, #A68B4B 100%)',
     keywords: ['IGI certification explained', 'how to read diamond certificate', 'IGI diamond grading India', 'diamond 4Cs explained', 'IGI vs GIA certification'],
     content: `
@@ -232,6 +237,7 @@ export const blogPosts = [
     dateISO: '2026-06-04',
     readTime: '5 min read',
     emoji: '🧼',
+    image: '/blog-ring-care.png',
     gradient: 'linear-gradient(135deg, #F5EFE0 0%, #E8E0D4 50%, #C5A467 100%)',
     keywords: ['how to clean diamond ring at home', 'diamond ring care tips', 'keep diamond ring sparkling', 'gold ring maintenance India', 'diamond jewellery care'],
     content: `
