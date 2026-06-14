@@ -51,7 +51,7 @@ export const metadata = {
     'theme-color': '#C5A467',
   },
   verification: {
-    google: 'your-google-site-verification-code',
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || 'your-google-site-verification-code',
   },
 };
 

@@ -53,6 +53,8 @@ export async function GET(request) {
                 let c = cat.toLowerCase().replace(/\s+/g, '-');
                 // Remove trailing 's' for comparison (necklaces -> necklace)
                 if (c.endsWith('s')) c = c.slice(0, -1);
+                // Map "stack-ring" to "stackable-ring" to bridge sitemap and sheet mismatches
+                if (c === 'stack-ring') c = 'stackable-ring';
                 // Fix common typos (earings -> earing)
                 c = c.replace('earring', 'earing');
                 return c;
