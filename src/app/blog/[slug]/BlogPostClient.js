@@ -38,10 +38,12 @@ function BlogPostContent({ params }) {
       <article className="blog-article">
         <div className="blog-article-header">
           <div className="container">
-            <Link href="/blog" className="blog-back-link">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-              Back to Journal
-            </Link>
+            <div className="blog-back-link-wrap">
+              <Link href="/blog" className="blog-back-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Back to Journal
+              </Link>
+            </div>
             <span className="blog-article-category">{post.category}</span>
             <h1 className="blog-article-title">{post.title}</h1>
             <div className="blog-article-meta">
