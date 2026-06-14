@@ -249,7 +249,7 @@ function HomePage() {
                   }}
                 />
               </div>
-              <div className="hero-content" style={{ position: 'relative', zIndex: 1 }}>
+              <div className="hero-content hero-content-left" style={{ position: 'relative', zIndex: 1 }}>
                 <div className="hero-badge">{slide.badge}</div>
                 <h1 className="hero-title">{slide.title}</h1>
                 <p className="hero-text">{slide.text}</p>
@@ -398,11 +398,10 @@ function HomePage() {
         </div>
       </section>
 
-      {/* ── LOOSE / POLISHED DIAMONDS ── */}
       <section className="products-section alt-bg">
         <div className="container">
-          <div className="story-grid" style={{ direction: 'rtl' }}>
-            <div className="story-image" style={{ direction: 'ltr', borderRadius: '16px', overflow: 'hidden' }}>
+          <div className="story-grid story-grid-reverse">
+            <div className="story-image" style={{ borderRadius: '16px', overflow: 'hidden' }}>
               <img
                 src="/loose-diamonds.png"
                 alt="Polished Lab Grown Diamonds — Buy loose diamonds online"
@@ -413,7 +412,7 @@ function HomePage() {
                 }}
               />
             </div>
-            <div className="story-content" style={{ direction: 'ltr' }}>
+            <div className="story-content">
               <div className="story-label">Polished Diamonds</div>
               <h2 className="story-title">Buy Certified Loose Diamonds</h2>
               <p className="story-text">

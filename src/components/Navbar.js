@@ -88,7 +88,7 @@ export default function Navbar() {
                         <Link href="/shop?category=engagement-rings" className="nav-link">Engagement Rings</Link>
                         <Link href="/shop?category=stackable-rings" className="nav-link">Stackable Rings</Link>
                         <Link href="/shop?category=fine-jewellery" className="nav-link">Fine Jewellery</Link>
-                        <Link href="/ring-atelier" className="nav-link" style={{ color: 'var(--color-gold, #C5A467)' }}>Ring Atelier ✨</Link>
+
                         <Link href="/our-story" className="nav-link">Our Story</Link>
                     </div>
 
@@ -189,7 +189,7 @@ export default function Navbar() {
                     <Link href="/shop?category=stackable-rings" className="nav-link" onClick={() => setMobileOpen(false)}>Stackable Rings</Link>
                     <Link href="/shop?category=fine-jewellery" className="nav-link" onClick={() => setMobileOpen(false)}>Fine Jewellery</Link>
                     <Link href="/shop?category=polished-diamonds" className="nav-link" onClick={() => setMobileOpen(false)} style={{ color: 'var(--color-gold, #C5A467)' }}>💎 Loose Diamonds</Link>
-                    <Link href="/ring-atelier" className="nav-link" onClick={() => setMobileOpen(false)} style={{ color: 'var(--color-gold, #C5A467)' }}>✨ Ring Atelier</Link>
+
                     <Link href="/our-story" className="nav-link" onClick={() => setMobileOpen(false)}>Our Story</Link>
                     <div style={{ marginTop: '24px' }}>
                         {user ? (
