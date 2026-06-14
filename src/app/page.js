@@ -113,6 +113,19 @@ function PromisesSection() {
         </svg>
       ),
     },
+    {
+      label: 'Hallmark HUID Gold & Silver',
+      desc: '100% BIS Hallmarked certified purity',
+      icon: (
+        <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M25 45 L15 72 L40 60 L65 72 L55 45" stroke="#A68B4B" strokeWidth="3" strokeLinejoin="round" fill="#C5A467" opacity="0.5"/>
+          <circle cx="40" cy="35" r="22" fill="#C5A467" opacity="0.85"/>
+          <circle cx="40" cy="35" r="17" stroke="#FDFBF7" strokeWidth="1.5" strokeDasharray="4 2"/>
+          <path d="M40 23 L51 42 H29 L40 23 Z" fill="#FDFBF7" opacity="0.9"/>
+          <path d="M40 29 L47 40 H33 L40 29 Z" fill="#A68B4B"/>
+        </svg>
+      ),
+    },
   ];
 
   return (
