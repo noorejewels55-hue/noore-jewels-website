@@ -65,7 +65,29 @@ export default async function sitemap() {
             changeFrequency: 'weekly',
             priority: 0.85,
         },
+        {
+            url: `${baseUrl}/blog`,
+            lastModified: new Date(),
+            changeFrequency: 'weekly',
+            priority: 0.8,
+        },
     ];
+
+    // Blog post pages for SEO
+    const blogSlugs = [
+        'lab-grown-vs-mined-diamonds-truth-nobody-tells-you',
+        'how-to-choose-perfect-engagement-ring-first-time-buyer',
+        'art-of-stacking-rings-style-guide',
+        'understanding-gold-purity-9kt-vs-14kt-vs-18kt',
+        'igi-certification-explained-what-to-look-for',
+        'diamond-ring-care-guide-keep-sparkle-forever',
+    ];
+    const blogPages = blogSlugs.map(slug => ({
+        url: `${baseUrl}/blog/${slug}`,
+        lastModified: new Date(),
+        changeFrequency: 'monthly',
+        priority: 0.75,
+    }));
 
     // New niche category pages for SEO
     const nichePages = [
@@ -141,5 +163,5 @@ export default async function sitemap() {
         console.error('Sitemap: Error fetching categories', e);
     }
 
-    return [...staticPages, ...nichePages, ...productPages, ...categoryPages];
+    return [...staticPages, ...blogPages, ...nichePages, ...productPages, ...categoryPages];
 }
