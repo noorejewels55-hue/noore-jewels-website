@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import NewsletterForm from './NewsletterForm';
 
 export default function Footer() {
     return (
@@ -33,10 +34,7 @@ export default function Footer() {
                             <h3 className="footer-newsletter-title">Join Noore Jewels</h3>
                             <p className="footer-newsletter-sub">Get early access to new collections, exclusive offers & styling inspiration.</p>
                         </div>
-                        <form className="footer-newsletter-form" onSubmit={e => e.preventDefault()}>
-                            <input type="email" placeholder="Your email address" className="footer-newsletter-input" />
-                            <button type="submit" className="footer-newsletter-btn">Subscribe</button>
-                        </form>
+                        <NewsletterForm />
                     </div>
                 </div>
             </div>
