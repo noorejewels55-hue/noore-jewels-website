@@ -64,25 +64,49 @@ function CustomizePageContent() {
                     <div style={{
                         display: 'flex',
                         justifyContent: 'center',
-                        gap: '32px',
+                        gap: '24px',
                         flexWrap: 'wrap',
                         marginBottom: '48px',
                     }}>
                         {[
-                            { icon: '💎', title: '8+ Diamond Shapes', desc: 'Round, Oval, Emerald, Pear & more' },
-                            { icon: '🏅', title: 'IGI Certified', desc: 'Every diamond comes certified' },
-                            { icon: '✨', title: '9kt, 14kt, 18kt Gold', desc: 'Yellow, Rose & White Gold' },
-                            { icon: '📦', title: 'Made-to-Order', desc: 'Delivered in 3 weeks' },
+                            { image: '/custom-diamond-shapes.png', title: '8+ Diamond Shapes', desc: 'Round, Oval, Emerald, Pear & more' },
+                            { image: '/custom-igi-cert.png', title: 'IGI Certified', desc: 'Every diamond comes certified' },
+                            { image: '/custom-gold-types.png', title: '9kt, 14kt, 18kt Gold', desc: 'Yellow, Rose & White Gold' },
+                            { image: '/custom-luxury-box.png', title: 'Made-to-Order', desc: 'Delivered in 3 weeks' },
                         ].map((item, i) => (
                             <div key={i} style={{
                                 textAlign: 'center',
-                                flex: '0 1 200px',
-                                padding: '24px 16px',
+                                flex: '0 1 220px',
+                                padding: '16px 16px 24px',
                                 background: 'var(--color-bg-card)',
                                 border: '1px solid var(--color-border-light)',
+                                borderRadius: '12px',
+                                boxShadow: '0 10px 30px rgba(0,0,0,0.03)',
                                 transition: 'all 0.3s ease',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
                             }}>
-                                <div style={{ fontSize: '1.8rem', marginBottom: '12px' }}>{item.icon}</div>
+                                <div style={{
+                                    width: '100%',
+                                    height: '140px',
+                                    borderRadius: '8px',
+                                    overflow: 'hidden',
+                                    marginBottom: '16px',
+                                    border: '1px solid rgba(197, 164, 103, 0.15)',
+                                    position: 'relative'
+                                }}>
+                                    <img 
+                                        src={item.image} 
+                                        alt={item.title} 
+                                        style={{ 
+                                            width: '100%', 
+                                            height: '100%', 
+                                            objectFit: 'cover',
+                                            display: 'block'
+                                        }} 
+                                    />
+                                </div>
                                 <div style={{
                                     fontFamily: 'var(--font-body)',
                                     fontSize: '0.78rem',
