@@ -28,7 +28,7 @@ async function fetchFromSheets() {
 
     const response = await sheets.spreadsheets.values.get({
         spreadsheetId: process.env.GOOGLE_SHEET_ID,
-        range: 'Products!A2:T',
+        range: 'Products!A2:U',
     });
 
     const rows = response.data.values || [];
@@ -42,14 +42,14 @@ async function fetchFromSheets() {
             // H=Discount, I=Tags, J=Image 2, K=Image 3, L=Quantity, M=Video URL
             // N=Gold Weight (g), O=Diamond Carat (total), P=Diamond Quality,
             // Q=Diamond Shape, R=(unused - customer selects ring size),
-            // S=(unused), T=Num Diamonds
+            // S=(unused), T=Num Diamonds, U=Image 4
             const imageUrl = row[4] || '';
             const description = row[5] || '';
             const quantity = parseInt(row[11]) || 0; // Column L = Quantity
             const videoUrl = row[12] || ''; // Column M = Video URL
 
-            // Build images array: main image (E) + Image 2 (J) + Image 3 (K)
-            const allImageUrls = [imageUrl, row[9] || '', row[10] || '']
+            // Build images array: main image (E) + Image 2 (J) + Image 3 (K) + Image 4 (U)
+            const allImageUrls = [imageUrl, row[9] || '', row[10] || '', row[20] || '']
                 .map(u => u.trim())
                 .filter(Boolean)
                 .map(u => convertDriveUrl(u));
