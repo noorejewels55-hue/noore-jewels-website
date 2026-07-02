@@ -118,7 +118,18 @@ function ProductDetail({ params }) {
         ? product.price * (1 - product.discount / 100)
         : product?.price || 0;
 
-    const productImages = product?.images || (product?.image ? [product.image] : []);
+    const galleryItems = [];
+    if (product?.video) {
+        galleryItems.push({ type: 'video', url: product.video });
+    }
+    const images = product?.images || (product?.image ? [product.image] : []);
+    images.forEach(img => {
+        galleryItems.push({ type: 'image', url: img });
+    });
+    // Fallback if empty
+    if (galleryItems.length === 0) {
+        galleryItems.push({ type: 'image', url: '/placeholder-product.jpg' });
+    }
 
     const handleAddToCart = () => {
         if (product && product.stock) {
@@ -350,10 +361,11 @@ function ProductDetail({ params }) {
                         <div className="product-gallery">
                             <div
                                 className="product-gallery-main"
-                                style={{ position: 'relative', overflow: 'hidden', cursor: isZooming ? 'zoom-in' : (productImages.length > 1 ? 'grab' : 'zoom-in'), userSelect: 'none' }}
+                                style={{ position: 'relative', overflow: 'hidden', cursor: isZooming ? 'zoom-in' : (galleryItems.length > 1 ? 'grab' : 'zoom-in'), userSelect: 'none' }}
                                 onMouseMove={(e) => {
                                     // Desktop hover-zoom
                                     if (window.innerWidth < 768) return;
+                                    if (galleryItems[selectedImage]?.type === 'video') return;
                                     const rect = e.currentTarget.getBoundingClientRect();
                                     const x = ((e.clientX - rect.left) / rect.width) * 100;
                                     const y = ((e.clientY - rect.top) / rect.height) * 100;
@@ -364,17 +376,17 @@ function ProductDetail({ params }) {
                                     setZoomStyle({});
                                     setIsZooming(false);
                                     e.currentTarget._mouseStartX = null;
-                                    e.currentTarget.style.cursor = productImages.length > 1 ? 'grab' : 'zoom-in';
+                                    e.currentTarget.style.cursor = galleryItems.length > 1 ? 'grab' : 'zoom-in';
                                 }}
                                 onTouchStart={(e) => {
-                                    if (productImages.length <= 1) return;
+                                    if (galleryItems.length <= 1) return;
                                     const touch = e.touches[0];
                                     e.currentTarget._touchStartX = touch.clientX;
                                     e.currentTarget._touchStartY = touch.clientY;
                                     e.currentTarget._isSwiping = false;
                                 }}
                                 onTouchMove={(e) => {
-                                    if (productImages.length <= 1 || !e.currentTarget._touchStartX) return;
+                                    if (galleryItems.length <= 1 || !e.currentTarget._touchStartX) return;
                                     const touch = e.touches[0];
                                     const diffX = Math.abs(touch.clientX - e.currentTarget._touchStartX);
                                     const diffY = Math.abs(touch.clientY - e.currentTarget._touchStartY);
@@ -383,12 +395,12 @@ function ProductDetail({ params }) {
                                     }
                                 }}
                                 onTouchEnd={(e) => {
-                                    if (productImages.length <= 1 || !e.currentTarget._touchStartX) return;
+                                    if (galleryItems.length <= 1 || !e.currentTarget._touchStartX) return;
                                     const touchEndX = e.changedTouches[0].clientX;
                                     const diff = e.currentTarget._touchStartX - touchEndX;
                                     if (e.currentTarget._isSwiping && Math.abs(diff) > 50) {
                                         if (diff > 0) {
-                                            setSelectedImage(prev => Math.min(prev + 1, productImages.length - 1));
+                                            setSelectedImage(prev => Math.min(prev + 1, galleryItems.length - 1));
                                         } else {
                                             setSelectedImage(prev => Math.max(prev - 1, 0));
                                         }
@@ -397,16 +409,18 @@ function ProductDetail({ params }) {
                                     e.currentTarget._isSwiping = false;
                                 }}
                                 onMouseDown={(e) => {
-                                    if (productImages.length <= 1) return;
+                                    if (galleryItems.length <= 1) return;
+                                    // If clicking on video controls or iframe, don't initiate drag
+                                    if (e.target.tagName === 'VIDEO' || e.target.tagName === 'IFRAME') return;
                                     e.currentTarget._mouseStartX = e.clientX;
                                     e.currentTarget.style.cursor = 'grabbing';
                                 }}
                                 onMouseUp={(e) => {
-                                    if (productImages.length <= 1 || !e.currentTarget._mouseStartX) return;
+                                    if (galleryItems.length <= 1 || !e.currentTarget._mouseStartX) return;
                                     const diff = e.currentTarget._mouseStartX - e.clientX;
                                     if (Math.abs(diff) > 50) {
                                         if (diff > 0) {
-                                            setSelectedImage(prev => Math.min(prev + 1, productImages.length - 1));
+                                            setSelectedImage(prev => Math.min(prev + 1, galleryItems.length - 1));
                                         } else {
                                             setSelectedImage(prev => Math.max(prev - 1, 0));
                                         }
@@ -415,15 +429,60 @@ function ProductDetail({ params }) {
                                     e.currentTarget.style.cursor = 'grab';
                                 }}
                             >
-                                <img
-                                    src={productImages[selectedImage] || product.image}
-                                    alt={product.name}
-                                    draggable={false}
-                                    style={{ pointerEvents: 'none', transition: isZooming ? 'none' : 'transform 0.3s ease', ...zoomStyle }}
-                                />
+                                {galleryItems[selectedImage]?.type === 'video' ? (
+                                    <div 
+                                        style={{ 
+                                            width: '100%', 
+                                            height: '100%', 
+                                            position: 'relative',
+                                            background: '#000',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                        }}
+                                    >
+                                        {galleryItems[selectedImage].url.includes('drive.google.com') ? (
+                                            <iframe
+                                                src={galleryItems[selectedImage].url}
+                                                style={{
+                                                    width: '100%',
+                                                    height: '100%',
+                                                    border: 0,
+                                                    background: '#000',
+                                                }}
+                                                allow="autoplay; encrypted-media"
+                                                allowFullScreen
+                                                title={`${product.name} Video Preview`}
+                                            />
+                                        ) : (
+                                            <video
+                                                src={galleryItems[selectedImage].url}
+                                                playsInline
+                                                muted
+                                                loop
+                                                autoPlay
+                                                controls
+                                                style={{ 
+                                                    width: '100%', 
+                                                    height: '100%', 
+                                                    objectFit: 'cover',
+                                                    background: '#000',
+                                                    pointerEvents: 'auto',
+                                                }}
+                                            />
+                                        )}
+                                    </div>
+                                ) : (
+                                    <img
+                                        src={galleryItems[selectedImage]?.url || '/placeholder-product.jpg'}
+                                        alt={product.name}
+                                        draggable={false}
+                                        style={{ pointerEvents: 'none', transition: isZooming ? 'none' : 'transform 0.3s ease', ...zoomStyle }}
+                                    />
+                                )}
 
                                 {/* Arrow Buttons (desktop) */}
-                                {productImages.length > 1 && (
+                                {galleryItems.length > 1 && (
                                     <>
                                         {selectedImage > 0 && (
                                             <button
@@ -443,7 +502,7 @@ function ProductDetail({ params }) {
                                                 ‹
                                             </button>
                                         )}
-                                        {selectedImage < productImages.length - 1 && (
+                                        {selectedImage < galleryItems.length - 1 && (
                                             <button
                                                 onClick={(e) => { e.stopPropagation(); setSelectedImage(prev => prev + 1); }}
                                                 aria-label="Next image"
@@ -467,11 +526,11 @@ function ProductDetail({ params }) {
                                             position: 'absolute', bottom: '16px', left: '50%', transform: 'translateX(-50%)',
                                             display: 'flex', gap: '8px', zIndex: 2,
                                         }}>
-                                            {productImages.map((_, idx) => (
+                                            {galleryItems.map((_, idx) => (
                                                 <button
                                                     key={idx}
                                                     onClick={(e) => { e.stopPropagation(); setSelectedImage(idx); }}
-                                                    aria-label={`View image ${idx + 1}`}
+                                                    aria-label={`View item ${idx + 1}`}
                                                     style={{
                                                         width: selectedImage === idx ? '20px' : '8px',
                                                         height: '8px',
@@ -495,12 +554,12 @@ function ProductDetail({ params }) {
                                             fontSize: '0.72rem', fontWeight: 500, letterSpacing: '0.05em',
                                             zIndex: 2,
                                         }}>
-                                            {selectedImage + 1} / {productImages.length}
+                                            {selectedImage + 1} / {galleryItems.length}
                                         </div>
                                     </>
                                 )}
                             </div>
-                            {productImages.length > 1 && (
+                            {galleryItems.length > 1 && (
                                 <div style={{
                                     display: 'flex',
                                     gap: '8px',
@@ -508,7 +567,7 @@ function ProductDetail({ params }) {
                                     overflowX: 'auto',
                                     paddingBottom: '4px',
                                 }}>
-                                    {productImages.map((img, idx) => (
+                                    {galleryItems.map((item, idx) => (
                                         <button
                                             key={idx}
                                             onClick={() => setSelectedImage(idx)}
@@ -526,60 +585,42 @@ function ProductDetail({ params }) {
                                                 opacity: selectedImage === idx ? 1 : 0.6,
                                                 transition: 'all 0.2s ease',
                                                 flexShrink: 0,
+                                                position: 'relative',
                                             }}
                                         >
-                                            <img
-                                                src={img}
-                                                alt={`${product.name} - view ${idx + 1}`}
-                                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                            />
+                                            {item.type === 'video' ? (
+                                                <>
+                                                    <img
+                                                        src={product.image || '/placeholder-product.jpg'}
+                                                        alt={`${product.name} - video view`}
+                                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                                    />
+                                                    <div style={{
+                                                        position: 'absolute',
+                                                        top: 0, left: 0, right: 0, bottom: 0,
+                                                        background: 'rgba(0,0,0,0.3)',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        color: '#fff',
+                                                        fontSize: '18px',
+                                                    }}>
+                                                        ▶
+                                                    </div>
+                                                </>
+                                            ) : (
+                                                <img
+                                                    src={item.url}
+                                                    alt={`${product.name} - view ${idx + 1}`}
+                                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                                />
+                                            )}
                                         </button>
                                     ))}
                                 </div>
                             )}
 
-                            {/* Product Video */}
-                            {product.video && (
-                                <div style={{
-                                    marginTop: '20px',
-                                    borderRadius: '12px',
-                                    overflow: 'hidden',
-                                    border: '1px solid var(--color-border, #E8E0D4)',
-                                }}>
-                                    <div style={{
-                                        textAlign: 'center',
-                                        padding: '12px 0 8px',
-                                        fontSize: '0.72rem',
-                                        fontWeight: 500,
-                                        letterSpacing: '0.15em',
-                                        textTransform: 'uppercase',
-                                        color: 'var(--color-gold, #C5A467)',
-                                    }}>
-                                        ▶ Watch This Piece Come Alive
-                                    </div>
-                                    {product.video.includes('drive.google.com') ? (
-                                        <iframe
-                                            src={product.video}
-                                            width="100%"
-                                            height="300"
-                                            allow="autoplay; encrypted-media"
-                                            allowFullScreen
-                                            style={{ border: 'none', display: 'block' }}
-                                            title={`${product.name} video`}
-                                        />
-                                    ) : (
-                                        <video
-                                            controls
-                                            playsInline
-                                            preload="metadata"
-                                            style={{ width: '100%', display: 'block', maxHeight: '400px', objectFit: 'contain', background: '#000' }}
-                                        >
-                                            <source src={product.video} type="video/mp4" />
-                                            Your browser does not support the video tag.
-                                        </video>
-                                    )}
-                                </div>
-                            )}
+                            {/* Separate Product Video Removed (now integrated in the main gallery) */}
                         </div>
 
                         {/* Info */}
