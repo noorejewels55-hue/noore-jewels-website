@@ -319,6 +319,16 @@ export async function findCustomer(phone) {
 function convertDriveUrl(url) {
     if (!url) return '/placeholder-product.jpg';
 
+    url = url.trim();
+
+    // Optimize Cloudinary URLs automatically
+    if (url.includes('res.cloudinary.com')) {
+        if (!url.includes('/q_auto')) {
+            return url.replace('/upload/', '/upload/q_auto/');
+        }
+        return url;
+    }
+
     // Already a direct link or non-drive URL
     if (!url.includes('drive.google.com')) return url;
 
@@ -342,6 +352,14 @@ function convertDriveVideoUrl(url) {
     if (!url || !url.trim()) return '';
 
     url = url.trim();
+
+    // Optimize Cloudinary URLs automatically
+    if (url.includes('res.cloudinary.com')) {
+        if (!url.includes('/q_auto')) {
+            return url.replace('/upload/', '/upload/q_auto/');
+        }
+        return url;
+    }
 
     // Already a direct video link (YouTube, mp4, etc.)
     if (!url.includes('drive.google.com')) return url;
