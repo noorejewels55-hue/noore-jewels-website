@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect, use, useRef } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -37,6 +37,15 @@ function ProductDetail({ params }) {
     const [selectedColor, setSelectedColor] = useState('Yellow Gold');
     const [selectedRingSize, setSelectedRingSize] = useState('');
     const { addItem } = useCart();
+    const videoRef = useRef(null);
+
+    useEffect(() => {
+        if (videoRef.current) {
+            videoRef.current.play().catch(err => {
+                console.log("Autoplay check:", err);
+            });
+        }
+    }, [selectedImage, product]);
 
     useEffect(() => {
         fetchProduct();
@@ -457,6 +466,7 @@ function ProductDetail({ params }) {
                                             />
                                         ) : (
                                             <video
+                                                ref={videoRef}
                                                 key={`video-${selectedImage}`}
                                                 src={galleryItems[selectedImage].url}
                                                 poster={product.image}

@@ -361,12 +361,17 @@ function convertDriveVideoUrl(url) {
     // Optimize Cloudinary URLs automatically
     if (url.includes('res.cloudinary.com')) {
         if (url.includes('/upload/')) {
-            if (url.includes('/q_auto/')) {
-                return url.replace('/q_auto/', '/f_auto,q_auto/');
-            }
-            if (!url.includes('f_auto,q_auto')) {
-                return url.replace('/upload/', '/upload/f_auto,q_auto/');
-            }
+            let path = url;
+            path = path.replace(/\/upload\/([^\/]+)\//, (match, p1) => {
+                if (p1.startsWith('v') && /^\d+$/.test(p1.slice(1))) {
+                    return `/upload/f_auto,q_auto:eco,w_480,br_500k/${p1}/`;
+                }
+                if (p1.includes('q_') || p1.includes('w_') || p1.includes('f_') || p1.includes('br_')) {
+                    return '/upload/f_auto,q_auto:eco,w_480,br_500k/';
+                }
+                return `/upload/f_auto,q_auto:eco,w_480,br_500k/${p1}/`;
+            });
+            return path;
         }
         return url;
     }
