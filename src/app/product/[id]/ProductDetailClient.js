@@ -443,6 +443,7 @@ function ProductDetail({ params }) {
                                     >
                                         {galleryItems[selectedImage].url.includes('drive.google.com') ? (
                                             <iframe
+                                                key={`video-${selectedImage}`}
                                                 src={galleryItems[selectedImage].url}
                                                 style={{
                                                     width: '100%',
@@ -456,6 +457,7 @@ function ProductDetail({ params }) {
                                             />
                                         ) : (
                                             <video
+                                                key={`video-${selectedImage}`}
                                                 src={galleryItems[selectedImage].url}
                                                 playsInline
                                                 muted

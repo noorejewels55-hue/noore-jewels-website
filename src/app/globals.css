@@ -1404,12 +1404,26 @@ h1, h2, h3, h4, h5, h6 {
   overflow: hidden;
   background: var(--color-bg-alt);
   margin-bottom: 12px;
+  border-radius: 12px;
 }
 
 .product-gallery-main img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.product-gallery-main video,
+.product-gallery-main iframe {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 0;
+}
+
+.product-gallery-main > div {
+  width: 100%;
+  height: 100%;
 }
 
 .product-gallery-thumbs {
