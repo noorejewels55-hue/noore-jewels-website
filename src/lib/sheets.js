@@ -323,8 +323,13 @@ function convertDriveUrl(url) {
 
     // Optimize Cloudinary URLs automatically
     if (url.includes('res.cloudinary.com')) {
-        if (!url.includes('/q_auto')) {
-            return url.replace('/upload/', '/upload/q_auto/');
+        if (url.includes('/upload/')) {
+            if (url.includes('/q_auto/')) {
+                return url.replace('/q_auto/', '/f_auto,q_auto/');
+            }
+            if (!url.includes('f_auto,q_auto')) {
+                return url.replace('/upload/', '/upload/f_auto,q_auto/');
+            }
         }
         return url;
     }
@@ -355,8 +360,13 @@ function convertDriveVideoUrl(url) {
 
     // Optimize Cloudinary URLs automatically
     if (url.includes('res.cloudinary.com')) {
-        if (!url.includes('/q_auto')) {
-            return url.replace('/upload/', '/upload/q_auto/');
+        if (url.includes('/upload/')) {
+            if (url.includes('/q_auto/')) {
+                return url.replace('/q_auto/', '/f_auto,q_auto/');
+            }
+            if (!url.includes('f_auto,q_auto')) {
+                return url.replace('/upload/', '/upload/f_auto,q_auto/');
+            }
         }
         return url;
     }

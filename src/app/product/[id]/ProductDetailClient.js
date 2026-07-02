@@ -459,7 +459,10 @@ function ProductDetail({ params }) {
                                             <video
                                                 key={`video-${selectedImage}`}
                                                 src={galleryItems[selectedImage].url}
+                                                poster={product.image}
+                                                preload="auto"
                                                 playsInline
+                                                webkit-playsinline=""
                                                 muted
                                                 loop
                                                 autoPlay
