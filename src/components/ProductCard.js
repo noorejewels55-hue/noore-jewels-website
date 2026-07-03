@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useCart } from '@/context/CartContext';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 // Wishlist helpers
 function getWishlist() {
@@ -59,6 +59,42 @@ export default function ProductCard({ product, reviewSummary }) {
     const [imageLoaded, setImageLoaded] = useState(false);
     const [wishlisted, setWishlisted] = useState(false);
     const [addedToBag, setAddedToBag] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
+    const cardRef = useRef(null);
+    const videoNodeRef = useRef(null);
+
+    // IntersectionObserver: detect when this card enters/leaves viewport
+    useEffect(() => {
+        if (!product.video) return; // skip observer for image-only cards
+        const el = cardRef.current;
+        if (!el) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsVisible(true);
+                } else {
+                    setIsVisible(false);
+                    // Pause and release video memory when off-screen
+                    if (videoNodeRef.current) {
+                        videoNodeRef.current.pause();
+                    }
+                }
+            },
+            { rootMargin: '200px' } // start loading 200px before card enters view
+        );
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, [product.video]);
+
+    // Ref callback: play video the instant it mounts in the DOM
+    const videoRefCallback = useCallback((node) => {
+        videoNodeRef.current = node;
+        if (node) {
+            node.muted = true;
+            node.play().catch(() => {});
+        }
+    }, []);
 
     useEffect(() => {
         setWishlisted(getWishlist().includes(product.id));
@@ -90,22 +126,38 @@ export default function ProductCard({ product, reviewSummary }) {
     };
 
     return (
-        <div className="product-card">
+        <div className="product-card" ref={cardRef}>
             <Link href={`/product/${product.id}`}>
                 <div className="product-card-image">
                     {product.video ? (
                         <>
-                            <video
-                                src={product.video}
-                                poster={product.image}
-                                preload="auto"
-                                playsInline
-                                muted
-                                loop
-                                autoPlay
-                                onLoadedData={(e) => { e.target.muted = true; e.target.play().catch(() => {}); }}
-                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                            {/* Show poster image as background while video loads */}
+                            <img
+                                src={product.image}
+                                alt={product.name}
+                                style={{
+                                    width: '100%', height: '100%', objectFit: 'cover',
+                                    position: 'absolute', top: 0, left: 0, zIndex: 0,
+                                }}
                             />
+                            {/* Only mount video when card is near/in viewport */}
+                            {isVisible && (
+                                <video
+                                    ref={videoRefCallback}
+                                    src={product.video}
+                                    poster={product.image}
+                                    preload="auto"
+                                    playsInline
+                                    muted
+                                    loop
+                                    autoPlay
+                                    onLoadedData={(e) => { e.target.muted = true; e.target.play().catch(() => {}); }}
+                                    style={{
+                                        width: '100%', height: '100%', objectFit: 'cover',
+                                        position: 'relative', zIndex: 1,
+                                    }}
+                                />
+                            )}
                         </>
                     ) : (
                         <>
