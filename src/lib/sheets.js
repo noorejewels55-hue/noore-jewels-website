@@ -321,16 +321,8 @@ function convertDriveUrl(url) {
 
     url = url.trim();
 
-    // Optimize Cloudinary URLs automatically
+    // Optimize Cloudinary URLs automatically — return the original raw URL to avoid lossy compression shadows
     if (url.includes('res.cloudinary.com')) {
-        if (url.includes('/upload/')) {
-            if (url.includes('/q_auto/')) {
-                return url.replace('/q_auto/', '/f_auto,q_auto/');
-            }
-            if (!url.includes('f_auto,q_auto')) {
-                return url.replace('/upload/', '/upload/f_auto,q_auto/');
-            }
-        }
         return url;
     }
 
