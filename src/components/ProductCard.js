@@ -171,6 +171,7 @@ export default function ProductCard({ product, reviewSummary }) {
                                 preload="auto"
                                 playsInline
                                 muted
+                                defaultMuted={true}
                                 loop
                                 autoPlay
                                 style={{

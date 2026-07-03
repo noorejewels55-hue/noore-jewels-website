@@ -473,6 +473,7 @@ function ProductDetail({ params }) {
                                                 playsInline
                                                 webkit-playsinline=""
                                                 muted
+                                                defaultMuted={true}
                                                 loop
                                                 autoPlay
                                                 controls
