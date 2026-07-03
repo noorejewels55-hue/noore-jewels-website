@@ -561,17 +561,6 @@ function ProductDetail({ params }) {
                                                 />
                                             ))}
                                         </div>
-
-                                        {/* Image counter */}
-                                        <div style={{
-                                            position: 'absolute', top: '12px', right: '12px',
-                                            background: 'rgba(0,0,0,0.5)', color: '#fff',
-                                            padding: '4px 10px', borderRadius: '12px',
-                                            fontSize: '0.72rem', fontWeight: 500, letterSpacing: '0.05em',
-                                            zIndex: 2,
-                                        }}>
-                                            {selectedImage + 1} / {galleryItems.length}
-                                        </div>
                                     </>
                                 )}
                             </div>
