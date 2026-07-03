@@ -708,7 +708,15 @@ h1, h2, h3, h4, h5, h6 {
   transition: transform var(--transition-elegant);
 }
 
-.product-card:hover .product-card-image img {
+.product-card-image video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-elegant);
+}
+
+.product-card:hover .product-card-image img,
+.product-card:hover .product-card-image video {
   transform: scale(1.05);
 }
 

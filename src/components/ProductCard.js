@@ -93,17 +93,35 @@ export default function ProductCard({ product, reviewSummary }) {
         <div className="product-card">
             <Link href={`/product/${product.id}`}>
                 <div className="product-card-image">
-                    {!imageLoaded && (
-                        <div className="skeleton" style={{ width: '100%', height: '100%', position: 'absolute' }} />
+                    {product.video ? (
+                        <>
+                            <video
+                                src={product.video}
+                                poster={product.image}
+                                preload="auto"
+                                playsInline
+                                muted
+                                loop
+                                autoPlay
+                                onLoadedData={(e) => { e.target.muted = true; e.target.play().catch(() => {}); }}
+                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                            />
+                        </>
+                    ) : (
+                        <>
+                            {!imageLoaded && (
+                                <div className="skeleton" style={{ width: '100%', height: '100%', position: 'absolute' }} />
+                            )}
+                            <img
+                                src={product.image}
+                                alt={product.name}
+                                loading="lazy"
+                                decoding="async"
+                                onLoad={() => setImageLoaded(true)}
+                                style={{ opacity: imageLoaded ? 1 : 0, transition: 'opacity 0.3s ease' }}
+                            />
+                        </>
                     )}
-                    <img
-                        src={product.image}
-                        alt={product.name}
-                        loading="lazy"
-                        decoding="async"
-                        onLoad={() => setImageLoaded(true)}
-                        style={{ opacity: imageLoaded ? 1 : 0, transition: 'opacity 0.3s ease' }}
-                    />
 
                     {/* Badges */}
                     <div className="product-card-badges">

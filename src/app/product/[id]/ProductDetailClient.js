@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, use, useRef } from 'react';
+import { useState, useEffect, use, useCallback } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -37,15 +37,14 @@ function ProductDetail({ params }) {
     const [selectedColor, setSelectedColor] = useState('Yellow Gold');
     const [selectedRingSize, setSelectedRingSize] = useState('');
     const { addItem } = useCart();
-    const videoRef = useRef(null);
 
-    useEffect(() => {
-        if (videoRef.current) {
-            videoRef.current.play().catch(err => {
-                console.log("Autoplay check:", err);
-            });
+    // Ref callback: fires the instant React mounts the <video> into the DOM
+    const videoRefCallback = useCallback((node) => {
+        if (node) {
+            node.muted = true; // ensure muted property is set on the DOM node
+            node.play().catch(() => {});
         }
-    }, [selectedImage, product]);
+    }, []);
 
     useEffect(() => {
         fetchProduct();
@@ -466,7 +465,7 @@ function ProductDetail({ params }) {
                                             />
                                         ) : (
                                             <video
-                                                ref={videoRef}
+                                                ref={videoRefCallback}
                                                 key={`video-${selectedImage}`}
                                                 src={galleryItems[selectedImage].url}
                                                 poster={product.image}
@@ -477,6 +476,7 @@ function ProductDetail({ params }) {
                                                 loop
                                                 autoPlay
                                                 controls
+                                                onLoadedData={(e) => { e.target.play().catch(() => {}); }}
                                                 style={{ 
                                                     width: '100%', 
                                                     height: '100%', 
