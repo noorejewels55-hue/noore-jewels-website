@@ -52,8 +52,8 @@ function ProductDetail({ params }) {
 
     const fetchProduct = async () => {
         try {
-            // Fetch only this specific product (not all products)
-            const res = await fetch(`/api/products?id=${id}`);
+            // Fetch only this specific product (not all products) with cache-busting
+            const res = await fetch(`/api/products?id=${id}&t=${Date.now()}`);
             const data = await res.json();
             if (data.success) {
                 setProduct(data.product || null);
