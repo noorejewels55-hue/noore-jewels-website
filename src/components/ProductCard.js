@@ -87,14 +87,38 @@ export default function ProductCard({ product, reviewSummary }) {
         return () => observer.disconnect();
     }, [product.video]);
 
-    // Ref callback: play video the instant it mounts in the DOM
+    // Ref callback to capture the DOM node
     const videoRefCallback = useCallback((node) => {
         videoNodeRef.current = node;
         if (node) {
             node.muted = true;
-            node.play().catch(() => {});
         }
     }, []);
+
+    // Explicitly load and play/pause based on visibility
+    useEffect(() => {
+        if (!product.video) return;
+        const video = videoNodeRef.current;
+        if (!video) return;
+
+        if (isVisible) {
+            // Only set src and load if it's not already matching
+            if (!video.src || !video.src.includes(product.video)) {
+                video.src = product.video;
+                video.load();
+            }
+            video.play().catch((err) => {
+                console.log("Autoplay failed:", err);
+            });
+        } else {
+            video.pause();
+            // Clear source to release network and memory resources
+            video.removeAttribute('src');
+            try {
+                video.load();
+            } catch (e) {}
+        }
+    }, [isVisible, product.video]);
 
     useEffect(() => {
         setWishlisted(getWishlist().includes(product.id));
@@ -140,24 +164,22 @@ export default function ProductCard({ product, reviewSummary }) {
                                     position: 'absolute', top: 0, left: 0, zIndex: 0,
                                 }}
                             />
-                            {/* Only mount video when card is near/in viewport */}
-                            {isVisible && (
-                                <video
-                                    ref={videoRefCallback}
-                                    src={product.video}
-                                    poster={product.image}
-                                    preload="auto"
-                                    playsInline
-                                    muted
-                                    loop
-                                    autoPlay
-                                    onLoadedData={(e) => { e.target.muted = true; e.target.play().catch(() => {}); }}
-                                    style={{
-                                        width: '100%', height: '100%', objectFit: 'cover',
-                                        position: 'relative', zIndex: 1,
-                                    }}
-                                />
-                            )}
+                            {/* Video element is always in the DOM but loads src dynamically */}
+                            <video
+                                ref={videoRefCallback}
+                                poster={product.image}
+                                preload="auto"
+                                playsInline
+                                muted
+                                loop
+                                autoPlay
+                                style={{
+                                    width: '100%', height: '100%', objectFit: 'cover',
+                                    position: 'relative', zIndex: 1,
+                                    opacity: isVisible ? 1 : 0,
+                                    transition: 'opacity 0.3s ease',
+                                }}
+                            />
                         </>
                     ) : (
                         <>
