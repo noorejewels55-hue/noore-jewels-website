@@ -358,20 +358,17 @@ function convertDriveVideoUrl(url) {
 
     url = url.trim();
 
-    // Optimize Cloudinary URLs automatically
+    // Optimize Cloudinary video URLs — keep it simple with q_auto only
+    // Heavy transforms (w_480, br_500k) cause chunked responses without Content-Length,
+    // which prevents browsers from buffering properly and delays autoplay.
     if (url.includes('res.cloudinary.com')) {
         if (url.includes('/upload/')) {
-            let path = url;
-            path = path.replace(/\/upload\/([^\/]+)\//, (match, p1) => {
-                if (p1.startsWith('v') && /^\d+$/.test(p1.slice(1))) {
-                    return `/upload/f_auto,q_auto:eco,w_480,br_500k/${p1}/`;
-                }
-                if (p1.includes('q_') || p1.includes('w_') || p1.includes('f_') || p1.includes('br_')) {
-                    return '/upload/f_auto,q_auto:eco,w_480,br_500k/';
-                }
-                return `/upload/f_auto,q_auto:eco,w_480,br_500k/${p1}/`;
-            });
-            return path;
+            // Strip any existing transforms and just use q_auto
+            let cleaned = url.replace(/\/upload\/[^v][^\/]*\//, '/upload/q_auto/');
+            if (!cleaned.includes('/q_auto/')) {
+                cleaned = url.replace('/upload/', '/upload/q_auto/');
+            }
+            return cleaned;
         }
         return url;
     }
