@@ -22,9 +22,10 @@ export function middleware(request) {
         "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://checkout.razorpay.com https://api.razorpay.com; " +
         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
         "font-src 'self' https://fonts.gstatic.com; " +
-        "img-src 'self' data: blob: https://lh3.googleusercontent.com https://*.googleusercontent.com https://res.cloudinary.com; " +
+        "img-src 'self' data: blob: https://lh3.googleusercontent.com https://*.googleusercontent.com https://res.cloudinary.com https://*.cloudinary.com; " +
+        "media-src 'self' https://res.cloudinary.com https://*.cloudinary.com https://drive.google.com blob: data:; " +
         "connect-src 'self' https://api.razorpay.com https://lumberjack-cx.razorpay.com https://raw.githack.com https://*.githack.com https://cdn.jsdelivr.net https://*.jsdelivr.net https://dl.polyhaven.org https://*.polyhaven.org https://*.polyhaven.net https://*.githubusercontent.com; " +
-        "frame-src https://api.razorpay.com https://checkout.razorpay.com; " +
+        "frame-src https://api.razorpay.com https://checkout.razorpay.com https://drive.google.com; " +
         "worker-src 'self' blob:; " +
         "child-src blob:; " +
         "object-src 'none'; " +
