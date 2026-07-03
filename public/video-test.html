@@ -1,109 +1,158 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Video Autoplay Test</title>
+    <title>Advanced Autoplay Diagnostic</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        body { font-family: sans-serif; padding: 20px; background: #111; color: #fff; }
-        .test { margin: 20px 0; padding: 20px; border: 1px solid #333; border-radius: 8px; }
-        .test h3 { margin-top: 0; color: #C5A467; }
-        video { width: 300px; aspect-ratio: 3/4; object-fit: cover; background: #000; border-radius: 8px; }
-        .status { padding: 8px; margin-top: 8px; border-radius: 4px; font-size: 14px; }
-        .success { background: #1a4a1a; color: #4caf50; }
-        .error { background: #4a1a1a; color: #f44336; }
-        .info { background: #1a2a4a; color: #2196f3; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 20px; background: #121212; color: #e0e0e0; line-height: 1.5; }
+        .container { max-width: 600px; margin: 0 auto; }
+        h1 { color: #C5A467; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .info-box { background: #1e1e1e; border: 1px solid #333; border-radius: 8px; padding: 15px; margin-bottom: 20px; }
+        .test-card { background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 15px; margin-bottom: 15px; }
+        .test-card h3 { margin-top: 0; color: #fff; border-bottom: 1px solid #2a2a2a; padding-bottom: 5px; }
+        video { width: 100%; max-width: 320px; aspect-ratio: 3/4; object-fit: cover; background: #000; border-radius: 6px; display: block; margin: 10px 0; }
+        .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; margin-bottom: 10px; }
+        .badge-pending { background: #eab30820; color: #eab308; border: 1px solid #eab30840; }
+        .badge-success { background: #22c55e20; color: #22c55e; border: 1px solid #22c55e40; }
+        .badge-error { background: #ef444420; color: #ef4444; border: 1px solid #ef444440; }
+        .log-box { font-family: monospace; background: #0a0a0a; padding: 10px; border-radius: 4px; max-height: 120px; overflow-y: auto; font-size: 12px; border: 1px solid #222; }
+        button { background: #C5A467; color: #000; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px; margin-top: 10px; }
+        button:hover { background: #b39255; }
     </style>
 </head>
 <body>
-    <h1>Video Autoplay Diagnostic</h1>
-    <p>Open this page and check which methods autoplay successfully.</p>
+    <div class="container">
+        <h1>🎬 Autoplay Diagnostic Tool</h1>
+        
+        <div class="info-box">
+            <h3>System Information</h3>
+            <div><strong>User Agent:</strong> <span id="ua-info">Loading...</span></div>
+            <div style="margin-top: 8px;">
+                <button id="btn-interact">👉 CLICK HERE TO FORCE INTERACTION</button>
+            </div>
+        </div>
 
-    <div class="test">
-        <h3>Test 1: Standard HTML autoplay (autoplay muted playsinline)</h3>
-        <video id="v1"
-            src="https://res.cloudinary.com/dryqd44dj/video/upload/q_auto/v1782967306/Marquise_stack_hzdnoa.mp4"
-            autoplay muted playsinline loop
-            poster="https://res.cloudinary.com/dryqd44dj/image/upload/q_auto/v1782967299/Marquise_stack2_paw5wg.jpg"
-        ></video>
-        <div id="s1" class="status info">Waiting...</div>
-    </div>
+        <!-- TEST 1: Standard Autoplay tag with Source tag -->
+        <div class="test-card">
+            <h3>Test 1: standard &lt;video&gt; with &lt;source&gt; tag</h3>
+            <span id="badge-1" class="badge badge-pending">PENDING</span>
+            <video id="v1" autoplay muted playsinline loop poster="https://res.cloudinary.com/dryqd44dj/image/upload/q_auto/v1782967299/Marquise_stack2_paw5wg.jpg">
+                <source src="https://res.cloudinary.com/dryqd44dj/video/upload/q_auto/v1782967306/Marquise_stack_hzdnoa.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div class="log-box" id="log-1">Initializing...</div>
+        </div>
 
-    <div class="test">
-        <h3>Test 2: RAW video URL (no transforms)</h3>
-        <video id="v2"
-            src="https://res.cloudinary.com/dryqd44dj/video/upload/v1782967306/Marquise_stack_hzdnoa.mp4"
-            autoplay muted playsinline loop
-        ></video>
-        <div id="s2" class="status info">Waiting...</div>
-    </div>
+        <!-- TEST 2: Javascript play() on user gesture -->
+        <div class="test-card">
+            <h3>Test 2: JS .play() after user gesture</h3>
+            <span id="badge-2" class="badge badge-pending">WAITING FOR CLICK</span>
+            <video id="v2" muted playsinline loop>
+                <source src="https://res.cloudinary.com/dryqd44dj/video/upload/q_auto/v1782967306/Marquise_stack_hzdnoa.mp4" type="video/mp4">
+            </video>
+            <div class="log-box" id="log-2">Waiting for you to click the button above...</div>
+        </div>
 
-    <div class="test">
-        <h3>Test 3: JavaScript .play() after loadeddata</h3>
-        <video id="v3"
-            src="https://res.cloudinary.com/dryqd44dj/video/upload/v1782967306/Marquise_stack_hzdnoa.mp4"
-            muted playsinline loop
-        ></video>
-        <div id="s3" class="status info">Waiting...</div>
-    </div>
-
-    <div class="test">
-        <h3>Test 4: JS muted=true + play() on canplay</h3>
-        <video id="v4" playsinline loop></video>
-        <div id="s4" class="status info">Waiting...</div>
+        <!-- TEST 3: Alternative Video URL (Generic sample) -->
+        <div class="test-card">
+            <h3>Test 3: Sample MP4 from different domain</h3>
+            <span id="badge-3" class="badge badge-pending">PENDING</span>
+            <video id="v3" autoplay muted playsinline loop>
+                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/mp4">
+            </video>
+            <div class="log-box" id="log-3">Initializing...</div>
+        </div>
     </div>
 
     <script>
-        var v1 = document.getElementById('v1');
-        v1.addEventListener('playing', function() {
-            document.getElementById('s1').className = 'status success';
-            document.getElementById('s1').textContent = 'PLAYING - Standard autoplay works!';
+        document.getElementById('ua-info').textContent = navigator.userAgent;
+
+        function log(id, message, isError = false) {
+            const el = document.getElementById('log-' + id);
+            const badge = document.getElementById('badge-' + id);
+            
+            const time = new Date().toLocaleTimeString();
+            el.innerHTML += `\n[${time}] ${message}`;
+            el.scrollTop = el.scrollHeight;
+
+            if (isError) {
+                badge.className = 'badge badge-error';
+                badge.textContent = 'BLOCKED/ERROR';
+            }
+        }
+
+        function setSuccess(id, msg) {
+            const badge = document.getElementById('badge-' + id);
+            badge.className = 'badge badge-success';
+            badge.textContent = 'PLAYING';
+            log(id, msg);
+        }
+
+        // --- TEST 1 ---
+        const v1 = document.getElementById('v1');
+        log(1, 'Video created. Attributes: autoplay, muted, playsinline');
+        
+        v1.addEventListener('loadstart', () => log(1, 'Video loading started...'));
+        v1.addEventListener('loadedmetadata', () => log(1, 'Metadata loaded. Duration: ' + v1.duration));
+        v1.addEventListener('loadeddata', () => log(1, 'First frame loaded.'));
+        v1.addEventListener('canplay', () => log(1, 'Can play event fired.'));
+        v1.addEventListener('playing', () => setSuccess(1, '✅ Video is playing!'));
+        v1.addEventListener('pause', () => log(1, 'Video paused.'));
+        
+        v1.addEventListener('error', (e) => {
+            const errCode = v1.error ? v1.error.code : 'unknown';
+            const errMsg = v1.error ? v1.error.message : 'no message';
+            log(1, `❌ Error event! Code: ${errCode}, Message: ${errMsg}`, true);
         });
-        v1.addEventListener('error', function() {
-            document.getElementById('s1').className = 'status error';
-            document.getElementById('s1').textContent = 'ERROR: ' + (v1.error ? v1.error.message : 'unknown');
-        });
-        setTimeout(function() {
+
+        // Autoplay check promise
+        setTimeout(() => {
             if (v1.paused) {
-                document.getElementById('s1').className = 'status error';
-                document.getElementById('s1').textContent = 'PAUSED after 3s - autoplay blocked';
+                log(1, 'Video is paused after 3s. Attempting programmatic play()...');
+                v1.play().then(() => {
+                    setSuccess(1, '✅ Programmatic play() succeeded!');
+                }).catch((err) => {
+                    log(1, `❌ programatic play() failed: ${err.name} - ${err.message}`, true);
+                });
             }
-        }, 3000);
+        }, 2000);
 
-        var v2 = document.getElementById('v2');
-        v2.addEventListener('playing', function() {
-            document.getElementById('s2').className = 'status success';
-            document.getElementById('s2').textContent = 'PLAYING - RAW URL works!';
+        // --- TEST 3 ---
+        const v3 = document.getElementById('v3');
+        log(3, 'Loading generic sample video...');
+        v3.addEventListener('playing', () => setSuccess(3, '✅ Generic sample video is playing!'));
+        v3.addEventListener('error', (e) => {
+            log(3, `❌ Generic video error: ${v3.error ? v3.error.message : 'unknown'}`, true);
         });
-        setTimeout(function() {
-            if (v2.paused) {
-                document.getElementById('s2').className = 'status error';
-                document.getElementById('s2').textContent = 'PAUSED after 3s';
+        setTimeout(() => {
+            if (v3.paused) {
+                v3.play().then(() => {
+                    setSuccess(3, '✅ Generic programmatic play() succeeded!');
+                }).catch((err) => {
+                    log(3, `❌ Generic play() failed: ${err.name} - ${err.message}`, true);
+                });
             }
-        }, 3000);
+        }, 2000);
 
-        var v3 = document.getElementById('v3');
-        v3.addEventListener('loadeddata', function() {
-            v3.muted = true;
-            v3.play().then(function() {
-                document.getElementById('s3').className = 'status success';
-                document.getElementById('s3').textContent = 'PLAYING - JS .play() works!';
-            }).catch(function(err) {
-                document.getElementById('s3').className = 'status error';
-                document.getElementById('s3').textContent = 'play() rejected: ' + err.message;
+        // --- TEST 2 (User Interaction) ---
+        const btn = document.getElementById('btn-interact');
+        const v2 = document.getElementById('v2');
+        
+        btn.addEventListener('click', () => {
+            log(2, 'Button clicked! Calling v2.play()...');
+            
+            // Try playing all videos on user interaction
+            v2.play().then(() => {
+                setSuccess(2, '✅ Play succeeded on user gesture!');
+            }).catch((err) => {
+                log(2, `❌ Play failed on user gesture: ${err.name} - ${err.message}`, true);
             });
-        });
 
-        var v4 = document.getElementById('v4');
-        v4.muted = true;
-        v4.src = 'https://res.cloudinary.com/dryqd44dj/video/upload/v1782967306/Marquise_stack_hzdnoa.mp4';
-        v4.addEventListener('canplay', function() {
-            v4.play().then(function() {
-                document.getElementById('s4').className = 'status success';
-                document.getElementById('s4').textContent = 'PLAYING - Full JS control works!';
-            }).catch(function(err) {
-                document.getElementById('s4').className = 'status error';
-                document.getElementById('s4').textContent = 'play() rejected: ' + err.message;
-            });
+            // Also try v1 and v3 just in case
+            v1.play().then(() => setSuccess(1, '✅ Play succeeded on user gesture!'))
+                .catch(err => log(1, 'Gesture play failed: ' + err.message));
+            v3.play().then(() => setSuccess(3, '✅ Play succeeded on user gesture!'))
+                .catch(err => log(3, 'Gesture play failed: ' + err.message));
         });
     </script>
 </body>
