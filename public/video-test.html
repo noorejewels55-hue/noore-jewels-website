@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Video Autoplay Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #111; color: #fff; }
+        .test { margin: 20px 0; padding: 20px; border: 1px solid #333; border-radius: 8px; }
+        .test h3 { margin-top: 0; color: #C5A467; }
+        video { width: 300px; aspect-ratio: 3/4; object-fit: cover; background: #000; border-radius: 8px; }
+        .status { padding: 8px; margin-top: 8px; border-radius: 4px; font-size: 14px; }
+        .success { background: #1a4a1a; color: #4caf50; }
+        .error { background: #4a1a1a; color: #f44336; }
+        .info { background: #1a2a4a; color: #2196f3; }
+    </style>
+</head>
+<body>
+    <h1>Video Autoplay Diagnostic</h1>
+    <p>Open this page and check which methods autoplay successfully.</p>
+
+    <div class="test">
+        <h3>Test 1: Standard HTML autoplay (autoplay muted playsinline)</h3>
+        <video id="v1"
+            src="https://res.cloudinary.com/dryqd44dj/video/upload/q_auto/v1782967306/Marquise_stack_hzdnoa.mp4"
+            autoplay muted playsinline loop
+            poster="https://res.cloudinary.com/dryqd44dj/image/upload/q_auto/v1782967299/Marquise_stack2_paw5wg.jpg"
+        ></video>
+        <div id="s1" class="status info">Waiting...</div>
+    </div>
+
+    <div class="test">
+        <h3>Test 2: RAW video URL (no transforms)</h3>
+        <video id="v2"
+            src="https://res.cloudinary.com/dryqd44dj/video/upload/v1782967306/Marquise_stack_hzdnoa.mp4"
+            autoplay muted playsinline loop
+        ></video>
+        <div id="s2" class="status info">Waiting...</div>
+    </div>
+
+    <div class="test">
+        <h3>Test 3: JavaScript .play() after loadeddata</h3>
+        <video id="v3"
+            src="https://res.cloudinary.com/dryqd44dj/video/upload/v1782967306/Marquise_stack_hzdnoa.mp4"
+            muted playsinline loop
+        ></video>
+        <div id="s3" class="status info">Waiting...</div>
+    </div>
+
+    <div class="test">
+        <h3>Test 4: JS muted=true + play() on canplay</h3>
+        <video id="v4" playsinline loop></video>
+        <div id="s4" class="status info">Waiting...</div>
+    </div>
+
+    <script>
+        var v1 = document.getElementById('v1');
+        v1.addEventListener('playing', function() {
+            document.getElementById('s1').className = 'status success';
+            document.getElementById('s1').textContent = 'PLAYING - Standard autoplay works!';
+        });
+        v1.addEventListener('error', function() {
+            document.getElementById('s1').className = 'status error';
+            document.getElementById('s1').textContent = 'ERROR: ' + (v1.error ? v1.error.message : 'unknown');
+        });
+        setTimeout(function() {
+            if (v1.paused) {
+                document.getElementById('s1').className = 'status error';
+                document.getElementById('s1').textContent = 'PAUSED after 3s - autoplay blocked';
+            }
+        }, 3000);
+
+        var v2 = document.getElementById('v2');
+        v2.addEventListener('playing', function() {
+            document.getElementById('s2').className = 'status success';
+            document.getElementById('s2').textContent = 'PLAYING - RAW URL works!';
+        });
+        setTimeout(function() {
+            if (v2.paused) {
+                document.getElementById('s2').className = 'status error';
+                document.getElementById('s2').textContent = 'PAUSED after 3s';
+            }
+        }, 3000);
+
+        var v3 = document.getElementById('v3');
+        v3.addEventListener('loadeddata', function() {
+            v3.muted = true;
+            v3.play().then(function() {
+                document.getElementById('s3').className = 'status success';
+                document.getElementById('s3').textContent = 'PLAYING - JS .play() works!';
+            }).catch(function(err) {
+                document.getElementById('s3').className = 'status error';
+                document.getElementById('s3').textContent = 'play() rejected: ' + err.message;
+            });
+        });
+
+        var v4 = document.getElementById('v4');
+        v4.muted = true;
+        v4.src = 'https://res.cloudinary.com/dryqd44dj/video/upload/v1782967306/Marquise_stack_hzdnoa.mp4';
+        v4.addEventListener('canplay', function() {
+            v4.play().then(function() {
+                document.getElementById('s4').className = 'status success';
+                document.getElementById('s4').textContent = 'PLAYING - Full JS control works!';
+            }).catch(function(err) {
+                document.getElementById('s4').className = 'status error';
+                document.getElementById('s4').textContent = 'play() rejected: ' + err.message;
+            });
+        });
+    </script>
+</body>
+</html>
