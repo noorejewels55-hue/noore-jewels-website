@@ -28,7 +28,7 @@ async function fetchFromSheets() {
 
     const response = await sheets.spreadsheets.values.get({
         spreadsheetId: process.env.GOOGLE_SHEET_ID,
-        range: 'Products!A2:U',
+        range: 'Products!A2:V',
     });
 
     const rows = response.data.values || [];
@@ -42,7 +42,7 @@ async function fetchFromSheets() {
             // H=Discount, I=Tags, J=Image 2, K=Image 3, L=Quantity, M=Video URL
             // N=Gold Weight (g), O=Diamond Carat (total), P=Diamond Quality,
             // Q=Diamond Shape, R=(unused - customer selects ring size),
-            // S=(unused), T=Num Diamonds, U=Image 4
+            // S=(unused), T=Num Diamonds, U=Image 4, V=Default Metal
             const imageUrl = row[4] || '';
             const description = row[5] || '';
             const quantity = parseInt(row[11]) || 0; // Column L = Quantity
@@ -77,6 +77,7 @@ async function fetchFromSheets() {
                 diamondQuality: row[15] || '',
                 diamondShape: row[16] || '',  // Column Q = Diamond Shape (set by seller)
                 numDiamonds: parseInt(row[19]) || 0,  // Number of individual stones
+                defaultMetal: (row[21] || '').trim() || '9K Gold',  // Column V = Default Metal
             };
         });
 }
@@ -586,13 +587,24 @@ export async function getProductPricingInfo(product) {
     }
 }
 
-// Calculate the default 9kt gold price for a product (server-side)
+// Map the defaultMetal field value to the pricing table key
+const METAL_TO_PRICING_KEY = {
+    '9K Gold': 'Gold 9K per gram',
+    '14K Gold': 'Gold 14K per gram',
+    '18K Gold': 'Gold 18K per gram',
+    '22K Gold': 'Gold 22K per gram',
+    '24K Gold': 'Gold 24K per gram',
+    '925 Silver': 'Silver 925 per gram',
+};
+
+// Calculate the default price for a product using its defaultMetal (server-side)
 // Uses same formula as the client-side price breakdown
-function calc9ktPrice(product, pricing, diamondPricing) {
+function calcDefaultMetalPrice(product, pricing, diamondPricing) {
     if (!product.goldWeight && !product.diamondCarat) return null;
 
-    const goldRate = pricing['Gold 9K per gram']?.rate || 0;
-    const goldPrice = Math.round(goldRate * (product.goldWeight || 0));
+    const metalKey = METAL_TO_PRICING_KEY[product.defaultMetal] || 'Gold 9K per gram';
+    const metalRate = pricing[metalKey]?.rate || 0;
+    const metalPrice = Math.round(metalRate * (product.goldWeight || 0));
 
     // Diamond price
     const diamondInfo = diamondPricing?.find(d => d.qualityGrade === product.diamondQuality);
@@ -607,8 +619,8 @@ function calc9ktPrice(product, pricing, diamondPricing) {
     const certFee = pricing['Certification Fee']?.rate || 0;
     const gstPercent = pricing['GST (%)']?.rate || 3;
 
-    // GST applies on gold + diamond + making charges only (not certification)
-    const gstBase = goldPrice + diamondFinalPrice + makingCharges;
+    // GST applies on metal + diamond + making charges only (not certification)
+    const gstBase = metalPrice + diamondFinalPrice + makingCharges;
     const gst = Math.round(gstBase * gstPercent / 100);
     const total = gstBase + gst + certFee;
 
@@ -622,8 +634,8 @@ let cachedEnrichedProducts = null;
 let enrichedCacheTimestamp = 0;
 const ENRICHED_CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
-// Enrich all products with their default 9kt price
-// Called from the products API so shop/cards show the 9kt price by default
+// Enrich all products with their default metal price
+// Called from the products API so shop/cards show the correct default price
 export async function enrichProductsWithDefaultPricing(products) {
     const now = Date.now();
 
@@ -640,12 +652,12 @@ export async function enrichProductsWithDefaultPricing(products) {
         ]);
 
         const enriched = products.map(p => {
-            const default9ktPrice = calc9ktPrice(p, pricing, diamondPricing);
+            const defaultMetalPrice = calcDefaultMetalPrice(p, pricing, diamondPricing);
             return {
                 ...p,
-                // If we can calculate a 9kt price, use it; otherwise keep the sheet price
-                defaultPrice: default9ktPrice || (p.discount > 0 ? Math.round(p.price * (1 - p.discount / 100)) : p.price),
-                hasLivePrice: !!default9ktPrice,
+                // Use product's defaultMetal to calculate price; otherwise keep the sheet price
+                defaultPrice: defaultMetalPrice || (p.discount > 0 ? Math.round(p.price * (1 - p.discount / 100)) : p.price),
+                hasLivePrice: !!defaultMetalPrice,
             };
         });
 

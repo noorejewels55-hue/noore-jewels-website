@@ -127,10 +127,16 @@ export default function ProductCard({ product, reviewSummary }) {
         return () => window.removeEventListener('wishlistChange', handler);
     }, [product.id]);
 
-    // Use defaultPrice (9kt calculated price) if available, otherwise fallback
+    // Use defaultPrice (calculated from product's default metal) if available, otherwise fallback
     const displayPrice = product.defaultPrice || (product.discount > 0
         ? Math.round(product.price * (1 - product.discount / 100))
         : product.price);
+
+    // Dynamic label for the default metal shown next to price
+    const metalLabel = {
+        '9K Gold': '9kt', '14K Gold': '14kt', '18K Gold': '18kt',
+        '22K Gold': '22kt', '24K Gold': '24kt', '925 Silver': 'Silver',
+    }[product.defaultMetal] || '9kt';
 
     const review = reviewSummary?.[product.id];
 
@@ -232,7 +238,7 @@ export default function ProductCard({ product, reviewSummary }) {
                         {product.hasLivePrice ? (
                             <>
                                 <span className="sale-price">₹{displayPrice.toLocaleString('en-IN')}</span>
-                                <span style={{ fontSize: '0.65rem', color: 'var(--color-text-muted)', marginLeft: '4px' }}>(9kt)</span>
+                                <span style={{ fontSize: '0.65rem', color: 'var(--color-text-muted)', marginLeft: '4px' }}>({metalLabel})</span>
                             </>
                         ) : product.discount > 0 ? (
                             <>

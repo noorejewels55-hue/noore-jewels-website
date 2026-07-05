@@ -56,9 +56,14 @@ function ProductDetail({ params }) {
             const res = await fetch(`/api/products?id=${id}&t=${Date.now()}`);
             const data = await res.json();
             if (data.success) {
-                setProduct(data.product || null);
+                const prod = data.product || null;
+                setProduct(prod);
                 setSelectedImage(0);
                 setRelated(data.related || []);
+                // Set default metal/purity from product data (e.g., '925 Silver' for silver items)
+                if (prod?.defaultMetal) {
+                    setSelectedMetal(prod.defaultMetal);
+                }
             }
         } catch (err) {
             console.error('Error:', err);
