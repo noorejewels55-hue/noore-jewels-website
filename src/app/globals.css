@@ -971,6 +971,7 @@ h1, h2, h3, h4, h5, h6 {
   width: 56px;
   height: 56px;
   object-fit: contain;
+  mix-blend-mode: multiply;
   transition: transform var(--transition-base);
 }
 
