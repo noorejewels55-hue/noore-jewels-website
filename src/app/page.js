@@ -34,19 +34,12 @@ function PromisesSection() {
   const promises = [
     {
       label: 'Premium Lab Diamonds',
-      desc: 'IGI-certified finest quality stones',
+      desc: 'IGI & SGL certified finest quality stones',
       icon: (
-        <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M40 8L56 28L40 72L24 28L40 8Z" fill="#C5A467" opacity="0.85"/>
-          <path d="M40 8L56 28H24L40 8Z" fill="#D4BA82"/>
-          <path d="M40 8L48 28H40V8Z" fill="#A68B4B" opacity="0.6"/>
-          <path d="M56 28L40 72V28H56Z" fill="#A68B4B" opacity="0.5"/>
-          <path d="M24 28L40 72V28H24Z" fill="#C5A467" opacity="0.7"/>
-          <path d="M14 28L24 28L40 8L14 28Z" fill="#D4BA82" opacity="0.5"/>
-          <path d="M66 28L56 28L40 8L66 28Z" fill="#D4BA82" opacity="0.4"/>
-          <path d="M14 28L40 72L24 28H14Z" fill="#C5A467" opacity="0.4"/>
-          <path d="M66 28L40 72L56 28H66Z" fill="#A68B4B" opacity="0.35"/>
-        </svg>
+        <div style={{ display: 'flex', gap: '6%', alignItems: 'center', justifyContent: 'center', width: '85%', height: '85%' }}>
+          <img src="/igi-logo.png" alt="IGI" style={{ width: '50%', height: '50%', objectFit: 'contain' }} />
+          <img src="/sgl-logo.png" alt="SGL" style={{ width: '44%', height: '44%', objectFit: 'contain' }} />
+        </div>
       ),
     },
     {
@@ -117,13 +110,7 @@ function PromisesSection() {
       label: 'Hallmark HUID Gold & Silver',
       desc: '100% BIS Hallmarked certified purity',
       icon: (
-        <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M25 45 L15 72 L40 60 L65 72 L55 45" stroke="#A68B4B" strokeWidth="3" strokeLinejoin="round" fill="#C5A467" opacity="0.5"/>
-          <circle cx="40" cy="35" r="22" fill="#C5A467" opacity="0.85"/>
-          <circle cx="40" cy="35" r="17" stroke="#FDFBF7" strokeWidth="1.5" strokeDasharray="4 2"/>
-          <path d="M40 23 L51 42 H29 L40 23 Z" fill="#FDFBF7" opacity="0.9"/>
-          <path d="M40 29 L47 40 H33 L40 29 Z" fill="#A68B4B"/>
-        </svg>
+        <img src="/bis-logo.png" alt="BIS Hallmark" style={{ width: '55%', height: '55%', objectFit: 'contain' }} />
       ),
     },
   ];
