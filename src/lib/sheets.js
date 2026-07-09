@@ -77,7 +77,17 @@ async function fetchFromSheets() {
                 diamondQuality: row[15] || '',
                 diamondShape: row[16] || '',  // Column Q = Diamond Shape (set by seller)
                 numDiamonds: parseInt(row[19]) || 0,  // Number of individual stones
-                defaultMetal: (row[21] || '').trim() || '9K Gold',  // Column V = Default Metal
+                defaultMetal: (() => {
+                    const rawMetal = (row[21] || '').trim();
+                    if (!rawMetal) return '9K Gold';
+                    if (rawMetal.toLowerCase().includes('silver')) return '925 Silver';
+                    if (rawMetal.toLowerCase().includes('9k')) return '9K Gold';
+                    if (rawMetal.toLowerCase().includes('14k')) return '14K Gold';
+                    if (rawMetal.toLowerCase().includes('18k')) return '18K Gold';
+                    if (rawMetal.toLowerCase().includes('22k')) return '22K Gold';
+                    if (rawMetal.toLowerCase().includes('24k')) return '24K Gold';
+                    return rawMetal;
+                })(),
             };
         });
 }
@@ -595,6 +605,7 @@ const METAL_TO_PRICING_KEY = {
     '22K Gold': 'Gold 22K per gram',
     '24K Gold': 'Gold 24K per gram',
     '925 Silver': 'Silver 925 per gram',
+    '925 Sterling Silver': 'Silver 925 per gram',
 };
 
 // Calculate the default price for a product using its defaultMetal (server-side)

@@ -136,6 +136,7 @@ export default function ProductCard({ product, reviewSummary }) {
     const metalLabel = {
         '9K Gold': '9kt', '14K Gold': '14kt', '18K Gold': '18kt',
         '22K Gold': '22kt', '24K Gold': '24kt', '925 Silver': 'Silver',
+        '925 Sterling Silver': 'Silver',
     }[product.defaultMetal] || '9kt';
 
     const review = reviewSummary?.[product.id];
