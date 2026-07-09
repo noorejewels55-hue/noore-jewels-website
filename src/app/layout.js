@@ -1,6 +1,7 @@
 import "./globals.css";
 import VisitorTracker from '@/components/VisitorTracker';
 import ExitIntentPopup from '@/components/ExitIntentPopup';
+import Script from 'next/script';
 
 export const metadata = {
   title: "Noore Jewels — Buy Lab Grown Diamond Rings Online India | IGI Certified | 9kt 14kt 18kt Gold",
@@ -261,6 +262,19 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
+        {/* Google tag (gtag.js) */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=AW-18301430051"
+          strategy="afterInteractive"
+        />
+        <Script id="google-tag" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'AW-18301430051');
+          `}
+        </Script>
         <VisitorTracker />
         <ExitIntentPopup />
         {children}
