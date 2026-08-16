@@ -52,8 +52,8 @@ export default function ExitIntentPopup() {
         setError('');
 
         const cleanPhone = phone.replace(/\D/g, '');
-        if (cleanPhone.length < 10) {
-            setError('Please enter a valid 10-digit mobile number');
+        if (cleanPhone.length < 7 || cleanPhone.length > 15) {
+            setError('Please enter a valid phone number (7-15 digits)');
             return;
         }
 
@@ -216,13 +216,13 @@ export default function ExitIntentPopup() {
                                             borderRight: '1px solid rgba(197,164,103,0.2)',
                                             background: 'rgba(197,164,103,0.05)',
                                             whiteSpace: 'nowrap',
-                                        }}>🇮🇳 +91</span>
+                                        }}>📱</span>
                                         <input
                                             type="tel"
-                                            placeholder="WhatsApp Number *"
+                                            placeholder="WhatsApp Number (with country code) *"
                                             value={phone}
                                             onChange={e => setPhone(e.target.value)}
-                                            maxLength={10}
+                                            maxLength={15}
                                             required
                                             style={{
                                                 flex: 1,

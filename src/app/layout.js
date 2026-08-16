@@ -1,6 +1,7 @@
 import "./globals.css";
 import VisitorTracker from '@/components/VisitorTracker';
 import ExitIntentPopup from '@/components/ExitIntentPopup';
+import WhatsAppFloat from '@/components/WhatsAppFloat';
 import Script from 'next/script';
 
 export const metadata = {
@@ -277,6 +278,7 @@ export default function RootLayout({ children }) {
         </Script>
         <VisitorTracker />
         <ExitIntentPopup />
+        <WhatsAppFloat />
         {children}
       </body>
     </html>

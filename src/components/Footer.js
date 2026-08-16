@@ -14,7 +14,7 @@ export default function Footer() {
                             { icon: '📦', text: 'Insured Shipping' },
                             { icon: '🔄', text: '7-Day Returns' },
                             { icon: '🔒', text: 'Secure Payments' },
-                            { icon: '🇮🇳', text: 'Pan India Delivery' },
+                            { icon: '🌍', text: 'India & Worldwide Shipping' },
                         ].map((item, i) => (
                             <div key={i} className="footer-trust-item">
                                 <span className="footer-trust-icon">{item.icon}</span>
@@ -48,7 +48,7 @@ export default function Footer() {
                         <div className="footer-v2-brand-col">
                             <div className="footer-v2-logo">Nooré Jewels</div>
                             <p className="footer-v2-desc">
-                                Handcrafted Lab Grown Diamond jewellery in 9kt, 14kt &amp; 18kt gold. IGI certified stones, ethically made, delivered across India.
+                                Handcrafted Lab Grown Diamond jewellery in 9kt, 14kt &amp; 18kt gold. IGI certified stones, ethically made, delivered across India &amp; worldwide.
                             </p>
                             <div className="footer-v2-socials">
                                 <a href="https://www.instagram.com/noore.jewels/" target="_blank" rel="noopener noreferrer" className="footer-v2-social" title="Instagram">
@@ -125,7 +125,7 @@ export default function Footer() {
                             <div className="footer-v2-contact">
                                 <div className="footer-v2-contact-item">
                                     <span className="footer-v2-contact-icon">📍</span>
-                                    <span>India — Pan India Delivery</span>
+                                    <span>India & Worldwide Delivery</span>
                                 </div>
                                 <div className="footer-v2-contact-item">
                                     <span className="footer-v2-contact-icon">📱</span>
