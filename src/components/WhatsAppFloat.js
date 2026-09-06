@@ -3,14 +3,41 @@
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 
+/**
+ * Global WhatsApp floating button.
+ * - Hides on /admin pages
+ * - Auto-hides when any element with [data-whatsapp-cta] is visible in the viewport,
+ *   so the floating icon never overlaps the inline WhatsApp CTA sections.
+ * - Shows a "Chat with us" tooltip on hover
+ * - Supports product-specific pre-filled messages
+ */
 export default function WhatsAppFloat({ productName, productId }) {
     const [mounted, setMounted] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
+    const [ctaVisible, setCtaVisible] = useState(false);
     const pathname = usePathname();
 
     useEffect(() => {
         setMounted(true);
     }, []);
+
+    // IntersectionObserver: hide when a WhatsApp CTA section is on screen
+    useEffect(() => {
+        if (!mounted) return;
+        const targets = document.querySelectorAll('[data-whatsapp-cta]');
+        if (targets.length === 0) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                const anyVisible = entries.some((e) => e.isIntersecting);
+                setCtaVisible(anyVisible);
+            },
+            { threshold: 0 }
+        );
+
+        targets.forEach((el) => observer.observe(el));
+        return () => observer.disconnect();
+    }, [mounted]);
 
     // Check if on admin page via Next.js pathname or window location
     const currentPath = pathname || (typeof window !== 'undefined' ? window.location.pathname : '');
@@ -56,6 +83,9 @@ export default function WhatsAppFloat({ productName, productId }) {
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'flex-end',
+                    opacity: ctaVisible ? 0 : 1,
+                    pointerEvents: ctaVisible ? 'none' : 'auto',
+                    transition: 'opacity 0.3s ease',
                 }}
             >
                 {/* Tooltip Label */}

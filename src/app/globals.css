@@ -2028,7 +2028,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 1.5rem;
   box-shadow: 0 4px 16px rgba(37, 211, 102, 0.3);
   z-index: 999;
-  transition: all var(--transition-base);
+  transition: all var(--transition-base), opacity 0.3s ease;
 }
 
 .whatsapp-float svg {
